@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -12,22 +11,25 @@ export class BooksService {
 
   url: string = "https://www.googleapis.com/books/v1/volumes?q="
 
+  //Changes queries string based on user input
+  getBooks(title:string,author:string,subject:string):any{
+    let route:string = this.url;
+    if(title.length > 0)
+    {
+      route = route+`intitle:${title}`;
+    }
+    if (author.length > 0)
+    {
+      route = route+`+inauthor:${author}`;
+    }
+    if (subject.length >0)
+    {
+      route = route+`+subject:${subject}`;
+    }
 
-  //endpoint for searching by a book title
-  getByTitle(title:string):any{
-    return this.http.get(`${this.url}intitle:${title}&maxResults=1`)
+    return this.http.get(`${route}&maxResults=1`);
+
   }
-
-  //endpoint for searching by author
-  getByAuthor(author:string):any{
-    return this.http.get(`${this.url}inauthor:${author}&maxResults=1`)
-  }
-
-  //endpoint for searching by subject
-  getBySubject(subject:string):any{
-    return this.http.get(`${this.url}subject:${subject}&maxResults=1`)
-  }
-
 }
 
 

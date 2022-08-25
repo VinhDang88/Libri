@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Books } from '../books';
 import { BooksService } from '../books.service';
 
@@ -8,40 +9,22 @@ import { BooksService } from '../books.service';
 })
 export class HomeComponent {
   constructor(private bookService: BooksService) {}
+  books: Books = {} as Books;
+  title: string ="";
+  author: string ="";
+  subject: string ="";
 
-  booksByTitle: Books = {} as Books;
-  booksByAuthor: Books = {} as Books;
-  booksBySubject: Books = {} as Books;
-
-//temporary, get books to display on init, change to call with user input later
 ngOnInit(): void {
-  this.displayByTitle();
-  this.displayByAuthor();
-  this.displayBySubject();
 }
+//Queries a book based on the users form and gives back top result.
+    SearchBooks(form:NgForm):void{
+      this.title = form.form.value.title
+      this.author = form.form.value.author
+      this.subject = form.form.value.subject
 
-  //method for calling book service to get one book by title
-  displayByTitle(){
-  this.bookService.getByTitle("harry potter").subscribe((response:Books) => {
-    this.booksByTitle = response;
-    console.log(response.items);
-  })
-  }
-
-  //method for calling book service to get one book by author
-  displayByAuthor(){
-    this.bookService.getByAuthor("rowling").subscribe((response:Books) => {
-      this.booksByAuthor = response;
-      console.log(response.items);
-    })
-    }
-
-  //method for calling book service to get one book by subject
-  displayBySubject(){
-    this.bookService.getBySubject("weather").subscribe((response:Books) => {
-      this.booksBySubject = response;
-      console.log(response.items);
-    })
+      this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
+        this.books = response;
+      })
     }
   
 }

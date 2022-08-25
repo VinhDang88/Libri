@@ -1,9 +1,10 @@
-<h1 *ngFor="let b of booksByTitle.items">
+<h1 *ngFor="let b of books.items">
   {{ b.volumeInfo.title }}
 </h1>
-<h1 *ngFor="let b of booksByAuthor.items">
-  {{ b.volumeInfo.title }}
-</h1>
-<h1 *ngFor="let b of booksBySubject.items">
-  {{ b.volumeInfo.title }}
-</h1>
+
+<form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
+  <input type="text" name="title" placeholder="Search by title" ngModel />
+  <input type="text" name="author" placeholder="Search by author" ngModel />
+  <input type="text" name="subject" placeholder="Search by subject" ngModel />
+  <button>Search</button>
+</form>

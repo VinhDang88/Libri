@@ -8,7 +8,7 @@ export class UsersService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  endpoint: string = "api/Books";
+  endpoint: string = "api/Users";
 
   addUsers(id: string, firstName: string, lastName: string, name: string, photoUrl: string):any{
     return this.http.post(`${this.baseUrl}${this.endpoint}/AddUser?id=${id}&firstName=${firstName}&lastName=${lastName}

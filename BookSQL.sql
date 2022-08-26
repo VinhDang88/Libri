@@ -32,3 +32,5 @@
 --ratingsCount INT
 
 --);
+
+SELECT * FROM Users;

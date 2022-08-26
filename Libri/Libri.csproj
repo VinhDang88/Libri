@@ -8,6 +8,7 @@
     <SpaProxyServerUrl>https://localhost:44423</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ece109b4-906b-455c-bdc2-35372248dbaf</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

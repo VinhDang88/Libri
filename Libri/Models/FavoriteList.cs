@@ -5,6 +5,7 @@ namespace Libri.Models
 {
     public partial class FavoriteList
     {
+        public int Id { get; set; }
         public string? FavoriteListId { get; set; }
         public string? Isbn { get; set; }
         public string? Title { get; set; }

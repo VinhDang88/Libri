@@ -1,10 +1,44 @@
-<h1 *ngFor="let b of books.items">
-  {{ b.volumeInfo.title }}
-</h1>
+<div class="searchBar">
+  <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
+    <input type="text" name="title" placeholder="Search by title" ngModel />
+    <input type="text" name="author" placeholder="Search by author" ngModel />
+    <input type="text" name="subject" placeholder="Search by subject" ngModel />
+    <button>Search</button>
+  </form>
+</div>
 
-<form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
-  <input type="text" name="title" placeholder="Search by title" ngModel />
-  <input type="text" name="author" placeholder="Search by author" ngModel />
-  <input type="text" name="subject" placeholder="Search by subject" ngModel />
-  <button>Search</button>
-</form>
+<div class="searchResults" *ngFor="let b of books.items">
+  <div class="row-10 offset-1">
+    <div class="col-2">
+      <img src="{{ getThumbnail(b) }}" />
+    </div>
+    <div class="col-6 searchInfo">
+      <h4>{{ b.volumeInfo.title }}</h4>
+      <!-- <h5>description:&nbsp;</h5> -->
+      <!-- <p>{{ b.volumeInfo.description }}</p> -->
+      <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
+      <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
+      <h5>categories: {{ b.volumeInfo.categories }}</h5>
+      <button *ngIf="loggedIn" (click)="addFavorite(b)">favorite</button>
+      <p *ngIf="!loggedIn">Log in to favorite</p>
+    </div>
+  </div>
+</div>
+
+<h1>recommended:</h1>
+<div *ngFor="let r of recommendations">
+  <div class="row-10 offset-1">
+    <div class="col-2">
+      <img src="{{ getThumbnail(r) }}" />
+    </div>
+    <div class="col-6 searchInfo">
+      <h4>{{ r.volumeInfo.title }}</h4>
+      <!-- <h5>description:&nbsp;</h5> -->
+      <!-- <p>{{ b.volumeInfo.description }}</p> -->
+      <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
+      <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
+      <h5>categories: {{ r.volumeInfo.categories }}</h5>
+      <button (click)="addFavorite(r)">favorite</button>
+    </div>
+  </div>
+</div>

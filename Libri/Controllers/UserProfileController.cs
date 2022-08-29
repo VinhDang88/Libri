@@ -28,5 +28,12 @@ namespace Libri.Controllers
             context.SaveChanges();
             return favorite;
         }
+
+        [HttpGet("GetUserFavorites")]
+        public List<FavoriteList> GetUserFavorites(string userId)
+        {
+            List<FavoriteList> userFavorites = context.FavoriteLists.Where(f => f.FavoriteListId == userId).ToList();
+            return userFavorites;
+        }
     }
 }

@@ -28,7 +28,14 @@ export class BooksService {
     }
 
     return this.http.get(`${route}&maxResults=1`);
+  }
 
+  getBooksByIsbn(isbn:string):any{
+    return this.http.get(`${this.url}isbn:${isbn}`);
+  }
+
+  searchByDescription(description:string):any{
+    return this.http.get(`${this.url}${description}`);
   }
 }
 

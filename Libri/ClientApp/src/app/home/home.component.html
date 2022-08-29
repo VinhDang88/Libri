@@ -1,3 +1,58 @@
+<!-- 
+<div class="row">
+  <div
+    id="carouselExampleControls"
+    class="carousel carousel-dark slide"
+    data-bs-ride="carousel"
+  >
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img
+          src="http://www.flightclub.com/media/catalog/product/2/0/201536_1.jpg"
+          height="600px"
+          class="d-block w-100"
+          alt="..."
+        />
+      </div>
+      <div class="carousel-item">
+        <img
+          src="https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$"
+          height="600px"
+          class="d-block w-100"
+          alt="..."
+        />
+      </div>
+      <div class="carousel-item">
+        <img
+          height="600px"
+          src="https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3090/geforce-rtx-3090-shop-630-d@2x.png"
+          class="d-block w-100"
+          alt="..."
+        />
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleControls"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleControls"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+ -->
+
 <div class="searchBar">
   <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
     <input type="text" name="title" placeholder="Search by title" ngModel />
@@ -6,26 +61,46 @@
     <button>Search</button>
   </form>
 </div>
-
-<div class="searchResults" *ngFor="let b of books.items">
-  <div class="row-10 offset-1">
-    <div class="col-2">
-      <img src="{{ getThumbnail(b) }}" />
-    </div>
-    <div class="col-6 searchInfo">
-      <h4>{{ b.volumeInfo.title }}</h4>
-      <!-- <h5>description:&nbsp;</h5> -->
-      <!-- <p>{{ b.volumeInfo.description }}</p> -->
-      <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
-      <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
-      <h5>categories: {{ b.volumeInfo.categories }}</h5>
-      <button *ngIf="loggedIn" (click)="addFavorite(b)">favorite</button>
-      <p *ngIf="!loggedIn">Log in to favorite</p>
+<!-- work with the div below to create a carousel -->
+<div style="overflow: auto; white-space: nowrap">
+  <div class="searchResults" *ngFor="let b of books.items">
+    <div>
+      <!-- goes in div above: class="row-10 offset-1" -->
+      <div class="col-2">
+        <img src="{{ getThumbnail(b) }}" />
+      </div>
+      <div class="col-6 searchInfo">
+        <h4>{{ b.volumeInfo.title }}</h4>
+        <!-- <h5>description:&nbsp;</h5> -->
+        <!-- <p>{{ b.volumeInfo.description }}</p> -->
+        <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
+        <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
+        <h5>Categories: {{ b.volumeInfo.categories }}</h5>
+        <p *ngIf="b.volumeInfo.ratingsCount != undefined">
+          Rating: {{ b.volumeInfo.averageRating }} / 5
+        </p>
+        <p *ngIf="b.volumeInfo.ratingsCount == undefined">
+          Ratings not available
+        </p>
+        <button *ngIf="loggedIn" (click)="addFavorite(b)">favorite</button>
+        <p *ngIf="!loggedIn">Log in to favorite</p>
+        <button *ngIf="loggedIn" (click)="addToWishList(b)">
+          Add To Wish List
+        </button>
+        <p *ngIf="!loggedIn">Log in to make a wish list</p>
+        <button *ngIf="loggedIn" (click)="addToReadList(b)">
+          Already Read It
+        </button>
+        <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
+        <button *ngIf="loggedIn" (click)="addToDeniedList(b)">Deny It</button>
+        <br />
+        <br />
+      </div>
     </div>
   </div>
 </div>
 
-<h1>recommended:</h1>
+<h1>Recommendations:</h1>
 <div *ngFor="let r of recommendations">
   <div class="row-10 offset-1">
     <div class="col-2">
@@ -37,8 +112,26 @@
       <!-- <p>{{ b.volumeInfo.description }}</p> -->
       <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
       <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
-      <h5>categories: {{ r.volumeInfo.categories }}</h5>
-      <button (click)="addFavorite(r)">favorite</button>
+      <h5>Categories: {{ r.volumeInfo.categories }}</h5>
+      <p *ngIf="r.volumeInfo.ratingsCount != undefined">
+        Rating: {{ r.volumeInfo.averageRating }} / 5
+      </p>
+      <p *ngIf="r.volumeInfo.ratingsCount == undefined">
+        Ratings not available
+      </p>
+      <button *ngIf="loggedIn" (click)="addFavorite(r)">favorite</button>
+      <p *ngIf="!loggedIn">Log in to favorite</p>
+      <button *ngIf="loggedIn" (click)="addToWishList(r)">
+        Add To Wish List
+      </button>
+      <p *ngIf="!loggedIn">Log in to make a wish list</p>
+      <button *ngIf="loggedIn" (click)="addToReadList(r)">
+        Already Read It
+      </button>
+      <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
+      <button *ngIf="loggedIn" (click)="addToDeniedList(r)">Deny It</button>
+      <br />
+      <br />
     </div>
   </div>
 </div>

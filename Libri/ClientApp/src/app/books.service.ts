@@ -27,7 +27,7 @@ export class BooksService {
       route = route+`+subject:${subject}`;
     }
 
-    return this.http.get(`${route}&maxResults=1`);
+    return this.http.get(`${route}&maxResults=10`);
   }
 
   getBooksByIsbn(isbn:string):any{

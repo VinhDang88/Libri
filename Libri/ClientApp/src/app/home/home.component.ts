@@ -3,8 +3,11 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
+import { Denied } from '../denied';
 import { Favorites } from '../favorites';
-import { FavoritesService } from '../favorites.service';
+import { ListsService } from '../lists.service';
+import { Read } from '../read';
+import { Wish } from '../wish';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +15,7 @@ import { FavoritesService } from '../favorites.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private bookService: BooksService, private favoriteService: FavoritesService, private authService: SocialAuthService) {}
+  constructor(private bookService: BooksService, private listsService: ListsService, private authService: SocialAuthService) {}
   books: Books = {} as Books;
   title: string ="";
   author: string ="";
@@ -22,6 +25,9 @@ export class HomeComponent {
   favoriteTitles: string[] = [];
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
+  wish: Wish = {} as Wish;
+  read: Read = {} as Read;
+  denied: Denied = {} as Denied;
 
 ngOnInit(): void {
   this.authService.authState.subscribe((user) => {
@@ -47,23 +53,88 @@ ngOnInit(): void {
     }
 
     getIsbn(book: Item):string{
+      // Contains ISBN-10 from the books
       let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
       let isbn: string[] = [];
+      // Puts ISBNs from industry identifier into empty string array
       bookIds.forEach((id) => isbn.push(id.identifier))
+      // Grabbing first string out of the array that matches ISBN
       return <string>isbn[0];
     }
 
     addFavorite(book:Item):any{
-      this.favoriteService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+      this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
       book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
         this.favorite = response;
       });
       console.log(this.favorite);
     }
 
+    addToWishList(book:Item):any{
+      this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+        this.wish = response;
+      });
+      console.log(this.wish);
+    }
+
+    addToReadList(book:Item):any{
+      this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
+        this.read = response;
+      });
+      console.log(this.read);
+    }
+
+    addToDeniedList(book:Item):any{
+      this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
+        this.denied = response;
+      });
+      console.log(this.denied);
+    }
+
+    getWishList():any{
+      this.listsService.getWishList(this.user.id).subscribe((response:Wish) => {
+        this.wish = response;
+      });
+      console.log(this.wish);
+    }
+
+    getReadList():any{
+      this.listsService.getReadList(this.user.id).subscribe((response:Read) => {
+        this.read = response;
+      });
+      console.log(this.read);
+    }
+
+    getDeniedList():any{
+      this.listsService.getDeniedList(this.user.id).subscribe((response:Denied) => {
+        this.denied = response;
+      })
+    }
+
+    deleteWishListObject(book:Item):any{
+      this.listsService.deleteWishListObject(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+        this.wish = response;
+      });
+      console.log(this.wish);
+    }
+
+    deleteReadListObject(book:Item):any{
+      this.listsService.deleteReadListObject(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
+        this.read = response;
+      });
+      console.log(this.read);
+    }
+
+    deleteDeniedListObject(book:Item):any{
+      this.listsService.deleteDeniedListObject(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
+        this.denied = response;
+      });
+      console.log(this.denied);
+    }
+
     getRecommendations(userId: string):any{
       //get list of favorites
-      this.favoriteService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
+      this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
         response.forEach((f:Favorites) => {
           //set subject to compare for recommendation results
           let subject = f.subject;

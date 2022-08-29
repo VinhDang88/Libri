@@ -27,7 +27,7 @@ namespace Libri.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=libri.database.windows.net;Initial Catalog=BookDB;User Id=sunnysunnysunny; Password=Banhxeoturtlepizza15!;");
+                optionsBuilder.UseSqlServer($"Data Source={Secrets.dataSource};Initial Catalog=BookDB;User Id={Secrets.userId}; Password={Secrets.password};");
             }
         }
 
@@ -35,14 +35,12 @@ namespace Libri.Models
         {
             modelBuilder.Entity<DeniedList>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.DeniedListId).HasMaxLength(25);
 
                 entity.Property(e => e.Isbn).HasMaxLength(255);
 
                 entity.HasOne(d => d.DeniedListNavigation)
-                    .WithMany()
+                    .WithMany(p => p.DeniedLists)
                     .HasForeignKey(d => d.DeniedListId)
                     .HasConstraintName("FK__DeniedLis__Denie__628FA481");
             });
@@ -71,14 +69,12 @@ namespace Libri.Models
 
             modelBuilder.Entity<ReadList>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.Isbn).HasMaxLength(255);
 
                 entity.Property(e => e.ReadListId).HasMaxLength(25);
 
                 entity.HasOne(d => d.ReadListNavigation)
-                    .WithMany()
+                    .WithMany(p => p.ReadLists)
                     .HasForeignKey(d => d.ReadListId)
                     .HasConstraintName("FK__ReadLists__ReadL__60A75C0F");
             });
@@ -98,14 +94,12 @@ namespace Libri.Models
 
             modelBuilder.Entity<WishList>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.Isbn).HasMaxLength(255);
 
                 entity.Property(e => e.WishListId).HasMaxLength(25);
 
                 entity.HasOne(d => d.WishListNavigation)
-                    .WithMany()
+                    .WithMany(p => p.WishLists)
                     .HasForeignKey(d => d.WishListId)
                     .HasConstraintName("FK__WishLists__WishL__5EBF139D");
             });

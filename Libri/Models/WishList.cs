@@ -7,6 +7,7 @@ namespace Libri.Models
     {
         public string? WishListId { get; set; }
         public string? Isbn { get; set; }
+        public int Id { get; set; }
 
         public virtual User? WishListNavigation { get; set; }
     }

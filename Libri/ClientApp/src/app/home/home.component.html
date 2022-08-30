@@ -64,7 +64,7 @@
 <!-- work with the div below to create a carousel -->
 <div style="overflow: auto; white-space: nowrap">
   <div class="searchResults" *ngFor="let b of books.items">
-    <div class="row-10 offset-1">
+    <div *ngIf="getThumbnail(b) != undefined" class="row-10 offset-1">
       <!-- goes in div above: class="row-10 offset-1" -->
       <div class="col-2">
         <img src="{{ getThumbnail(b) }}" />
@@ -83,15 +83,13 @@
           Rating not available
         </p>
         <button *ngIf="loggedIn" (click)="addFavorite(b)">Favorite</button>
-        <p *ngIf="!loggedIn">Log in to favorite</p>
+        <p *ngIf="!loggedIn">Log in to add books to custom lists</p>
         <button *ngIf="loggedIn" (click)="addToWishList(b)">
           Add To Wish List
         </button>
-        <p *ngIf="!loggedIn">Log in to make a wish list</p>
         <button *ngIf="loggedIn" (click)="addToReadList(b)">
           Already Read It
         </button>
-        <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
         <button *ngIf="loggedIn" (click)="addToDeniedList(b)">Deny It</button>
         <br />
         <br />
@@ -102,7 +100,7 @@
 
 <h1>Recommendations:</h1>
 <div *ngFor="let r of recommendations">
-  <div class="row-10 offset-1">
+  <div *ngIf="getThumbnail(r) != undefined" class="row-10 offset-1">
     <div class="col-2">
       <img src="{{ getThumbnail(r) }}" />
     </div>
@@ -119,7 +117,7 @@
       <p *ngIf="r.volumeInfo.ratingsCount == undefined">
         Ratings not available
       </p>
-      <button *ngIf="loggedIn" (click)="addFavorite(r)">favorite</button>
+      <button *ngIf="loggedIn" (click)="addFavorite(r)">Favorite</button>
       <p *ngIf="!loggedIn">Log in to favorite</p>
       <button *ngIf="loggedIn" (click)="addToWishList(r)">
         Add To Wish List

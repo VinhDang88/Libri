@@ -12,8 +12,12 @@ namespace Libri.Controllers
 
         //Allows user to favorite a single book
         [HttpPost("AddFavorite")]
-        public FavoriteList AddFavorite(string favoriteListId, string isbn, string title, string author, string subject, float averageRating, int ratingsCount)
+        public FavoriteList AddFavorite(string? favoriteListId, string? isbn, string? title, string? author, string? subject, float? averageRating, int? ratingsCount)
         {
+            if (context.FavoriteLists.Where(b => b.Isbn == isbn && b.FavoriteListId == favoriteListId).Count() > 0)
+            {
+                return null;
+            }
             FavoriteList favorite = new FavoriteList()
             {
                 FavoriteListId = favoriteListId,
@@ -41,6 +45,10 @@ namespace Libri.Controllers
         [HttpPost("AddToWishList")]
         public WishList AddToWishList(string isbn, string wishListId)
         {
+            if (context.WishLists.Where(b => b.Isbn == isbn && b.WishListId == wishListId).Count() > 0)
+            {
+                return null;
+            }
             WishList wishList = new WishList()
             {
                 Isbn = isbn,
@@ -72,6 +80,10 @@ namespace Libri.Controllers
         [HttpPost("AddToDeniedList")]
         public DeniedList AddToDeniedList(string isbn, string deniedListId)
         {
+            if (context.DeniedLists.Where(b => b.Isbn == isbn && b.DeniedListId == deniedListId).Count() > 0)
+            {
+                return null;
+            }
             DeniedList deniedList = new DeniedList()
             {
                 Isbn = isbn,
@@ -103,6 +115,10 @@ namespace Libri.Controllers
         [HttpPost("AddToReadList")]
         public ReadList AddToReadList(string isbn, string readListId)
         {
+            if (context.ReadLists.Where(b => b.Isbn == isbn && b.ReadListId == readListId).Count() > 0)
+            {
+                return null;
+            }
             ReadList readList = new ReadList()
             {
                 Isbn = isbn,

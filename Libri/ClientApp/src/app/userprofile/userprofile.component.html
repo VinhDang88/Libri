@@ -39,6 +39,7 @@
       Rating: {{ f.volumeInfo.averageRating }} / 5
     </p>
     <p *ngIf="f.volumeInfo.ratingsCount == undefined">Rating not available</p>
+    <!-- <button >Remove</button> -->
   </div>
 </div>
 
@@ -53,6 +54,7 @@
       Rating: {{ w.volumeInfo.averageRating }} / 5
     </p>
     <p *ngIf="w.volumeInfo.ratingsCount == undefined">Rating not available</p>
+    <button (click)="deleteWishListObject(w)">Remove</button>
   </div>
 </div>
 

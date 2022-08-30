@@ -59,7 +59,6 @@ export class UserprofileComponent implements OnInit {
         response.items.forEach((i:Item)=>{
           //Pushes the found book into a list
           this.wishListItems.push(i);
-          
         });
       })
     });
@@ -131,6 +130,39 @@ export class UserprofileComponent implements OnInit {
     bookIds.forEach((id) => isbn.push(id.identifier))
     // Grabbing first string out of the array that matches ISBN
     return <string>isbn[0];
+  }
+
+  // NEED TO CREATE METHOD IN C# AND SERVICE FOR DELETING FAVORITE*****************************
+  // deleteFavoriteListObject(book:Item):any{
+  //   this.listsService.deleteFavoriteListObject(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+  //     console.log(response);
+  //     let i = this.favListItems.indexOf(book);
+  //     this.favListItems.splice(i,1);
+  //   });
+  // }
+
+  deleteWishListObject(book:Item):any{
+    this.listsService.deleteWishListObject(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+      console.log(response);
+      let i = this.wishListItems.indexOf(book);
+      this.wishListItems.splice(i,1);
+    });
+  }
+
+  deleteReadListObject(book:Item):any{
+    this.listsService.deleteReadListObject(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
+      console.log(response);
+      let i = this.wishListItems.indexOf(book);
+      this.wishListItems.splice(i,1);
+    });
+  }
+
+  deleteDeniedListObject(book:Item):any{
+    this.listsService.deleteDeniedListObject(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
+      console.log(response);
+      let i = this.wishListItems.indexOf(book);
+      this.wishListItems.splice(i,1);
+    });
   }
 
   toggleFavoriteList():any{

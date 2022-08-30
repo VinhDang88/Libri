@@ -13,6 +13,9 @@ export class ListsService {
     // allows user to add favorite book to their profile once logged in
     addToFavoriteBooks(favoriteListId:string, isbn:string, title:string, author:string, subject:string,averageRating:number, ratingsCount:number):any{
       // console.log(averageRating)
+      if(subject == undefined){
+        subject = "";
+      }
       if(averageRating == undefined){
         averageRating = 0;
       }

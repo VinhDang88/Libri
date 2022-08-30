@@ -12,7 +12,7 @@ namespace Libri.Controllers
 
         //Allows user to change their profile picture.
         [HttpPut("ChangePhotoUrl")]
-        public User ChangePhotoUrl(string id, string photoUrl)
+        public User ChangePhotoUrl(string id, string? photoUrl)
         {
             User user = context.Users.FirstOrDefault(x => x.Id == id);
             user.PhotoUrl = photoUrl;
@@ -21,7 +21,7 @@ namespace Libri.Controllers
         }
         //Collects NEW user information and stores to the SQL database. 
         [HttpPost("AddUser")]
-        public User AddUser(string id, string firstName, string lastName, string name, string photoUrl)
+        public User AddUser(string id, string firstName, string lastName, string name, string? photoUrl)
         {
             User user = context.Users.Find(id);
             //Doesn't add already existed users.

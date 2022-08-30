@@ -25,9 +25,9 @@ export class HomeComponent {
   favoriteTitles: string[] = [];
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
-  wish: Wish = {} as Wish;
-  read: Read = {} as Read;
-  denied: Denied = {} as Denied;
+  wish: Wish[] = [];
+  read: Read[] = [];
+  denied: Denied[] = [];
 
 ngOnInit(): void {
   this.authService.authState.subscribe((user) => {
@@ -63,6 +63,9 @@ ngOnInit(): void {
     }
 
     addFavorite(book:Item):any{
+      if(book.volumeInfo.categories == undefined){
+        book.volumeInfo.categories = [];
+      }
       this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
       book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
         this.favorite = response;
@@ -72,90 +75,67 @@ ngOnInit(): void {
 
     addToWishList(book:Item):any{
       this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
-        this.wish = response;
+        console.log(response);
+        this.wish.push(response);
       });
-      console.log(this.wish);
     }
 
     addToReadList(book:Item):any{
       this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
-        this.read = response;
+        console.log(response);
+        this.read.push(response);
       });
-      console.log(this.read);
     }
 
     addToDeniedList(book:Item):any{
       this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
-        this.denied = response;
+        console.log(response);
+        this.denied.push(response);
       });
-      console.log(this.denied);
     }
 
     getWishList():any{
-      this.listsService.getWishList(this.user.id).subscribe((response:Wish) => {
+      this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
         this.wish = response;
       });
       console.log(this.wish);
     }
 
     getReadList():any{
-      this.listsService.getReadList(this.user.id).subscribe((response:Read) => {
+      this.listsService.getReadList(this.user.id).subscribe((response:Read[]) => {
         this.read = response;
       });
       console.log(this.read);
     }
 
     getDeniedList():any{
-      this.listsService.getDeniedList(this.user.id).subscribe((response:Denied) => {
+      this.listsService.getDeniedList(this.user.id).subscribe((response:Denied[]) => {
         this.denied = response;
       })
-    }
-
-    deleteWishListObject(book:Item):any{
-      this.listsService.deleteWishListObject(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
-        this.wish = response;
-      });
-      console.log(this.wish);
-    }
-
-    deleteReadListObject(book:Item):any{
-      this.listsService.deleteReadListObject(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
-        this.read = response;
-      });
-      console.log(this.read);
-    }
-
-    deleteDeniedListObject(book:Item):any{
-      this.listsService.deleteDeniedListObject(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
-        this.denied = response;
-      });
-      console.log(this.denied);
     }
 
     getRecommendations(userId: string):any{
       //get list of favorites
       this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
         response.forEach((f:Favorites) => {
-          //set subject to compare for recommendation results
-          let subject = f.subject;
           //gather titles to exclude from reccomendations
           this.favoriteTitles.push(f.title);
           //search by isbn to get favorites as book objects
           this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
           //after getting favorites as book objects, search by description to get possible recommendations
           response.items.forEach((i:Item) => {
-            this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-              //filter recommendations by category and add them to recommended list if the title is not already favorited
-              response.items.forEach((i:Item) => {
-                if(!this.favoriteTitles.includes(i.volumeInfo.title)){
-                  this.recommendations.push(i);
-                }
-                // if((i.volumeInfo.categories.toString().includes(subject) || subject.includes(i.volumeInfo.categories.toString())) 
-                // && !this.favoriteTitles.includes(i.volumeInfo.title)){
-                //   this.recommendations.push(i);
-                // }
+            // if no description, won't use it for search
+            if(i.volumeInfo.description != undefined)
+            {
+              this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
+                //filter recommendations by category and add them to recommended list if the title is not already favorited
+                response.items.forEach((i:Item) => {
+                  if(!this.favoriteTitles.includes(i.volumeInfo.title)){
+                    this.recommendations.push(i);
+                  }
+                })
               })
-            })
+            }
             //search based on author
             this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
               response.items.forEach((i:Item) => {
@@ -171,7 +151,6 @@ ngOnInit(): void {
       })
     })
   };
-  
 }
 
 

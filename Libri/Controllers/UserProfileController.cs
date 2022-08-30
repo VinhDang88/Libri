@@ -53,9 +53,9 @@ namespace Libri.Controllers
 
         // Gets users customer wish list
         [HttpGet("GetWishList")]
-        public List<WishList> GetWishList()
+        public List<WishList> GetWishList(string userId)
         {
-            return context.WishLists.ToList();
+            return context.WishLists.Where(u => u.WishListId == userId).ToList();
         }
 
         // Allows user to delete a book out of their wish list
@@ -84,9 +84,9 @@ namespace Libri.Controllers
 
         // Gets the user denied list
         [HttpGet("GetDeniedList")]
-        public List<DeniedList> GetDeniedLists()
+        public List<DeniedList> GetDeniedLists(string userId)
         {
-            return context.DeniedLists.ToList();
+            return context.DeniedLists.Where(u => u.DeniedListId == userId).ToList();
         }
 
         // Allows user to delete books from their denied list if they decide they like it again
@@ -115,9 +115,9 @@ namespace Libri.Controllers
 
         // Gets the users custom read list
         [HttpGet("GetReadList")]
-        public List<ReadList> GetReadLists()
+        public List<ReadList> GetReadLists(string userId)
         {
-            return context.ReadLists.ToList();
+            return context.ReadLists.Where(u => u.ReadListId == userId).ToList();
         }
 
         // Allows user to delete a book out of their read list

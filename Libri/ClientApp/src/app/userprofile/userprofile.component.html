@@ -1,0 +1,25 @@
+<p>Welcome {{user.firstName}}!</p>
+<img src="{{user.photoUrl}}" />
+<button (click)="getWishList();
+">WishList</button>
+<p># of wishlist {{wishListItems.length}}</p>
+<button (click)="getFavoriteList()">Favorites</button>
+<button (click)="getReadList()">ReadList</button>
+<button (click)="getDeniedList()">DeniedList</button>
+<div *ngFor="let w of wishListItems">
+    <P>{{w.volumeInfo.title}}</P>
+
+</div>
+
+<div *ngFor="let f of favListItems">
+    <p>{{f.volumeInfo.title}}</p>
+
+</div>
+
+<div *ngFor="let r of readListItems">
+    <p>{{r.volumeInfo.title}}</p>
+</div>
+
+<div *ngFor="let d of deniedListItems">
+    <p>{{d.volumeInfo.title}}</p>
+</div>

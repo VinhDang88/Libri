@@ -1,5 +1,6 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from '../user';
 import { UsersService } from '../users.service';
 
@@ -10,7 +11,7 @@ import { UsersService } from '../users.service';
 })
 export class NavMenuComponent implements OnInit {
 
-  constructor(private authService: SocialAuthService, private userService: UsersService) { }
+  constructor(private authService: SocialAuthService, private userService: UsersService, private router:Router) { }
   
   isExpanded = false;
   user: SocialUser = {} as SocialUser;
@@ -40,5 +41,7 @@ export class NavMenuComponent implements OnInit {
 //Allows google user to sign out
   signOut(): void {
     this.authService.signOut();
+    this.router.navigate(['/']);
+    location.reload();
     }
 }

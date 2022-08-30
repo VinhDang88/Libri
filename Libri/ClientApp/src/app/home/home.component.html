@@ -64,7 +64,7 @@
 <!-- work with the div below to create a carousel -->
 <div style="overflow: auto; white-space: nowrap">
   <div class="searchResults" *ngFor="let b of books.items">
-    <div>
+    <div class="row-10 offset-1">
       <!-- goes in div above: class="row-10 offset-1" -->
       <div class="col-2">
         <img src="{{ getThumbnail(b) }}" />
@@ -80,9 +80,9 @@
           Rating: {{ b.volumeInfo.averageRating }} / 5
         </p>
         <p *ngIf="b.volumeInfo.ratingsCount == undefined">
-          Ratings not available
+          Rating not available
         </p>
-        <button *ngIf="loggedIn" (click)="addFavorite(b)">favorite</button>
+        <button *ngIf="loggedIn" (click)="addFavorite(b)">Favorite</button>
         <p *ngIf="!loggedIn">Log in to favorite</p>
         <button *ngIf="loggedIn" (click)="addToWishList(b)">
           Add To Wish List

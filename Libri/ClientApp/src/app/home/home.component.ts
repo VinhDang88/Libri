@@ -29,6 +29,7 @@ export class HomeComponent {
   read: Read[] = [];
   denied: Denied[] = [];
 
+
 ngOnInit(): void {
   this.authService.authState.subscribe((user) => {
     this.user = user;

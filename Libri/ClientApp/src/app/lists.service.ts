@@ -65,4 +65,8 @@ export class ListsService {
     deleteDeniedListObject(isbn:string, deniedListId:string):any{
       return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteDeniedListObject?isbn=${isbn}&deniedListId=${deniedListId}`)
     }
+
+    deleteFavoriteListObject(isbn:string, favoriteListId:string):any{
+      return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteFavoriteListObject?isbn=${isbn}&favoriteListId=${favoriteListId}`)
+    }
 }

@@ -41,6 +41,15 @@ namespace Libri.Controllers
             return userFavorites;
         }
 
+        [HttpDelete("DeleteFavoriteListObject")]
+        public FavoriteList DeleteFavoriteListObject(string isbn, string favoriteListId)
+        {
+            FavoriteList favoriteList = context.FavoriteLists.FirstOrDefault(f => f.Isbn == isbn && f.FavoriteListId == favoriteListId);
+            context.FavoriteLists.Remove(favoriteList);
+            context.SaveChanges();
+            return favoriteList;
+        }
+
         // Allows user to add a single book to their wish list
         [HttpPost("AddToWishList")]
         public WishList AddToWishList(string isbn, string wishListId)

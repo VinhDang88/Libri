@@ -153,6 +153,8 @@ export class UserprofileComponent implements OnInit {
       console.log(response);
       let i = this.readListItems.indexOf(book);
       this.readListItems.splice(i,1);
+      let index = this.readLists.indexOf(response);
+      this.readLists.splice(index, 1);
     });
   }
 
@@ -189,7 +191,7 @@ export class UserprofileComponent implements OnInit {
       isbn: this.getIsbn(book)
     }
     //Still needs to be updated
-    return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) )
+    return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) ) || this.readLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
   }
 
   toggleFavoriteList():any{

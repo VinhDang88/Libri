@@ -40,7 +40,9 @@
     </p>
     <p *ngIf="f.volumeInfo.ratingsCount == undefined">Rating not available</p>
     <button (click)="deleteFavoriteListObject(f)">remove</button>
-    <button *ngIf="checkIfInReadList(f)" (click)="addToReadList(f)">readList</button>
+    <button *ngIf="!checkIfInReadList(f)" (click)="addToReadList(f)">
+      readList
+    </button>
   </div>
 </div>
 

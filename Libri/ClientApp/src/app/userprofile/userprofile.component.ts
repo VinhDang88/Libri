@@ -133,10 +133,12 @@ export class UserprofileComponent implements OnInit {
   }
 
   deleteFavoriteListObject(book:Item):any{
-    this.listsService.deleteFavoriteListObject(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+    this.listsService.deleteFavoriteListObject(this.getIsbn(book), this.user.id).subscribe((response:Favorites) => {
       console.log(response);
       let i = this.favListItems.indexOf(book);
       this.favListItems.splice(i,1);
+      let index = this.favoriteList.indexOf(response);
+      this.favoriteList.splice(index, 1);
     });
   }
 
@@ -174,6 +176,7 @@ export class UserprofileComponent implements OnInit {
     book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
       this.favoriteList.push(response)
       console.log(response);
+      this.favListItems.push(book);
     });
   }
 
@@ -192,6 +195,12 @@ export class UserprofileComponent implements OnInit {
     }
     //Still needs to be updated
     return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) ) || this.readLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
+  }
+
+  checkIfInFavoriteList(book:Item):boolean{
+    
+    //Still needs to be updated
+    return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book) ) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book) )
   }
 
   toggleFavoriteList():any{

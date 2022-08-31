@@ -99,7 +99,11 @@ ngOnInit(): void {
         this.denied.push(response);
       });
     }
-
+    
+    //Create a toggle that will hide Wishlist button after user clicks on the button
+  CheckIfInFavoriteList(book:Item):boolean{
+    return this.favoritesArray.some(f=> f.isbn == <string>this.getIsbn(book) && f.favoriteListId == this.user.id)
+    }
     //Create a toggle that will hide Wishlist button after user clicks on the button
     CheckIfInWishList(book:Item):boolean{
       let wish: Wish = {
@@ -110,10 +114,24 @@ ngOnInit(): void {
       return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
       }
 
-      //Create a toggle that will hide Wishlist button after user clicks on the button
-    CheckIfInFavoriteList(book:Item):boolean{
-      return this.favoritesArray.some(f=> f.isbn == <string>this.getIsbn(book) && f.favoriteListId == this.user.id)
-      }
+      CheckIfInReadList(book:Item):boolean{
+        let read: Read = {
+          readListId: this.user.id,
+          isbn: this.getIsbn(book)
+  
+        }
+        return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
+        }
+
+        CheckIfInDeniedList(book:Item):boolean{
+          let denied: Denied = {
+            deniedListId: this.user.id,
+            isbn: this.getIsbn(book)
+    
+          }
+          return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
+          }
+      
 
     getWishList():any{
       this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {

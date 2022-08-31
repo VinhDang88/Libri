@@ -164,6 +164,34 @@ export class UserprofileComponent implements OnInit {
     });
   }
 
+  addFavorite(book:Item):any{
+    if(book.volumeInfo.categories == undefined){
+      book.volumeInfo.categories = [];
+    }
+    this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
+      this.favoriteList.push(response)
+      console.log(response);
+    });
+  }
+
+  addToReadList(book:Item):any{
+    this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
+      console.log(response);
+      this.readLists.push(response);
+      this.readListItems.push(book);
+    });
+  }
+
+  checkIfInReadList(book:Item):boolean{
+    let read: Read = {
+      readListId: this.user.id,
+      isbn: this.getIsbn(book)
+    }
+    //Still needs to be updated
+    return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) )
+  }
+
   toggleFavoriteList():any{
     this.displayFavoriteList = !this.displayFavoriteList;
     this.displayDeniedList = false;

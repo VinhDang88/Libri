@@ -117,17 +117,17 @@
       <p *ngIf="r.volumeInfo.ratingsCount == undefined">
         Ratings not available
       </p>
-      <button *ngIf="loggedIn && !CheckIfInFavoriteList(r)" (click)="addFavorite(r)">Favorite</button>
+      <button *ngIf="loggedIn" (click)="addFavorite(r)">Favorite</button>
       <p *ngIf="!loggedIn">Log in to favorite</p>
       <button *ngIf="loggedIn && !CheckIfInWishList(r) " (click)="addToWishList(r)">
         Add To Wish List
       </button>
       <p *ngIf="!loggedIn">Log in to make a wish list</p>
-      <button *ngIf="loggedIn" (click)="addToReadList(r)">
+      <button *ngIf="loggedIn && !CheckIfInReadList(r)" (click)="addToReadList(r)">
         Already Read It
       </button>
       <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
-      <button *ngIf="loggedIn" (click)="addToDeniedList(r)">Deny It</button>
+      <button *ngIf="loggedIn && !CheckIfInDeniedList(r)" (click)="addToDeniedList(r)">Deny It</button>
       <br />
       <br />
     </div>

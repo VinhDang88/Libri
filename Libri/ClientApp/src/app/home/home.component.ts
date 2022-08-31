@@ -107,7 +107,7 @@ ngOnInit(): void {
   //Create a toggle that will hide Favorite list button after user clicks on the button
   // tried f.isbn.trim() but it broke the code in a different way***************************************************
   CheckIfInFavoriteList(book:Item):boolean{
-      return this.favoritesArray.some(f => f.isbn == this.getIsbn(book))
+      return this.favoritesArray.some(f => f.isbn.trim().toString() == this.getIsbn(book))
   }
   
   //Create a toggle that will hide Wish list button after user clicks on the button

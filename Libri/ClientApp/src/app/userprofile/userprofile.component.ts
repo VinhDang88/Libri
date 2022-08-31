@@ -125,11 +125,15 @@ export class UserprofileComponent implements OnInit {
   getIsbn(book: Item):string{
     // Contains ISBN-10 from the books
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
-    let isbn: string[] = [];
+    let isbn: string = "";
     // Puts ISBNs from industry identifier into empty string array
-    bookIds.forEach((id) => isbn.push(id.identifier))
+    bookIds.forEach((id) => {
+      if(id.type == "ISBN_10"){
+        isbn = id.identifier
+      }
+    })
     // Grabbing first string out of the array that matches ISBN
-    return <string>isbn[0];
+    return isbn;
   }
 
   deleteFavoriteListObject(book:Item):any{
@@ -193,14 +197,11 @@ export class UserprofileComponent implements OnInit {
       readListId: this.user.id,
       isbn: this.getIsbn(book)
     }
-    //Still needs to be updated
     return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) ) || this.readLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
   }
 
   checkIfInFavoriteList(book:Item):boolean{
-    
-    //Still needs to be updated
-    return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book) ) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book) )
+    return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book) ) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book))
   }
 
   toggleFavoriteList():any{

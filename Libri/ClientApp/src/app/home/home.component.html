@@ -82,15 +82,31 @@
         <p *ngIf="b.volumeInfo.ratingsCount == undefined">
           Rating not available
         </p>
-        <button *ngIf="loggedIn" (click)="addFavorite(b)">Favorite</button>
+        <button
+          *ngIf="loggedIn && !CheckIfInFavoriteList(b)"
+          (click)="addFavorite(b)"
+        >
+          Favorite
+        </button>
         <p *ngIf="!loggedIn">Log in to add books to custom lists</p>
-        <button *ngIf="loggedIn" (click)="addToWishList(b)">
+        <button
+          *ngIf="loggedIn && !CheckIfInWishList(b)"
+          (click)="addToWishList(b)"
+        >
           Add To Wish List
         </button>
-        <button *ngIf="loggedIn" (click)="addToReadList(b)">
+        <button
+          *ngIf="loggedIn && !CheckIfInReadList(b)"
+          (click)="addToReadList(b)"
+        >
           Already Read It
         </button>
-        <button *ngIf="loggedIn" (click)="addToDeniedList(b)">Deny It</button>
+        <button
+          *ngIf="loggedIn && !CheckIfInDeniedList(b)"
+          (click)="addToDeniedList(b)"
+        >
+          Deny It
+        </button>
         <br />
         <br />
       </div>
@@ -117,17 +133,33 @@
       <p *ngIf="r.volumeInfo.ratingsCount == undefined">
         Ratings not available
       </p>
-      <button *ngIf="loggedIn" (click)="addFavorite(r)">Favorite</button>
+      <button
+        *ngIf="loggedIn && !CheckIfInFavoriteList(r)"
+        (click)="addFavorite(r)"
+      >
+        Favorite
+      </button>
       <p *ngIf="!loggedIn">Log in to favorite</p>
-      <button *ngIf="loggedIn && !CheckIfInWishList(r) " (click)="addToWishList(r)">
+      <button
+        *ngIf="loggedIn && !CheckIfInWishList(r)"
+        (click)="addToWishList(r)"
+      >
         Add To Wish List
       </button>
       <p *ngIf="!loggedIn">Log in to make a wish list</p>
-      <button *ngIf="loggedIn && !CheckIfInReadList(r)" (click)="addToReadList(r)">
+      <button
+        *ngIf="loggedIn && !CheckIfInReadList(r)"
+        (click)="addToReadList(r)"
+      >
         Already Read It
       </button>
       <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
-      <button *ngIf="loggedIn && !CheckIfInDeniedList(r)" (click)="addToDeniedList(r)">Deny It</button>
+      <button
+        *ngIf="loggedIn && !CheckIfInDeniedList(r)"
+        (click)="addToDeniedList(r)"
+      >
+        Deny It
+      </button>
       <br />
       <br />
     </div>

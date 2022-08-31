@@ -39,9 +39,9 @@
       Rating: {{ f.volumeInfo.averageRating }} / 5
     </p>
     <p *ngIf="f.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteFavoriteListObject(f)">remove</button>
+    <button (click)="deleteFavoriteListObject(f)">Remove</button>
     <button *ngIf="!checkIfInReadList(f)" (click)="addToReadList(f)">
-      readList
+      Read List
     </button>
   </div>
 </div>
@@ -72,9 +72,9 @@
       Rating: {{ r.volumeInfo.averageRating }} / 5
     </p>
     <p *ngIf="r.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteReadListObject(r)">remove</button>
+    <button (click)="deleteReadListObject(r)">Remove</button>
     <button *ngIf="!checkIfInFavoriteList(r)" (click)="addFavorite(r)">
-      favorite
+      Favorite
     </button>
   </div>
 </div>
@@ -90,6 +90,6 @@
       Rating: {{ d.volumeInfo.averageRating }} / 5
     </p>
     <p *ngIf="d.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteDeniedListObject(d)">remove</button>
+    <button (click)="deleteDeniedListObject(d)">Remove</button>
   </div>
 </div>

@@ -43,7 +43,25 @@
 --ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 
 --SELECT * FROM Users;
+
 --SELECT * FROM FavoriteLists;
---SELECT * FROM WishLists;
+
+--SELECT * FROM WishLists
+
 --SELECT * FROM ReadLists;
+
 --SELECT * FROM DeniedLists;
+
+--SELECT * FROM WishLists
+--JOIN Users ON WishLists.WishListId=Users.Id;
+
+--DELETE FROM WishLists;
+
+--DELETE FROM FavoriteLists;
+
+--DELETE FROM ReadLists;
+
+--DELETE FROM DeniedLists;
+
+--SELECT * FROM FavoriteLists
+--JOIN Users ON FavoriteLists.FavoriteListId=Users.Id;

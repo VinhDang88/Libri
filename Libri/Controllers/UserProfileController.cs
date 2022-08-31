@@ -45,9 +45,16 @@ namespace Libri.Controllers
         public FavoriteList DeleteFavoriteListObject(string isbn, string favoriteListId)
         {
             FavoriteList favoriteList = context.FavoriteLists.FirstOrDefault(f => f.Isbn == isbn && f.FavoriteListId == favoriteListId);
+            if (favoriteList == null)
+            {
+                return null;
+            }
+            else
+            {
             context.FavoriteLists.Remove(favoriteList);
             context.SaveChanges();
             return favoriteList;
+            }
         }
 
         // Allows user to add a single book to their wish list
@@ -80,9 +87,16 @@ namespace Libri.Controllers
         public WishList DeleteWishListObject(string isbn, string wishListId)
         {
             WishList wishList = context.WishLists.FirstOrDefault(o => o.Isbn == isbn && o.WishListId == wishListId);
+            if (wishList == null)
+            {
+                return null;
+            }
+            else
+            {
             context.WishLists.Remove(wishList);
             context.SaveChanges();
             return wishList;
+            }
         }
 
         // Allows user to add to a denied list for books they do not like
@@ -115,9 +129,16 @@ namespace Libri.Controllers
         public DeniedList DeleteDeniedListObject(string isbn, string deniedListId)
         {
             DeniedList deniedList = context.DeniedLists.FirstOrDefault(o => o.Isbn == isbn && o.DeniedListId == deniedListId);
+            if (deniedList == null)
+            {
+                return null;
+            }
+            else
+            {
             context.DeniedLists.Remove(deniedList);
             context.SaveChanges();
             return deniedList;
+            }
         }
 
         // Allows user to add a single book to a read list
@@ -150,9 +171,16 @@ namespace Libri.Controllers
         public ReadList DeleteReadListObject(string isbn, string readListId)
         {
             ReadList readList = context.ReadLists.FirstOrDefault(o => o.Isbn == isbn && o.ReadListId == readListId);
+            if (readList == null)
+            {
+                return null;
+            }
+            else
+            {
             context.ReadLists.Remove(readList);
             context.SaveChanges();
             return readList;
+            }
         }
     }
 }

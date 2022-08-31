@@ -44,119 +44,124 @@ ngOnInit(): void {
   
 }
 //Queries a book based on the users form and gives back top result.
-    SearchBooks(form:NgForm):void{
-      this.title = form.form.value.title
-      this.author = form.form.value.author
-      this.subject = form.form.value.subject
+  SearchBooks(form:NgForm):void{
+    this.title = form.form.value.title
+    this.author = form.form.value.author
+    this.subject = form.form.value.subject
 
-      this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
-        this.books = response;
-      })
-    }
+    this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
+      this.books = response;
+    })
+  }
 
-    getThumbnail(book:Item):string{
-      return <string>book.volumeInfo.imageLinks?.thumbnail;
-    }
+  getThumbnail(book:Item):string{
+    return <string>book.volumeInfo.imageLinks?.thumbnail;
+  }
 
-    getIsbn(book: Item):string{
-      // Contains ISBN-10 from the books
-      let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
-      let isbn: string[] = [];
-      // Puts ISBNs from industry identifier into empty string array
-      bookIds.forEach((id) => isbn.push(id.identifier))
-      // Grabbing first string out of the array that matches ISBN
-      return <string>isbn[0];
-    }
-
-    addFavorite(book:Item):any{
-      if(book.volumeInfo.categories == undefined){
-        book.volumeInfo.categories = [];
+  getIsbn(book: Item):string{
+    // Contains ISBN-10 from the books
+    let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
+    let isbn: string = "";
+    // Puts ISBNs from industry identifier into empty string array
+    bookIds.forEach((id) => {
+      if(id.type == "ISBN_10"){
+        isbn = id.identifier
       }
-      this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
-      book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
-        this.favoritesArray.push(response)
-      });
-      console.log(this.favorite);
-    }
+    })
+    // Grabbing first string out of the array that matches ISBN
+    return isbn;
+  }
 
-    addToWishList(book:Item):any{
-      this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
-        console.log(response);
-        this.wish.push(response);
-      });
+  addFavorite(book:Item):any{
+    if(book.volumeInfo.categories == undefined){
+      book.volumeInfo.categories = [];
     }
+    this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
+      this.favoritesArray.push(response)
+      console.log(response);
+    });
+  }
 
-    addToReadList(book:Item):any{
-      this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
-        console.log(response);
-        this.read.push(response);
-      });
-    }
+  addToWishList(book:Item):any{
+    this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
+      console.log(response);
+      this.wish.push(response);
+    });
+  }
 
-    addToDeniedList(book:Item):any{
-      this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
-        console.log(response);
-        this.denied.push(response);
-      });
-    }
-    
-    //Create a toggle that will hide Wishlist button after user clicks on the button
-  CheckIfInFavoriteList(book:Item):boolean{
-    return this.favoritesArray.some(f=> f.isbn == <string>this.getIsbn(book) && f.favoriteListId == this.user.id)
-    }
-    //Create a toggle that will hide Wishlist button after user clicks on the button
-    CheckIfInWishList(book:Item):boolean{
-      let wish: Wish = {
-        wishListId: this.user.id,
-        isbn: this.getIsbn(book)
+  addToReadList(book:Item):any{
+    this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
+      console.log(response);
+      this.read.push(response);
+    });
+  }
 
-      }
-      return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
-      }
-
-      CheckIfInReadList(book:Item):boolean{
-        let read: Read = {
-          readListId: this.user.id,
-          isbn: this.getIsbn(book)
+  addToDeniedList(book:Item):any{
+    this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
+      console.log(response);
+      this.denied.push(response);
+    });
+  }
   
-        }
-        return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
-        }
+  //Create a toggle that will hide Wishlist button after user clicks on the button
+  CheckIfInFavoriteList(book:Item):boolean{
+    console.log(this.favoritesArray.some(f => f.isbn == this.getIsbn(book)))
+    return this.favoritesArray.some(f => f.isbn == this.getIsbn(book))
+  }
+  
+  //Create a toggle that will hide Wishlist button after user clicks on the button
+  CheckIfInWishList(book:Item):boolean{
+    let wish: Wish = {
+      wishListId: this.user.id,
+      isbn: this.getIsbn(book)
 
-        CheckIfInDeniedList(book:Item):boolean{
-          let denied: Denied = {
-            deniedListId: this.user.id,
-            isbn: this.getIsbn(book)
+    }
+    return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
+    }
+
+  CheckIfInReadList(book:Item):boolean{
+    let read: Read = {
+      readListId: this.user.id,
+      isbn: this.getIsbn(book)
+
+    }
+    return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
+    }
+
+  CheckIfInDeniedList(book:Item):boolean{
+    let denied: Denied = {
+      deniedListId: this.user.id,
+      isbn: this.getIsbn(book)
+
+    }
+    return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
+    }
     
-          }
-          return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
-          }
-      
+  getWishList():any{
+    this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
+      this.wish = response;
+    });
+    console.log(this.wish);
+  }
 
-    getWishList():any{
-      this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
-        this.wish = response;
-      });
-      console.log(this.wish);
-    }
+  getReadList():any{
+    this.listsService.getReadList(this.user.id).subscribe((response:Read[]) => {
+      this.read = response;
+    });
+    console.log(this.read);
+  }
 
-    getReadList():any{
-      this.listsService.getReadList(this.user.id).subscribe((response:Read[]) => {
-        this.read = response;
-      });
-      console.log(this.read);
-    }
-
-    getDeniedList():any{
-      this.listsService.getDeniedList(this.user.id).subscribe((response:Denied[]) => {
-        this.denied = response;
-      })
-    }
-    getFavoriteList():any{
-      this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
-        this.favoritesArray = response;
-      })
-    }
+  getDeniedList():any{
+    this.listsService.getDeniedList(this.user.id).subscribe((response:Denied[]) => {
+      this.denied = response;
+    })
+  }
+  getFavoriteList():any{
+    this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
+      this.favoritesArray = response;
+    })
+  }
 
     getRecommendations(userId: string):any{
       //get list of favorites

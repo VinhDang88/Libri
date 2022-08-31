@@ -197,11 +197,11 @@ export class UserprofileComponent implements OnInit {
       readListId: this.user.id,
       isbn: this.getIsbn(book)
     }
-    return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book) ) || this.readLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
+    return this.readListItems.some(r => this.getIsbn(r) == this.getIsbn(book)) || this.readLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
   }
 
   checkIfInFavoriteList(book:Item):boolean{
-    return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book) ) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book))
+    return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book)) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book))
   }
 
   toggleFavoriteList():any{

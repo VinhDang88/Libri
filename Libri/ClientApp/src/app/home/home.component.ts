@@ -104,13 +104,13 @@ ngOnInit(): void {
     });
   }
   
-  //Create a toggle that will hide Wishlist button after user clicks on the button
+  //Create a toggle that will hide Favorite list button after user clicks on the button
+  // tried f.isbn.trim() but it broke the code in a different way***************************************************
   CheckIfInFavoriteList(book:Item):boolean{
-    console.log(this.favoritesArray.some(f => f.isbn == this.getIsbn(book)))
-    return this.favoritesArray.some(f => f.isbn == this.getIsbn(book))
+      return this.favoritesArray.some(f => f.isbn == this.getIsbn(book))
   }
   
-  //Create a toggle that will hide Wishlist button after user clicks on the button
+  //Create a toggle that will hide Wish list button after user clicks on the button
   CheckIfInWishList(book:Item):boolean{
     let wish: Wish = {
       wishListId: this.user.id,
@@ -160,41 +160,44 @@ ngOnInit(): void {
   getFavoriteList():any{
     this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
       this.favoritesArray = response;
+      console.log(response)
     })
   }
 
-    getRecommendations(userId: string):any{
-      //get list of favorites
-      this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
-        response.forEach((f:Favorites) => {
-          //gather titles to exclude from reccomendations
-          this.favoriteTitles.push(f.title);
+  getRecommendations(userId: string):any{
+    //get list of favorites
+    this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
+      response.forEach((f:Favorites) => {
+        //gather titles to exclude from reccomendations
+        this.favoriteTitles.push(f.title);
           //search by isbn to get favorites as book objects
           this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
-          //after getting favorites as book objects, search by description to get possible recommendations
-          response.items.forEach((i:Item) => {
-            // if no description, won't use it for search
-            if(i.volumeInfo.description != undefined)
-            {
-              this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-                //filter recommendations by category and add them to recommended list if the title is not already favorited
-                response.items.forEach((i:Item) => {
-                  if(!this.favoriteTitles.includes(i.volumeInfo.title)){
-                    this.recommendations.push(i);
-                  }
+            //after getting favorites as book objects, search by description to get possible recommendations
+            response.items.forEach((i:Item) => {
+              // if no description, won't use it for search
+              if(i.volumeInfo.description != undefined)
+              {
+                this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
+                  //filter recommendations by category and add them to recommended list if the title is not already favorited
+                  response.items.forEach((i:Item) => {
+                    if(!this.favoriteTitles.includes(i.volumeInfo.title))
+                    {
+                      this.recommendations.push(i);
+                    }
+                  })
                 })
-              })
-            }
-            //search based on author
-            this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
+              }
+              //search based on author
+              this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
               response.items.forEach((i:Item) => {
-                //add result from author search if book is not in reccomendations
-                if(!this.recommendations.includes(i) && !this.favoriteTitles.includes(i.volumeInfo.title)){
-                  this.recommendations.push(i)
-                }
+              //add result from author search if book is not in reccomendations
+              if(!this.recommendations.includes(i) && !this.favoriteTitles.includes(i.volumeInfo.title))
+              {
+                this.recommendations.push(i)
+              }
+              })
               })
             })
-          })
           console.log(this.recommendations);
         })
       })

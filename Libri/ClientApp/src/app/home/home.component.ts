@@ -25,6 +25,7 @@ export class HomeComponent {
   favoriteTitles: string[] = [];
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
+  favoritesArray: Favorites[] = [];
   wish: Wish[] = [];
   read: Read[] = [];
   denied: Denied[] = [];
@@ -35,6 +36,10 @@ ngOnInit(): void {
     this.user = user;
     this.loggedIn = (user != null);
     this.getRecommendations(this.user.id);
+    this.getWishList();
+    this.getFavoriteList();
+    this.getReadList();
+    this.getDeniedList();
   });
   
 }
@@ -69,7 +74,7 @@ ngOnInit(): void {
       }
       this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
       book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
-        this.favorite = response;
+        this.favoritesArray.push(response)
       });
       console.log(this.favorite);
     }
@@ -95,6 +100,21 @@ ngOnInit(): void {
       });
     }
 
+    //Create a toggle that will hide Wishlist button after user clicks on the button
+    CheckIfInWishList(book:Item):boolean{
+      let wish: Wish = {
+        wishListId: this.user.id,
+        isbn: this.getIsbn(book)
+
+      }
+      return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
+      }
+
+      //Create a toggle that will hide Wishlist button after user clicks on the button
+    CheckIfInFavoriteList(book:Item):boolean{
+      return this.favoritesArray.some(f=> f.isbn == <string>this.getIsbn(book) && f.favoriteListId == this.user.id)
+      }
+
     getWishList():any{
       this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
         this.wish = response;
@@ -112,6 +132,11 @@ ngOnInit(): void {
     getDeniedList():any{
       this.listsService.getDeniedList(this.user.id).subscribe((response:Denied[]) => {
         this.denied = response;
+      })
+    }
+    getFavoriteList():any{
+      this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
+        this.favoritesArray = response;
       })
     }
 

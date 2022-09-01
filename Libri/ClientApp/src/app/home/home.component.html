@@ -114,54 +114,101 @@
   </div>
 </div>
 
-<h1>Recommendations:</h1>
-<div *ngFor="let r of recommendations">
-  <div *ngIf="getThumbnail(r) != undefined" class="row-10 offset-1">
-    <div class="col-2">
-      <img src="{{ getThumbnail(r) }}" />
-    </div>
-    <div class="col-6 searchInfo">
-      <h4>{{ r.volumeInfo.title }}</h4>
-      <!-- <h5>description:&nbsp;</h5> -->
-      <!-- <p>{{ b.volumeInfo.description }}</p> -->
-      <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
-      <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
-      <h5>Categories: {{ r.volumeInfo.categories }}</h5>
-      <p *ngIf="r.volumeInfo.ratingsCount != undefined">
-        Rating: {{ r.volumeInfo.averageRating }} / 5
-      </p>
-      <p *ngIf="r.volumeInfo.ratingsCount == undefined">
-        Ratings not available
-      </p>
-      <button
-        *ngIf="loggedIn && !CheckIfInFavoriteList(r)"
-        (click)="addFavorite(r)"
-      >
-        Favorite
-      </button>
-      <p *ngIf="!loggedIn">Log in to favorite</p>
-      <button
-        *ngIf="loggedIn && !CheckIfInWishList(r)"
-        (click)="addToWishList(r)"
-      >
-        Add To Wish List
-      </button>
-      <p *ngIf="!loggedIn">Log in to make a wish list</p>
-      <button
-        *ngIf="loggedIn && !CheckIfInReadList(r)"
-        (click)="addToReadList(r)"
-      >
-        Already Read It
-      </button>
-      <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
-      <button
-        *ngIf="loggedIn && !CheckIfInDeniedList(r)"
-        (click)="addToDeniedList(r)"
-      >
-        Deny It
-      </button>
-      <br />
-      <br />
-    </div>
+<!-- <div *ngFor="let r of recommendations"> -->
+<!-- *ngIf="getThumbnail(recommendations[recommendationCount]) != undefined" -->
+<h1 *ngIf="showRecommended()">Recommendations:</h1>
+<div *ngIf="showRecommended()" class="recommendedContainer">
+  <div class="recommendedThumbnail">
+    <img
+      class="recommendedImage"
+      src="{{ getThumbnail(recommendations[recommendationCount]) }}"
+    />
   </div>
+  <div class="recommendedInfo">
+    <h2>{{ recommendations[recommendationCount].volumeInfo.title }}</h2>
+    <!-- <h5>description:&nbsp;</h5> -->
+    <!-- <p>{{ b.volumeInfo.description }}</p> -->
+    <h3>
+      Author(s): {{ recommendations[recommendationCount].volumeInfo.authors }}
+    </h3>
+    <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
+    <h3>
+      Categories:
+      {{ recommendations[recommendationCount].volumeInfo.categories }}
+    </h3>
+    <h3
+      *ngIf="
+        recommendations[recommendationCount].volumeInfo.ratingsCount !=
+        undefined
+      "
+    >
+      Rating:
+      {{ recommendations[recommendationCount].volumeInfo.averageRating }} / 5
+    </h3>
+    <h3
+      *ngIf="
+        recommendations[recommendationCount].volumeInfo.ratingsCount ==
+        undefined
+      "
+    >
+      Ratings not available
+    </h3>
+  </div>
+  <div class="recommendedButtons">
+    <button
+      class="iconButton"
+      *ngIf="
+        loggedIn && !CheckIfInFavoriteList(recommendations[recommendationCount])
+      "
+      (click)="addFavorite(recommendations[recommendationCount])"
+    >
+      <span id="icon" class="material-symbols-outlined"> hotel_class </span>
+      <br />
+      <p class="buttonText">Favorite</p>
+    </button>
+    <p *ngIf="!loggedIn">Log in to favorite</p>
+    <br />
+    <button
+      class="iconButton"
+      *ngIf="
+        loggedIn && !CheckIfInWishList(recommendations[recommendationCount])
+      "
+      (click)="addToWishList(recommendations[recommendationCount])"
+    >
+      <span id="icon" class="material-symbols-outlined"> menu_book </span>
+      <br />
+      <p class="buttonText">Wish List</p>
+    </button>
+    <p *ngIf="!loggedIn">Log in to make a wish list</p>
+    <br />
+    <button
+      class="iconButton"
+      *ngIf="
+        loggedIn && !CheckIfInReadList(recommendations[recommendationCount])
+      "
+      (click)="addToReadList(recommendations[recommendationCount])"
+    >
+      <span id="icon" class="material-symbols-outlined"> bookmark_added </span>
+      <br />
+      <p class="buttonText">Already Read</p>
+    </button>
+    <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
+    <br />
+    <button
+      class="iconButton"
+      *ngIf="
+        loggedIn && !CheckIfInDeniedList(recommendations[recommendationCount])
+      "
+      (click)="addToDeniedList(recommendations[recommendationCount])"
+    >
+      <span id="icon" class="material-symbols-outlined"> dangerous </span>
+      <br />
+      <p class="buttonText">Uninterested</p>
+    </button>
+  </div>
+  <br />
+  <button class="nextRecommendButton" (click)="nextRecommendation()">
+    <span class="material-symbols-outlined"> arrow_forward_ios </span>
+  </button>
 </div>
+<!-- </div> -->

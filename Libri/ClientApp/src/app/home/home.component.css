@@ -1,4 +1,57 @@
 .searchBar{
     display: flex;
     justify-content: center;
+    margin-top: 2%;
 }
+
+
+
+.recommendedContainer{
+    display:flex;
+    justify-content: center;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding:2%;
+    background-color: #9CC0E7;
+    
+}
+
+.recommendedThumbnail{
+    margin-right: 15%;
+    padding-left: 0%;
+}
+
+.recommendedImage{
+    height: 100%;
+    width:auto; 
+    
+}
+
+.recommendedInfo{
+    padding-right: 3%;
+}
+
+.recommendedButtons{
+    padding-right: 3%;
+}
+
+#icon{
+    font-size: 300%;
+}
+
+.buttonText{
+    font-size: xx-small;
+}
+
+.iconButton{
+    border: none;
+    /* background-color:#FAEACB; */
+    background-color: #9CC0E7;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+    font-family: 'Noto Sans', sans-serif;
+}
+
+
+

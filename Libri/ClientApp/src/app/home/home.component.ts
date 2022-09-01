@@ -29,6 +29,9 @@ export class HomeComponent {
   wish: Wish[] = [];
   read: Read[] = [];
   denied: Denied[] = [];
+  recommendationCount:number = 0;
+  recommendedHasBooks:boolean = false;
+  
 
 
 ngOnInit(): void {
@@ -43,6 +46,7 @@ ngOnInit(): void {
   });
   
 }
+
 //Queries a book based on the users form and gives back top result.
   SearchBooks(form:NgForm):void{
     this.title = form.form.value.title
@@ -55,7 +59,18 @@ ngOnInit(): void {
   }
 
   getThumbnail(book:Item):string{
+    if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null )
+    {
+      let thumbnail:string = "../../assets/thumbnail.png";
+      return thumbnail;
+    }
+    else{
     return <string>book.volumeInfo.imageLinks?.thumbnail;
+    }
+  }
+
+  showRecommended():boolean{
+    return this.recommendations.length > 0;
   }
 
   getIsbn(book: Item):string{
@@ -162,6 +177,19 @@ ngOnInit(): void {
       this.favoritesArray = response;
       console.log(response)
     })
+  }
+
+  nextRecommendation():number{
+    console.log(this.recommendations.length)
+    if(this.recommendationCount < this.recommendations.length){
+      console.log(this.recommendationCount)
+      return this.recommendationCount++;
+    }
+    else{
+      console.log(this.recommendationCount)
+      return this.recommendationCount;
+    }
+    
   }
 
   getRecommendations(userId: string):any{

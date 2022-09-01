@@ -133,6 +133,9 @@ export class UserprofileComponent implements OnInit {
       }
     })
     // Grabbing first string out of the array that matches ISBN
+    if(isbn == ""){
+      isbn = bookIds[0].type
+    }
     return isbn;
   }
 

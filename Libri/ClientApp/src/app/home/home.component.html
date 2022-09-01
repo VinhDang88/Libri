@@ -1,58 +1,3 @@
-<!-- 
-<div class="row">
-  <div
-    id="carouselExampleControls"
-    class="carousel carousel-dark slide"
-    data-bs-ride="carousel"
-  >
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img
-          src="http://www.flightclub.com/media/catalog/product/2/0/201536_1.jpg"
-          height="600px"
-          class="d-block w-100"
-          alt="..."
-        />
-      </div>
-      <div class="carousel-item">
-        <img
-          src="https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$"
-          height="600px"
-          class="d-block w-100"
-          alt="..."
-        />
-      </div>
-      <div class="carousel-item">
-        <img
-          height="600px"
-          src="https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3090/geforce-rtx-3090-shop-630-d@2x.png"
-          class="d-block w-100"
-          alt="..."
-        />
-      </div>
-    </div>
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#carouselExampleControls"
-      data-bs-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#carouselExampleControls"
-      data-bs-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-</div>
- -->
-
 <div class="searchBar">
   <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
     <input type="text" name="title" placeholder="Search by title" ngModel />
@@ -63,25 +8,33 @@
 </div>
 <!-- work with the div below to create a carousel -->
 <div style="overflow: auto; white-space: nowrap">
+  <br />
+  <br />
   <div class="searchResults" *ngFor="let b of books.items">
     <div *ngIf="getThumbnail(b) != undefined" class="row-10 offset-1">
       <!-- goes in div above: class="row-10 offset-1" -->
       <div class="col-2">
-        <img src="{{ getThumbnail(b) }}" />
+        <a routerLink="/Book/{{ getIsbn(b) }}"
+          ><img class="zoom" src="{{ getThumbnail(b) }}"
+        /></a>
       </div>
       <div class="col-6 searchInfo">
-        <h4>{{ b.volumeInfo.title }}</h4>
+        <h4>
+          <a routerLink="/Book/{{ getIsbn(b) }}">{{ b.volumeInfo.title }}</a>
+        </h4>
         <!-- <h5>description:&nbsp;</h5> -->
         <!-- <p>{{ b.volumeInfo.description }}</p> -->
         <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
         <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
         <h5>Categories: {{ b.volumeInfo.categories }}</h5>
         <p *ngIf="b.volumeInfo.ratingsCount != undefined">
-          Rating: {{ b.volumeInfo.averageRating }} / 5
+          Average Rating: {{ b.volumeInfo.averageRating }} / 5
         </p>
         <p *ngIf="b.volumeInfo.ratingsCount == undefined">
           Rating not available
         </p>
+        <!-- Testing route to single book info -->
+        <!-- <a routerLink="/Book/1781100489"> Test Link </a> -->
         <button
           *ngIf="loggedIn && !CheckIfInFavoriteList(b)"
           (click)="addFavorite(b)"
@@ -119,13 +72,19 @@
 <h1 *ngIf="showRecommended()">Recommendations:</h1>
 <div *ngIf="showRecommended()" class="recommendedContainer">
   <div class="recommendedThumbnail">
-    <img
-      class="recommendedImage"
-      src="{{ getThumbnail(recommendations[recommendationCount]) }}"
-    />
+    <a routerLink="/Book/{{ getIsbn(recommendations[recommendationCount]) }}"
+      ><img
+        class="recommendedImage"
+        src="{{ getThumbnail(recommendations[recommendationCount]) }}"
+    /></a>
   </div>
   <div class="recommendedInfo">
-    <h2>{{ recommendations[recommendationCount].volumeInfo.title }}</h2>
+    <h2>
+      <a
+        routerLink="/Book/{{ getIsbn(recommendations[recommendationCount]) }}"
+        >{{ recommendations[recommendationCount].volumeInfo.title }}</a
+      >
+    </h2>
     <!-- <h5>description:&nbsp;</h5> -->
     <!-- <p>{{ b.volumeInfo.description }}</p> -->
     <h3>
@@ -142,7 +101,7 @@
         undefined
       "
     >
-      Rating:
+      Average Rating:
       {{ recommendations[recommendationCount].volumeInfo.averageRating }} / 5
     </h3>
     <h3

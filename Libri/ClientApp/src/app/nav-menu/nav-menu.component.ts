@@ -38,7 +38,7 @@ export class NavMenuComponent implements OnInit {
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
-//Allows google user to sign out
+//Allows google user to sign out and redirects to home page
   signOut(): void {
     this.authService.signOut();
     this.router.navigate(['/']);

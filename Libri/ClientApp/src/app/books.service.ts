@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 
 @Injectable({
@@ -6,8 +6,7 @@ import { HttpClient } from '@angular/common/http'
 })
 export class BooksService {
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string
-  ) { }
+  constructor(private http: HttpClient) { }
 
   url: string = "https://www.googleapis.com/books/v1/volumes?q="
 

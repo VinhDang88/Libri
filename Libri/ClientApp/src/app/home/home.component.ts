@@ -14,6 +14,7 @@ import { Wish } from '../wish';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent {
   constructor(private bookService: BooksService, private listsService: ListsService, private authService: SocialAuthService) {}
   books: Books = {} as Books;
@@ -44,7 +45,6 @@ ngOnInit(): void {
     this.getReadList();
     this.getDeniedList();
   });
-  
 }
 
 //Queries a book based on the users form and gives back top result.
@@ -59,12 +59,13 @@ ngOnInit(): void {
   }
 
   getThumbnail(book:Item):string{
-    if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null )
+    if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null)
     {
       let thumbnail:string = "../../assets/thumbnail.png";
       return thumbnail;
     }
-    else{
+    else
+    {
     return <string>book.volumeInfo.imageLinks?.thumbnail;
     }
   }
@@ -123,7 +124,6 @@ ngOnInit(): void {
   }
   
   //Create a toggle that will hide Favorite list button after user clicks on the button
-  // tried f.isbn.trim() but it broke the code in a different way***************************************************
   CheckIfInFavoriteList(book:Item):boolean{
       return this.favoritesArray.some(f => f.isbn.trim().toString() == this.getIsbn(book))
   }
@@ -133,7 +133,6 @@ ngOnInit(): void {
     let wish: Wish = {
       wishListId: this.user.id,
       isbn: this.getIsbn(book)
-
     }
     return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
     }
@@ -142,7 +141,6 @@ ngOnInit(): void {
     let read: Read = {
       readListId: this.user.id,
       isbn: this.getIsbn(book)
-
     }
     return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
     }
@@ -151,7 +149,6 @@ ngOnInit(): void {
     let denied: Denied = {
       deniedListId: this.user.id,
       isbn: this.getIsbn(book)
-
     }
     return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
     }
@@ -192,7 +189,6 @@ ngOnInit(): void {
       console.log(this.recommendationCount)
       return this.recommendationCount;
     }
-    
   }
 
   getRecommendations(userId: string):any{

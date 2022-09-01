@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { Secret } from './secret';
 import { UserprofileComponent } from './userprofile/userprofile.component';
+import { SingleBookComponent } from './single-book/single-book.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { UserprofileComponent } from './userprofile/userprofile.component';
     NavMenuComponent,
     HomeComponent,
     UserprofileComponent,
+    SingleBookComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,7 +28,8 @@ import { UserprofileComponent } from './userprofile/userprofile.component';
     SocialLoginModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      {path: 'UserProfile', component:UserprofileComponent}
+      { path: 'UserProfile', component:UserprofileComponent },
+      { path: 'Book/:isbn', component:SingleBookComponent }
     ])
   ],
   providers: [

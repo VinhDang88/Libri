@@ -82,6 +82,12 @@ export class SingleBookComponent implements OnInit {
     if(book.volumeInfo.categories == undefined){
       book.volumeInfo.categories = [];
     }
+    if(book.volumeInfo.authors == undefined){
+      book.volumeInfo.authors = [];
+    }
+    if(book.volumeInfo.title == undefined){
+      book.volumeInfo.title = "";
+    }
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
       this.favoritesArray.push(response)

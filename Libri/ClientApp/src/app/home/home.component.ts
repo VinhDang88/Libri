@@ -35,19 +35,19 @@ export class HomeComponent {
   
 
 
-ngOnInit(): void {
-  this.authService.authState.subscribe((user) => {
-    this.user = user;
-    this.loggedIn = (user != null);
-    this.getRecommendations(this.user.id);
-    this.getWishList();
-    this.getFavoriteList();
-    this.getReadList();
-    this.getDeniedList();
-  });
-}
+  ngOnInit(): void {
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+      this.getRecommendations(this.user.id);
+      this.getWishList();
+      this.getFavoriteList();
+      this.getReadList();
+      this.getDeniedList();
+    });
+  }
 
-//Queries a book based on the users form and gives back top result.
+  //Queries a book based on the users form and gives back top result.
   SearchBooks(form:NgForm):void{
     this.title = form.form.value.title
     this.author = form.form.value.author
@@ -181,7 +181,30 @@ ngOnInit(): void {
 
   nextRecommendation():number{
     console.log(this.recommendations.length)
-    if(this.recommendationCount < this.recommendations.length){
+    if(this.recommendationCount < this.recommendations.length - 1){
+      console.log(this.recommendationCount)
+      return this.recommendationCount++;
+    }
+    else{
+      console.log(this.recommendationCount)
+      return this.recommendationCount;
+    }
+  }
+
+  nextFromFavorite(book:Item):number{
+    if(this.CheckIfInReadList(book) && this.recommendationCount < this.recommendations.length - 1){
+        console.log(this.recommendationCount)
+        return this.recommendationCount++;
+    }
+    else{
+      console.log(this.recommendationCount)
+      return this.recommendationCount;
+    }
+  }
+  
+
+  nextFromReadList(book:Item):number{
+    if(this.CheckIfInFavoriteList(book) && this.recommendationCount < this.recommendations.length - 1){
       console.log(this.recommendationCount)
       return this.recommendationCount++;
     }
@@ -200,37 +223,42 @@ ngOnInit(): void {
           //search by isbn to get favorites as book objects
           this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
             //after getting favorites as book objects, search by description to get possible recommendations
-            response.items.forEach((i:Item) => {
-              // if no description, won't use it for search
-              if(i.volumeInfo.description != undefined)
-              {
-                this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-                  //filter recommendations by category and add them to recommended list if the title is not already favorited
-                  response.items.forEach((i:Item) => {
-                    if(!this.favoriteTitles.includes(i.volumeInfo.title))
-                    {
-                      this.recommendations.push(i);
-                    }
-                  })
-                })
-              }
-              //search based on author
-              this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
+            if(response.items != undefined){
               response.items.forEach((i:Item) => {
-              //add result from author search if book is not in reccomendations
-              if(!this.recommendations.includes(i) && !this.favoriteTitles.includes(i.volumeInfo.title))
-              {
-                this.recommendations.push(i)
-              }
+                // if no description, won't use it for search
+                if(i.volumeInfo.description != undefined)
+                {
+                  this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
+                    //add books from descriptions search to recommended list if the title is not already favorited
+                    response.items.forEach((i:Item) => {
+                      if(!this.favoriteTitles.includes(i.volumeInfo.title))
+                      {
+                        this.recommendations.push(i);
+                      }
+                    })
+                  })
+                }             
+                //search based on author
+                this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
+                response.items.forEach((i:Item) => {
+                //add result from author search if book is not in reccomendations
+                if(!this.recommendations.includes(i) && !this.favoriteTitles.includes(i.volumeInfo.title))
+                {
+                  this.recommendations.push(i)
+                }
+                })
+                })
               })
-              })
-            })
+          }
           console.log(this.recommendations);
         })
       })
     })
   };
+
 }
+
+
 
 
 

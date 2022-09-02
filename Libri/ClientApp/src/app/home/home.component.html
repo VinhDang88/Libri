@@ -1,3 +1,4 @@
+<!-- searchbar, allows search w/ any combination of title, author, and subject -->
 <div class="searchBar">
   <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
     <input type="text" name="title" placeholder="Search by title" ngModel />
@@ -7,18 +8,15 @@
   </form>
 </div>
 <!-- work with the div below to create a carousel -->
-<div style="overflow: auto; white-space: nowrap">
-  <br />
-  <br />
-  <div class="searchResults" *ngFor="let b of books.items">
-    <div *ngIf="getThumbnail(b) != undefined" class="row-10 offset-1">
-      <!-- goes in div above: class="row-10 offset-1" -->
-      <div class="col-2">
+<div *ngIf="books.items != undefined" class="searchResultsContainer">
+  <div *ngFor="let b of books.items">
+    <div class="searchResult">
+      <div class="searchImage">
         <a routerLink="/Book/{{ getIsbn(b) }}"
           ><img class="zoom" src="{{ getThumbnail(b) }}"
         /></a>
       </div>
-      <div class="col-6 searchInfo">
+      <div class="searchInfo">
         <h4>
           <a routerLink="/Book/{{ getIsbn(b) }}">{{ b.volumeInfo.title }}</a>
         </h4>
@@ -33,44 +31,59 @@
         <p *ngIf="b.volumeInfo.ratingsCount == undefined">
           Rating not available
         </p>
-        <!-- Testing route to single book info -->
-        <!-- <a routerLink="/Book/1781100489"> Test Link </a> -->
+      </div>
+      <!-- Testing route to single book info -->
+      <!-- <a routerLink="/Book/1781100489"> Test Link </a> -->
+      <div class="searchButtons">
         <button
+          class="iconButton"
           *ngIf="loggedIn && !CheckIfInFavoriteList(b)"
-          (click)="addFavorite(b)"
+          (click)="addFavorite(b); getRecommendations(this.user.id)"
         >
-          Favorite
+          <span id="icon" class="material-symbols-outlined"> hotel_class </span>
+          <br />
+          <p class="buttonText">Favorite</p>
         </button>
-        <p *ngIf="!loggedIn">Log in to add books to custom lists</p>
+        <p *ngIf="!loggedIn">Log in to create personalized lists</p>
         <button
+          class="iconButton"
           *ngIf="loggedIn && !CheckIfInWishList(b)"
           (click)="addToWishList(b)"
         >
-          Add To Wish List
+          <span id="icon" class="material-symbols-outlined"> menu_book </span>
+          <br />
+          <p class="buttonText">Wish List</p>
         </button>
         <button
+          class="iconButton"
           *ngIf="loggedIn && !CheckIfInReadList(b)"
           (click)="addToReadList(b)"
         >
-          Already Read It
+          <span id="icon" class="material-symbols-outlined">
+            bookmark_added
+          </span>
+          <br />
+          <p class="buttonText">Already Read</p>
         </button>
         <button
+          class="iconButton"
           *ngIf="loggedIn && !CheckIfInDeniedList(b)"
           (click)="addToDeniedList(b)"
         >
-          Deny It
+          <span id="icon" class="material-symbols-outlined"> dangerous </span>
+          <br />
+          <p class="buttonText">Uninterested</p>
         </button>
-        <br />
-        <br />
       </div>
     </div>
   </div>
 </div>
 
-<!-- <div *ngFor="let r of recommendations"> -->
-<!-- *ngIf="getThumbnail(recommendations[recommendationCount]) != undefined" -->
+<!-- displays recommendations only if user is logged in -->
 <h1 *ngIf="showRecommended()">Recommendations:</h1>
+<!-- container for recommended image, info, and buttons -->
 <div *ngIf="showRecommended()" class="recommendedContainer">
+  <!-- recommendation image, clicking brings user to book info page -->
   <div class="recommendedThumbnail">
     <a routerLink="/Book/{{ getIsbn(recommendations[recommendationCount]) }}"
       ><img
@@ -78,6 +91,7 @@
         src="{{ getThumbnail(recommendations[recommendationCount]) }}"
     /></a>
   </div>
+  <!-- displays all info on recommended book in container -->
   <div class="recommendedInfo">
     <h2>
       <a
@@ -85,12 +99,9 @@
         >{{ recommendations[recommendationCount].volumeInfo.title }}</a
       >
     </h2>
-    <!-- <h5>description:&nbsp;</h5> -->
-    <!-- <p>{{ b.volumeInfo.description }}</p> -->
     <h3>
       Author(s): {{ recommendations[recommendationCount].volumeInfo.authors }}
     </h3>
-    <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
     <h3>
       Categories:
       {{ recommendations[recommendationCount].volumeInfo.categories }}
@@ -104,6 +115,7 @@
       Average Rating:
       {{ recommendations[recommendationCount].volumeInfo.averageRating }} / 5
     </h3>
+    <!-- switches text if book does not have ratings -->
     <h3
       *ngIf="
         recommendations[recommendationCount].volumeInfo.ratingsCount ==
@@ -113,52 +125,66 @@
       Ratings not available
     </h3>
   </div>
+  <!-- holds list buttons in recommended container -->
   <div class="recommendedButtons">
+    <!-- displays favorite button only if book is not favorited, if also in read list goes to next recommendation -->
     <button
       class="iconButton"
       *ngIf="
         loggedIn && !CheckIfInFavoriteList(recommendations[recommendationCount])
       "
-      (click)="addFavorite(recommendations[recommendationCount])"
+      (click)="
+        addFavorite(recommendations[recommendationCount]);
+        nextFromFavorite(recommendations[recommendationCount])
+      "
     >
       <span id="icon" class="material-symbols-outlined"> hotel_class </span>
       <br />
       <p class="buttonText">Favorite</p>
+      <!-- displays wishlist button only if not in wishlist, goes to next recommendation -->
     </button>
-    <p *ngIf="!loggedIn">Log in to favorite</p>
     <br />
     <button
       class="iconButton"
       *ngIf="
         loggedIn && !CheckIfInWishList(recommendations[recommendationCount])
       "
-      (click)="addToWishList(recommendations[recommendationCount])"
+      (click)="
+        addToWishList(recommendations[recommendationCount]);
+        nextRecommendation()
+      "
     >
       <span id="icon" class="material-symbols-outlined"> menu_book </span>
       <br />
       <p class="buttonText">Wish List</p>
     </button>
-    <p *ngIf="!loggedIn">Log in to make a wish list</p>
     <br />
+    <!-- displays readlist button only if not in readlist, goes to next recommendation if also favorited -->
     <button
       class="iconButton"
       *ngIf="
         loggedIn && !CheckIfInReadList(recommendations[recommendationCount])
       "
-      (click)="addToReadList(recommendations[recommendationCount])"
+      (click)="
+        addToReadList(recommendations[recommendationCount]);
+        nextFromReadList(recommendations[recommendationCount])
+      "
     >
       <span id="icon" class="material-symbols-outlined"> bookmark_added </span>
       <br />
       <p class="buttonText">Already Read</p>
     </button>
-    <p *ngIf="!loggedIn">Log in to make a list of books you already read</p>
     <br />
+    <!-- displays denied list button, goes to next reccomendation -->
     <button
       class="iconButton"
       *ngIf="
         loggedIn && !CheckIfInDeniedList(recommendations[recommendationCount])
       "
-      (click)="addToDeniedList(recommendations[recommendationCount])"
+      (click)="
+        addToDeniedList(recommendations[recommendationCount]);
+        nextRecommendation()
+      "
     >
       <span id="icon" class="material-symbols-outlined"> dangerous </span>
       <br />
@@ -166,8 +192,8 @@
     </button>
   </div>
   <br />
+  <!-- go to next recommendation without clicking list buttons -->
   <button class="nextRecommendButton" (click)="nextRecommendation()">
     <span class="material-symbols-outlined"> arrow_forward_ios </span>
   </button>
 </div>
-<!-- </div> -->

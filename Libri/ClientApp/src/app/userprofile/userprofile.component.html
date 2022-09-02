@@ -1,95 +1,186 @@
 <!-- User Information -->
 <h1 *ngIf="!loggedIn">Please sign in to see your profile!</h1>
+<div *ngIf="loggedIn" class="profileContainer">
+  <p>Welcome {{ user.firstName }}!</p>
 
-<p *ngIf="loggedIn">Welcome {{ user.firstName }}!</p>
+  <img src="{{ user.photoUrl }}" />
+  <br />
+  <br />
 
-<img src="{{ user.photoUrl }}" />
-<br />
-<br />
-
-<!-- Display number of items in each list -->
-<p *ngIf="loggedIn && displayFavoriteList">
-  # of Favorite List {{ favListItems.length }}
-</p>
-<p *ngIf="loggedIn && displayWishList">
-  # of Wish List {{ wishListItems.length }}
-</p>
-<p *ngIf="loggedIn && displayReadList">
-  # of Read List {{ readListItems.length }}
-</p>
-<p *ngIf="loggedIn && displayDeniedList">
-  # of Denied List {{ deniedListItems.length }}
-</p>
+  <!-- Display number of items in each list -->
+  <p *ngIf="loggedIn && displayFavoriteList">
+    # of Favorite List {{ favListItems.length }}
+  </p>
+  <p *ngIf="loggedIn && displayWishList">
+    # of Wish List {{ wishListItems.length }}
+  </p>
+  <p *ngIf="loggedIn && displayReadList">
+    # of Read List {{ readListItems.length }}
+  </p>
+  <p *ngIf="loggedIn && displayDeniedList">
+    # of Denied List {{ deniedListItems.length }}
+  </p>
+</div>
 
 <!-- Buttons -->
-<button *ngIf="loggedIn" (click)="toggleFavoriteList()">Favorites</button>
-<button *ngIf="loggedIn" (click)="toggleWishList()">WishList</button>
-<button *ngIf="loggedIn" (click)="toggleReadList()">ReadList</button>
-<button *ngIf="loggedIn" (click)="toggleDeniedList()">DeniedList</button>
+<div class="buttonContainer">
+  <button class="displayButton" *ngIf="loggedIn" (click)="toggleFavoriteList()">
+    Favorites
+  </button>
+  <button class="displayButton" *ngIf="loggedIn" (click)="toggleWishList()">
+    WishList
+  </button>
+  <button class="displayButton" *ngIf="loggedIn" (click)="toggleReadList()">
+    ReadList
+  </button>
+  <button class="displayButton" *ngIf="loggedIn" (click)="toggleDeniedList()">
+    DeniedList
+  </button>
+</div>
 
 <!-- List Displays -->
 <div *ngIf="displayFavoriteList">
-  <h3 *ngIf="loggedIn">Favorite List</h3>
-  <div *ngFor="let f of favListItems">
-    <img src="{{ getThumbnail(f) }}" />
-    <h4>{{ f.volumeInfo.title }}</h4>
-    <h5>Author(s): {{ f.volumeInfo.authors }}</h5>
-    <h5>Categories: {{ f.volumeInfo.categories }}</h5>
-    <p *ngIf="f.volumeInfo.ratingsCount != undefined">
-      Rating: {{ f.volumeInfo.averageRating }} / 5
-    </p>
-    <p *ngIf="f.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteFavoriteListObject(f)">Remove</button>
-    <button *ngIf="!checkIfInReadList(f)" (click)="addToReadList(f)">
-      Read List
-    </button>
+  <div *ngIf="loggedIn" class="listContainer">
+    <h3>Favorite List</h3>
+    <div *ngFor="let f of favListItems">
+      <div class="bookContainer">
+        <div class="bookImage">
+          <img src="{{ getThumbnail(f) }}" />
+        </div>
+        <div class="bookInfo">
+          <h4>{{ f.volumeInfo.title }}</h4>
+          <h5>Author(s): {{ f.volumeInfo.authors }}</h5>
+          <h5>Categories: {{ f.volumeInfo.categories }}</h5>
+          <p *ngIf="f.volumeInfo.ratingsCount != undefined">
+            Rating: {{ f.volumeInfo.averageRating }} / 5
+          </p>
+          <p *ngIf="f.volumeInfo.ratingsCount == undefined">
+            Rating not available
+          </p>
+        </div>
+        <div class="bookButtons">
+          <button class="iconButton" (click)="deleteFavoriteListObject(f)">
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
+            <p class="buttonText">Remove</p>
+          </button>
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInReadList(f)"
+            (click)="addToReadList(f)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div *ngIf="displayWishList">
-  <h3 *ngIf="loggedIn">Wish List</h3>
-  <div *ngFor="let w of wishListItems">
-    <img src="{{ getThumbnail(w) }}" />
-    <h4>{{ w.volumeInfo.title }}</h4>
-    <h5>Author(s): {{ w.volumeInfo.authors }}</h5>
-    <h5>Categories: {{ w.volumeInfo.categories }}</h5>
-    <p *ngIf="w.volumeInfo.ratingsCount != undefined">
-      Rating: {{ w.volumeInfo.averageRating }} / 5
-    </p>
-    <p *ngIf="w.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteWishListObject(w)">Remove</button>
+  <div *ngIf="loggedIn" class="listContainer">
+    <h3 *ngIf="loggedIn">Wish List</h3>
+    <div *ngFor="let w of wishListItems">
+      <div class="bookContainer">
+        <div class="bookImage">
+          <img src="{{ getThumbnail(w) }}" />
+        </div>
+        <div class="bookInfo">
+          <h4>{{ w.volumeInfo.title }}</h4>
+          <h5>Author(s): {{ w.volumeInfo.authors }}</h5>
+          <h5>Categories: {{ w.volumeInfo.categories }}</h5>
+          <p *ngIf="w.volumeInfo.ratingsCount != undefined">
+            Rating: {{ w.volumeInfo.averageRating }} / 5
+          </p>
+          <p *ngIf="w.volumeInfo.ratingsCount == undefined">
+            Rating not available
+          </p>
+        </div>
+        <div class="bookButtons">
+          <button class="iconButton" (click)="deleteWishListObject(w)">
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
+            <p class="buttonText">Remove</p>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div *ngIf="displayReadList">
-  <h3 *ngIf="loggedIn">Read List</h3>
-  <div *ngFor="let r of readListItems">
-    <img src="{{ getThumbnail(r) }}" />
-    <h4>{{ r.volumeInfo.title }}</h4>
-    <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
-    <h5>Categories: {{ r.volumeInfo.categories }}</h5>
-    <p *ngIf="r.volumeInfo.ratingsCount != undefined">
-      Rating: {{ r.volumeInfo.averageRating }} / 5
-    </p>
-    <p *ngIf="r.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteReadListObject(r)">Remove</button>
-    <button *ngIf="!checkIfInFavoriteList(r)" (click)="addFavorite(r)">
-      Favorite
-    </button>
+  <div *ngIf="loggedIn" class="listContainer">
+    <h3 *ngIf="loggedIn">Read List</h3>
+    <div *ngFor="let r of readListItems">
+      <div class="bookContainer">
+        <div class="bookImage">
+          <img src="{{ getThumbnail(r) }}" />
+        </div>
+        <div class="bookInfo">
+          <h4>{{ r.volumeInfo.title }}</h4>
+          <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
+          <h5>Categories: {{ r.volumeInfo.categories }}</h5>
+          <p *ngIf="r.volumeInfo.ratingsCount != undefined">
+            Rating: {{ r.volumeInfo.averageRating }} / 5
+          </p>
+          <p *ngIf="r.volumeInfo.ratingsCount == undefined">
+            Rating not available
+          </p>
+        </div>
+        <div class="bookButtons">
+          <button class="iconButton" (click)="deleteReadListObject(r)">
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
+            <p class="buttonText">Remove</p>
+          </button>
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInFavoriteList(r)"
+            (click)="addFavorite(r)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div *ngIf="displayDeniedList">
-  <h3 *ngIf="loggedIn">Denied List</h3>
-  <div *ngFor="let d of deniedListItems">
-    <img src="{{ getThumbnail(d) }}" />
-    <h4>{{ d.volumeInfo.title }}</h4>
-    <h5>Author(s): {{ d.volumeInfo.authors }}</h5>
-    <h5>Categories: {{ d.volumeInfo.categories }}</h5>
-    <p *ngIf="d.volumeInfo.ratingsCount != undefined">
-      Rating: {{ d.volumeInfo.averageRating }} / 5
-    </p>
-    <p *ngIf="d.volumeInfo.ratingsCount == undefined">Rating not available</p>
-    <button (click)="deleteDeniedListObject(d)">Remove</button>
+  <div *ngIf="loggedIn" class="listContainer">
+    <h3 *ngIf="loggedIn">Denied List</h3>
+    <div *ngFor="let d of deniedListItems">
+      <div class="bookContainer">
+        <div class="bookImage">
+          <img src="{{ getThumbnail(d) }}" />
+        </div>
+        <div class="bookInfo">
+          <h4>{{ d.volumeInfo.title }}</h4>
+          <h5>Author(s): {{ d.volumeInfo.authors }}</h5>
+          <h5>Categories: {{ d.volumeInfo.categories }}</h5>
+          <p *ngIf="d.volumeInfo.ratingsCount != undefined">
+            Rating: {{ d.volumeInfo.averageRating }} / 5
+          </p>
+          <p *ngIf="d.volumeInfo.ratingsCount == undefined">
+            Rating not available
+          </p>
+        </div>
+        <div class="bookButtons">
+          <button class="iconButton" (click)="deleteDeniedListObject(d)">
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
+            <p class="buttonText">Remove</p>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

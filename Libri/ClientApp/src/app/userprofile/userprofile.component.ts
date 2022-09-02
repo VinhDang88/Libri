@@ -111,9 +111,11 @@ export class UserprofileComponent implements OnInit {
   getFavoriteListByIsbn():any{
     this.favoriteList.forEach((f:Favorites)=>{
       this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books)=>{
-        response.items.forEach((i:Item)=>{
-          this.favListItems.push(i);
-        })
+        if(response.items != undefined){
+          response.items.forEach((i:Item)=>{
+            this.favListItems.push(i);
+          })
+        }
       })
     })
   }

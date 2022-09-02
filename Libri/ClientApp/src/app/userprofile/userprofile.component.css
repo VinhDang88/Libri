@@ -1,0 +1,71 @@
+.listContainer{
+    background-color: #9CC0E7;
+    border: 3px solid black;
+    border-radius: 5px 0 4px 0;
+    color: #3B3C3E;
+    font-size: 12px;
+    font-weight: bold;
+    left: -1px;
+    padding: 10px 7px 5px;
+
+    max-height:500px;
+    overflow:scroll;
+    overflow-x:hidden;
+}
+
+.buttonContainer{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2%;
+}
+
+.displayButton{
+    width: 25%;
+    background-color: #9CC0E7;
+    border: 3px solid;
+}
+
+.profileContainer{
+    border: 3px solid black;
+    background-color: #9CC0E7;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    padding: 10px 7px 5px;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.iconButton{
+    border: none;
+    background:none;
+}
+
+#icon{
+    font-size: 500%;
+}
+
+.buttonText{
+    font-size: xx-small;
+}
+
+.bookContainer{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2%;
+}
+
+.bookImage{
+    margin-right:5%;
+}
+
+.bookInfo{
+    width: 50%;
+    margin-right: 5%;
+}
+
+.bookButtons{
+    float:right;
+    margin-top: 5%;
+}

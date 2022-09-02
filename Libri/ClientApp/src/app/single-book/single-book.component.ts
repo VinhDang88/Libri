@@ -20,14 +20,18 @@ export class SingleBookComponent implements OnInit {
     constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService, private route:ActivatedRoute) { }
 
     ngOnInit(): void {
-      
       const routeParams = this.route.snapshot.paramMap;
       let isbn:string = String(routeParams.get("isbn"))
       this.bookService.getBooksByIsbn(isbn).subscribe((response:Books) => {
-        this.displayBook = response.items[0];
-        console.log(response);
+        if(response.totalItems != 0){
+          this.displayBook = response.items[0];
+        }
+        else{
+          this.bookService.getBooksById(isbn).subscribe((response:Item) =>{
+            this.displayBook = response;   
+          })
+        }
       })
-      
       this.authService.authState.subscribe((user) => {
         this.user = user;
         this.loggedIn = (user != null);

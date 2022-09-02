@@ -86,10 +86,22 @@ export class HomeComponent {
     })
     // Grabbing first string out of the array that matches ISBN
     if(isbn == ""){
-      isbn = bookIds[0].type
+      bookIds.forEach((id) => {
+        if(id.type == "ISBN_13"){
+          isbn = id.identifier
+        }
+      })
+    }
+    if(isbn == ""){
+      isbn = book.id
     }
     return isbn;
   }
+
+  getId(book:Item):string{
+    return book.id;
+  }
+
 
   addFavorite(book:Item):any{
     if(book.volumeInfo.categories == undefined){

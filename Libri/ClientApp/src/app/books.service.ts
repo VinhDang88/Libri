@@ -9,6 +9,7 @@ export class BooksService {
   constructor(private http: HttpClient) { }
 
   url: string = "https://www.googleapis.com/books/v1/volumes?q="
+  urlId: string = "https://www.googleapis.com/books/v1/volumes/"
 
   //Changes queries string based on user input
   getBooks(title:string,author:string,subject:string):any{
@@ -36,6 +37,12 @@ export class BooksService {
   searchByDescription(description:string):any{
     return this.http.get(`${this.url}${description}`);
   }
+
+  getBooksById(id:string):any{
+    return this.http.get(`${this.urlId}${id}`);
+  }
+  
+  
 }
 
 

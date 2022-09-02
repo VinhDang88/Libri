@@ -5,11 +5,6 @@
     margin-bottom: 2%;
 }
 
-/* .searchButtons{
-    display:flex;
-    justify-content: center;
-} */
-
 .searchResultsContainer{
     display: flex;
     justify-content: space-between;

@@ -17,3 +17,43 @@
 </p>
 <p>Publisher: {{ displayBook.volumeInfo.publisher }}</p>
 <p>Published Date: {{ displayBook.volumeInfo.publishedDate }}</p>
+
+<div class="searchButtons">
+  <button
+    class="iconButton"
+    *ngIf="loggedIn && !CheckIfInFavoriteList(displayBook)"
+    (click)="addFavorite(displayBook)"
+  >
+    <span id="icon" class="material-symbols-outlined"> hotel_class </span>
+    <br />
+    <p class="buttonText">Favorite</p>
+  </button>
+  <p *ngIf="!loggedIn">Log in to create personalized lists</p>
+  <button
+    class="iconButton"
+    *ngIf="loggedIn && !CheckIfInWishList(displayBook)"
+    (click)="addToWishList(displayBook)"
+  >
+    <span id="icon" class="material-symbols-outlined"> menu_book </span>
+    <br />
+    <p class="buttonText">Wish List</p>
+  </button>
+  <button
+    class="iconButton"
+    *ngIf="loggedIn && !CheckIfInReadList(displayBook)"
+    (click)="addToReadList(displayBook)"
+  >
+    <span id="icon" class="material-symbols-outlined"> bookmark_added </span>
+    <br />
+    <p class="buttonText">Already Read</p>
+  </button>
+  <button
+    class="iconButton"
+    *ngIf="loggedIn && !CheckIfInDeniedList(displayBook)"
+    (click)="addToDeniedList(displayBook)"
+  >
+    <span id="icon" class="material-symbols-outlined"> dangerous </span>
+    <br />
+    <p class="buttonText">Uninterested</p>
+  </button>
+</div>

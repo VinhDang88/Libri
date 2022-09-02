@@ -23,7 +23,7 @@ export class HomeComponent {
   subject: string ="";
   favorite: Favorites = {} as Favorites;
   recommendations: Item[] = [];
-  favoriteTitles: string[] = [];
+  listTitles: string[] = [];
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
   favoritesArray: Favorites[] = [];
@@ -33,17 +33,19 @@ export class HomeComponent {
   recommendationCount:number = 0;
   recommendedHasBooks:boolean = false;
   
-
-
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
-      this.getRecommendations(this.user.id);
-      this.getWishList();
       this.getFavoriteList();
+      this.getWishList();
       this.getReadList();
       this.getDeniedList();
+      
+      console.log(this.listTitles)
+      this.getRecommendations(this.user.id);
+
+      this.CheckForDuplicates();
     });
   }
 
@@ -55,6 +57,7 @@ export class HomeComponent {
 
     this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
       this.books = response;
+      this.CheckForDuplicateSearch();
     })
   }
 
@@ -98,11 +101,6 @@ export class HomeComponent {
     return isbn;
   }
 
-  getId(book:Item):string{
-    return book.id;
-  }
-
-
   addFavorite(book:Item):any{
     if(book.volumeInfo.categories == undefined){
       book.volumeInfo.categories = [];
@@ -110,27 +108,27 @@ export class HomeComponent {
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
       this.favoritesArray.push(response)
-      console.log(response);
+      // console.log(response);
     });
   }
 
   addToWishList(book:Item):any{
     this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
-      console.log(response);
+      // console.log(response);
       this.wish.push(response);
     });
   }
 
   addToReadList(book:Item):any{
     this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
-      console.log(response);
+      // console.log(response);
       this.read.push(response);
     });
   }
 
   addToDeniedList(book:Item):any{
     this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
-      console.log(response);
+      // console.log(response);
       this.denied.push(response);
     });
   }
@@ -147,7 +145,7 @@ export class HomeComponent {
       isbn: this.getIsbn(book)
     }
     return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
-    }
+  }
 
   CheckIfInReadList(book:Item):boolean{
     let read: Read = {
@@ -155,7 +153,7 @@ export class HomeComponent {
       isbn: this.getIsbn(book)
     }
     return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
-    }
+  }
 
   CheckIfInDeniedList(book:Item):boolean{
     let denied: Denied = {
@@ -163,20 +161,90 @@ export class HomeComponent {
       isbn: this.getIsbn(book)
     }
     return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
-    }
-    
+  }
+
+  CheckForDuplicates():void{
+    //remove dups based on book title
+    let result:Item[] = this.recommendations.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
+    ))
+    )
+  
+    console.log(result);
+    this.recommendations.forEach((r:Item) => {
+      if(this.CheckIfInDeniedList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInFavoriteList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInReadList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInWishList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+    })
+    console.log(result);
+    this.recommendations = result;
+  }
+
+  CheckForDuplicateSearch():void{
+    //remove dups based on book title
+    let result:Item[] = this.books.items.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
+    ))
+    )
+  
+    console.log(result);
+    this.books.items.forEach((r:Item) => {
+      if(this.CheckIfInDeniedList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInFavoriteList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInReadList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+      else if(this.CheckIfInWishList(r)) {
+        let i = result.indexOf(r)
+        result.splice(i,1);
+        console.log(r.volumeInfo.title)
+      } 
+    })
+    console.log(result);
+    this.books.items = result;
+  }
+
   getWishList():any{
     this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
       this.wish = response;
     });
-    console.log(this.wish);
+    // console.log(this.wish);
   }
 
   getReadList():any{
     this.listsService.getReadList(this.user.id).subscribe((response:Read[]) => {
       this.read = response;
     });
-    console.log(this.read);
+    // console.log(this.read);
   }
 
   getDeniedList():any{
@@ -187,29 +255,29 @@ export class HomeComponent {
   getFavoriteList():any{
     this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
       this.favoritesArray = response;
-      console.log(response)
+      // console.log(response)
     })
   }
 
   nextRecommendation():number{
-    console.log(this.recommendations.length)
+    // console.log(this.recommendations.length)
     if(this.recommendationCount < this.recommendations.length - 1){
-      console.log(this.recommendationCount)
+      // console.log(this.recommendationCount)
       return this.recommendationCount++;
     }
     else{
-      console.log(this.recommendationCount)
+      // console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
 
   nextFromFavorite(book:Item):number{
     if(this.CheckIfInReadList(book) && this.recommendationCount < this.recommendations.length - 1){
-        console.log(this.recommendationCount)
+        // console.log(this.recommendationCount)
         return this.recommendationCount++;
     }
     else{
-      console.log(this.recommendationCount)
+      // console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
@@ -217,21 +285,20 @@ export class HomeComponent {
 
   nextFromReadList(book:Item):number{
     if(this.CheckIfInFavoriteList(book) && this.recommendationCount < this.recommendations.length - 1){
-      console.log(this.recommendationCount)
+      // console.log(this.recommendationCount)
       return this.recommendationCount++;
     }
     else{
-      console.log(this.recommendationCount)
+      // console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
 
   getRecommendations(userId: string):any{
+    
     //get list of favorites
     this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
       response.forEach((f:Favorites) => {
-        //gather titles to exclude from reccomendations
-        this.favoriteTitles.push(f.title);
           //search by isbn to get favorites as book objects
           this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
             //after getting favorites as book objects, search by description to get possible recommendations
@@ -243,35 +310,30 @@ export class HomeComponent {
                   this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
                     //add books from descriptions search to recommended list if the title is not already favorited
                     response.items.forEach((i:Item) => {
-                      if(!this.favoriteTitles.includes(i.volumeInfo.title))
+                      if(!this.listTitles.some(s => s == i.volumeInfo.title))
                       {
                         this.recommendations.push(i);
                       }
                     })
+                    this.CheckForDuplicates();
                   })
                 }             
                 //search based on author
                 this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
                 response.items.forEach((i:Item) => {
                 //add result from author search if book is not in reccomendations
-                if(!this.recommendations.includes(i) && !this.favoriteTitles.includes(i.volumeInfo.title))
+                if(!this.recommendations.includes(i) && !this.listTitles.some(s => s == i.volumeInfo.title))
                 {
                   this.recommendations.push(i)
                 }
                 })
-                })
+                this.CheckForDuplicates();
               })
+            })
           }
-          console.log(this.recommendations);
+          // console.log(this.recommendations);
         })
       })
     })
   };
-
 }
-
-
-
-
-
-

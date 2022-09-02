@@ -121,7 +121,15 @@ export class UserprofileComponent implements OnInit {
   }
 
   getThumbnail(book:Item):string{
+    if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null)
+    {
+      let thumbnail:string = "../../assets/thumbnail.png";
+      return thumbnail;
+    }
+    else
+    {
     return <string>book.volumeInfo.imageLinks?.thumbnail;
+    }
   }
 
   getIsbn(book: Item):string{
@@ -136,7 +144,14 @@ export class UserprofileComponent implements OnInit {
     })
     // Grabbing first string out of the array that matches ISBN
     if(isbn == ""){
-      isbn = bookIds[0].type
+      bookIds.forEach((id) => {
+        if(id.type == "ISBN_13"){
+          isbn = id.identifier
+        }
+      })
+    }
+    if(isbn == ""){
+      isbn = book.id
     }
     return isbn;
   }

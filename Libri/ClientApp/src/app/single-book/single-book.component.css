@@ -1,4 +1,12 @@
-.singleBookImage{
-    height: 400%;
-    width: auto;
+.searchButtons{
+    width:100%;
+}
+
+.buttonText{
+    font-size: xx-small;
+}
+
+.iconButton{
+    border: none;
+    background:none;
 }

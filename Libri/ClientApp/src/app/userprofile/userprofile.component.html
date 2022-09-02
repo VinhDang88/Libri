@@ -45,10 +45,14 @@
     <div *ngFor="let f of favListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <img src="{{ getThumbnail(f) }}" />
+          <a routerLink="/Book/{{ getIsbn(f) }}"
+            ><img src="{{ getThumbnail(f) }}"
+          /></a>
         </div>
         <div class="bookInfo">
-          <h4>{{ f.volumeInfo.title }}</h4>
+          <a routerLink="/Book/{{ getIsbn(f) }}"
+            ><h4>{{ f.volumeInfo.title }}</h4></a
+          >
           <h5>Author(s): {{ f.volumeInfo.authors }}</h5>
           <h5>Categories: {{ f.volumeInfo.categories }}</h5>
           <p *ngIf="f.volumeInfo.ratingsCount != undefined">
@@ -87,10 +91,14 @@
     <div *ngFor="let w of wishListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <img src="{{ getThumbnail(w) }}" />
+          <a routerLink="/Book/{{ getIsbn(w) }}"
+            ><img src="{{ getThumbnail(w) }}"
+          /></a>
         </div>
         <div class="bookInfo">
-          <h4>{{ w.volumeInfo.title }}</h4>
+          <h4>
+            <a routerLink="/Book/{{ getIsbn(w) }}">{{ w.volumeInfo.title }}</a>
+          </h4>
           <h5>Author(s): {{ w.volumeInfo.authors }}</h5>
           <h5>Categories: {{ w.volumeInfo.categories }}</h5>
           <p *ngIf="w.volumeInfo.ratingsCount != undefined">
@@ -118,10 +126,14 @@
     <div *ngFor="let r of readListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <img src="{{ getThumbnail(r) }}" />
+          <a routerLink="/Book/{{ getIsbn(r) }}"
+            ><img src="{{ getThumbnail(r) }}"
+          /></a>
         </div>
         <div class="bookInfo">
-          <h4>{{ r.volumeInfo.title }}</h4>
+          <h4>
+            <a routerLink="/Book/{{ getIsbn(r) }}">{{ r.volumeInfo.title }}</a>
+          </h4>
           <h5>Author(s): {{ r.volumeInfo.authors }}</h5>
           <h5>Categories: {{ r.volumeInfo.categories }}</h5>
           <p *ngIf="r.volumeInfo.ratingsCount != undefined">
@@ -160,10 +172,14 @@
     <div *ngFor="let d of deniedListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <img src="{{ getThumbnail(d) }}" />
+          <a routerLink="/Book/{{ getIsbn(d) }}"
+            ><img src="{{ getThumbnail(d) }}"
+          /></a>
         </div>
         <div class="bookInfo">
-          <h4>{{ d.volumeInfo.title }}</h4>
+          <h4>
+            <a routerLink="/Book/{{ getIsbn(d) }}">{{ d.volumeInfo.title }}</a>
+          </h4>
           <h5>Author(s): {{ d.volumeInfo.authors }}</h5>
           <h5>Categories: {{ d.volumeInfo.categories }}</h5>
           <p *ngIf="d.volumeInfo.ratingsCount != undefined">

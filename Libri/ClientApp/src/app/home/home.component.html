@@ -7,7 +7,7 @@
     <button>Search</button>
   </form>
 </div>
-<!-- work with the div below to create a carousel -->
+
 <div *ngIf="books.items != undefined" class="searchResultsContainer">
   <div *ngFor="let b of books.items">
     <div class="searchResult">
@@ -20,10 +20,7 @@
         <h4>
           <a routerLink="/Book/{{ getIsbn(b) }}">{{ b.volumeInfo.title }}</a>
         </h4>
-        <!-- <h5>description:&nbsp;</h5> -->
-        <!-- <p>{{ b.volumeInfo.description }}</p> -->
         <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
-        <!-- <h5>Publisher: {{ b.volumeInfo.publisher }}</h5> -->
         <h5>Categories: {{ b.volumeInfo.categories }}</h5>
         <p *ngIf="b.volumeInfo.ratingsCount != undefined">
           Average Rating: {{ b.volumeInfo.averageRating }} / 5
@@ -32,8 +29,6 @@
           Rating not available
         </p>
       </div>
-      <!-- Testing route to single book info -->
-      <!-- <a routerLink="/Book/1781100489"> Test Link </a> -->
       <div class="searchButtons">
         <button
           class="iconButton"

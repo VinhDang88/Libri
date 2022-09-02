@@ -44,7 +44,7 @@
 
 --SELECT * FROM Users;
 
---SELECT * FROM FavoriteLists;
+--SELECT * FROM FavoriteLists
 
 --SELECT * FROM WishLists
 
@@ -55,9 +55,9 @@
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;
 
---DELETE FROM WishLists;
+--DELETE FROM WishLists
 
---DELETE FROM FavoriteLists;
+--DELETE FROM FavoriteLists
 
 --DELETE FROM ReadLists;
 

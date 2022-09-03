@@ -57,7 +57,12 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 .bookImage{
+    transition: transform .5s;
     margin-right:5%;
+}
+
+.bookImage:hover{
+    transform: scale(1.1);
 }
 
 .bookInfo{
@@ -68,4 +73,16 @@ h1,h2,h3,h4,h5,h6,p{
 .bookButtons{
     float:right;
     margin-top: 5%;
+}
+
+a{
+    color: rgb(20, 20, 20)
+}
+
+a:hover{
+    color: rgb(0, 102, 255);
+}
+
+a:link{
+    text-decoration: none;
 }

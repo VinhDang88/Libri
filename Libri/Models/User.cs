@@ -10,6 +10,7 @@ namespace Libri.Models
             DeniedLists = new HashSet<DeniedList>();
             FavoriteLists = new HashSet<FavoriteList>();
             ReadLists = new HashSet<ReadList>();
+            Reviews = new HashSet<Review>();
             WishLists = new HashSet<WishList>();
         }
 
@@ -22,6 +23,7 @@ namespace Libri.Models
         public virtual ICollection<DeniedList> DeniedLists { get; set; }
         public virtual ICollection<FavoriteList> FavoriteLists { get; set; }
         public virtual ICollection<ReadList> ReadLists { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         public virtual ICollection<WishList> WishLists { get; set; }
     }
 }

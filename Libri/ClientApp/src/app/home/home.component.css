@@ -37,6 +37,17 @@
     margin-bottom: 2%;
 }
 
+.zoom {
+    transition: transform .5s;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+  }
+  
+  .zoom:hover {
+    transform: scale(1.1);
+  }
+
 .searchInfo{
     
     width:100%;
@@ -66,8 +77,13 @@
 }
 
 .recommendedImage{
+    transition: transform .5s;
     width: 150%;
     height: auto;   
+}
+
+.recommendedImage:hover{
+    transform: scale(1.1);
 }
 
 .recommendedInfo{
@@ -112,13 +128,3 @@ a:link{
     text-decoration: none;
 }
 
-.zoom {
-    transition: transform .5s;
-    width: auto;
-    height: auto;
-    margin: 0 auto;
-  }
-  
-  .zoom:hover {
-    transform: scale(1.1);
-  }

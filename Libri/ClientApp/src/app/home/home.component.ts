@@ -314,27 +314,26 @@ export class HomeComponent {
                 if(i.volumeInfo.description != undefined)
                 {
                   this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-                    //add books from descriptions search to recommended list if the title is not already favorited
+                    //add books from descriptions search 
                     response.items.forEach((i:Item) => {
-                      if(!this.listTitles.some(s => s == i.volumeInfo.title))
-                      {
                         this.recommendations.push(i);
-                      }
                     })
+                    //remove duplicate titles
                     this.CheckForDuplicates();
                   })
                 }             
                 //search based on author
                 this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
-                response.items.forEach((i:Item) => {
-                //add result from author search if book is not in reccomendations
-                if(!this.recommendations.includes(i) && !this.listTitles.some(s => s == i.volumeInfo.title))
-                {
-                  this.recommendations.push(i)
-                }
+                  response.items.forEach((i:Item) => {
+                    //add result from author search
+                    if(!this.recommendations.includes(i))
+                    {
+                      this.recommendations.push(i)
+                    }
+                  })
+                  //remove duplicate titles
+                  this.CheckForDuplicates();
                 })
-                this.CheckForDuplicates();
-              })
             })
           }
           console.log(this.recommendations);

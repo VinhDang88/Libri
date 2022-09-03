@@ -19,6 +19,7 @@ namespace Libri.Models
         public virtual DbSet<DeniedList> DeniedLists { get; set; } = null!;
         public virtual DbSet<FavoriteList> FavoriteLists { get; set; } = null!;
         public virtual DbSet<ReadList> ReadLists { get; set; } = null!;
+        public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<WishList> WishLists { get; set; } = null!;
 
@@ -77,6 +78,30 @@ namespace Libri.Models
                     .WithMany(p => p.ReadLists)
                     .HasForeignKey(d => d.ReadListId)
                     .HasConstraintName("FK__ReadLists__ReadL__60A75C0F");
+            });
+
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.Property(e => e.Author).HasMaxLength(255);
+
+                entity.Property(e => e.BookTitle).HasMaxLength(255);
+
+                entity.Property(e => e.DatePosted).HasColumnType("datetime");
+
+                entity.Property(e => e.Isbn).HasMaxLength(255);
+
+                entity.Property(e => e.Review1)
+                    .HasMaxLength(1500)
+                    .HasColumnName("Review");
+
+                entity.Property(e => e.UserId).HasMaxLength(25);
+
+                entity.Property(e => e.UserName).HasMaxLength(255);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__Reviews__UserId__6D0D32F4");
             });
 
             modelBuilder.Entity<User>(entity =>

@@ -41,10 +41,7 @@ export class HomeComponent {
       this.getWishList();
       this.getReadList();
       this.getDeniedList();
-      
-      console.log(this.listTitles)
       this.getRecommendations(this.user.id);
-
       this.CheckForDuplicates();
     });
   }
@@ -78,16 +75,16 @@ export class HomeComponent {
   }
 
   getIsbn(book: Item):string{
-    // Contains ISBN-10 from the books
+    // Contains identifiers from the books
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
     let isbn: string = "";
-    // Puts ISBNs from industry identifier into empty string array
+    // tries to get Isbn_10
     bookIds.forEach((id) => {
       if(id.type == "ISBN_10"){
         isbn = id.identifier
       }
     })
-    // Grabbing first string out of the array that matches ISBN
+    // looks for isbn_13 if Isbn_10 was not found
     if(isbn == ""){
       bookIds.forEach((id) => {
         if(id.type == "ISBN_13"){
@@ -95,6 +92,7 @@ export class HomeComponent {
         }
       })
     }
+    //uses the id if no isbn was found
     if(isbn == ""){
       isbn = book.id
     }
@@ -114,27 +112,27 @@ export class HomeComponent {
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
       this.favoritesArray.push(response)
-      // console.log(response);
+      console.log(response);
     });
   }
 
   addToWishList(book:Item):any{
     this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
-      // console.log(response);
+      console.log(response);
       this.wish.push(response);
     });
   }
 
   addToReadList(book:Item):any{
     this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
-      // console.log(response);
+      console.log(response);
       this.read.push(response);
     });
   }
 
   addToDeniedList(book:Item):any{
     this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
-      // console.log(response);
+      console.log(response);
       this.denied.push(response);
     });
   }
@@ -211,8 +209,6 @@ export class HomeComponent {
       t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
     ))
     )
-  
-    console.log(result);
     this.books.items.forEach((r:Item) => {
       if(this.CheckIfInDeniedList(r)) {
         let i = result.indexOf(r)
@@ -235,7 +231,7 @@ export class HomeComponent {
         console.log(r.volumeInfo.title)
       } 
     })
-    console.log(result);
+    // console.log(result);
     this.books.items = result;
   }
 
@@ -266,24 +262,24 @@ export class HomeComponent {
   }
 
   nextRecommendation():number{
-    // console.log(this.recommendations.length)
+    console.log(this.recommendations.length)
     if(this.recommendationCount < this.recommendations.length - 1){
-      // console.log(this.recommendationCount)
+      console.log(this.recommendationCount)
       return this.recommendationCount++;
     }
     else{
-      // console.log(this.recommendationCount)
+      console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
 
   nextFromFavorite(book:Item):number{
     if(this.CheckIfInReadList(book) && this.recommendationCount < this.recommendations.length - 1){
-        // console.log(this.recommendationCount)
+        console.log(this.recommendationCount)
         return this.recommendationCount++;
     }
     else{
-      // console.log(this.recommendationCount)
+      console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
@@ -291,11 +287,11 @@ export class HomeComponent {
 
   nextFromReadList(book:Item):number{
     if(this.CheckIfInFavoriteList(book) && this.recommendationCount < this.recommendations.length - 1){
-      // console.log(this.recommendationCount)
+      console.log(this.recommendationCount)
       return this.recommendationCount++;
     }
     else{
-      // console.log(this.recommendationCount)
+      console.log(this.recommendationCount)
       return this.recommendationCount;
     }
   }
@@ -336,9 +332,9 @@ export class HomeComponent {
                 })
             })
           }
-          console.log(this.recommendations);
         })
       })
     })
+    console.log(this.recommendations);
   };
 }

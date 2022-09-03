@@ -1,24 +1,26 @@
-<div>
+<div class="thumbnail">
   <img class="col-md-3 col-sm-3" src="{{ getThumbnail(displayBook) }}" />
 </div>
-<h1>{{ displayBook.volumeInfo.title }}</h1>
-<h2>Categories: {{ displayBook.volumeInfo.categories }}</h2>
-<h3>Author(s): {{ displayBook.volumeInfo.authors }}</h3>
-<h6>{{ displayBook.volumeInfo.description }}</h6>
-<p>Page Count: {{ displayBook.volumeInfo.pageCount }}</p>
-<p *ngIf="displayBook.volumeInfo.ratingsCount != undefined">
-  Average Rating: {{ displayBook.volumeInfo.averageRating }} / 5
-</p>
-<p *ngIf="displayBook.volumeInfo.ratingsCount == undefined">
-  Rating not available
-</p>
-<p *ngIf="displayBook.volumeInfo.ratingsCount != undefined">
-  Number of Ratings: {{ displayBook.volumeInfo.ratingsCount }}
-</p>
-<p>Publisher: {{ displayBook.volumeInfo.publisher }}</p>
-<p>Published Date: {{ displayBook.volumeInfo.publishedDate }}</p>
+<div class="bookInfo">
+  <h1>{{ displayBook.volumeInfo.title }}</h1>
+  <h2>Categories: {{ displayBook.volumeInfo.categories }}</h2>
+  <h3>Author(s): {{ displayBook.volumeInfo.authors }}</h3>
+  <h6>{{ displayBook.volumeInfo.description }}</h6>
+  <p>Page Count: {{ displayBook.volumeInfo.pageCount }}</p>
+  <p *ngIf="displayBook.volumeInfo.ratingsCount != undefined">
+    Average Rating: {{ displayBook.volumeInfo.averageRating }} / 5
+  </p>
+  <p *ngIf="displayBook.volumeInfo.ratingsCount == undefined">
+    Rating not available
+  </p>
+  <p *ngIf="displayBook.volumeInfo.ratingsCount != undefined">
+    Number of Ratings: {{ displayBook.volumeInfo.ratingsCount }}
+  </p>
+  <p>Publisher: {{ displayBook.volumeInfo.publisher }}</p>
+  <p>Published Date: {{ displayBook.volumeInfo.publishedDate }}</p>
+</div>
 
-<div class="searchButtons">
+<div class="listButtons">
   <button
     class="iconButton"
     *ngIf="loggedIn && !CheckIfInFavoriteList(displayBook)"
@@ -56,4 +58,40 @@
     <br />
     <p class="buttonText">Uninterested</p>
   </button>
+</div>
+
+<button class="reviewButton" (click)="toggleReviewForm()">
+  Write a Review
+</button>
+
+<div *ngIf="showReviewForm" class="layer2">
+  <img src="../../assets/background.png" id="bg" />
+</div>
+
+<div *ngIf="showReviewForm" class="layer3">
+  <div class="reviewForm">
+    <form #Submit="ngForm" (ngSubmit)="PostReview(Submit); toggleReviewForm()">
+      <h6 class="reviewFormText">{{ user.name }}</h6>
+      <h6 class="reviewFormText">
+        Write a review for {{ displayBook.volumeInfo.title }} by
+        {{ displayBook.volumeInfo.authors }}
+      </h6>
+      <label class="reviewFormText" for="review" name="review" id="review"
+        >Review:</label
+      >
+      <br />
+      <textarea name="review" ngModel></textarea>
+      <button class="reviewFormButton">Post Review</button>
+    </form>
+  </div>
+</div>
+
+<div class="reviews">
+  <div *ngFor="let r of reviews">
+    <h6>{{ r.userName }}</h6>
+    <h6>{{ r.bookTitle }} by {{ r.author }}</h6>
+    <h6>{{ formatReviewDate(r.datePosted) }}</h6>
+    <p>{{ r.review1 }}</p>
+    <p>Votes: {{ r.votes }}</p>
+  </div>
 </div>

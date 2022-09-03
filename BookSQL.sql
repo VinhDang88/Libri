@@ -8,21 +8,25 @@
 --);
 
 --CREATE TABLE WishLists (
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 --WishListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE ReadLists (
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 --ReadListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE DeniedLists (
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 --DeniedListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE FavoriteLists (
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 --FavoriteListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255),
 --Title NVARCHAR(255),
@@ -31,6 +35,18 @@
 --averageRating REAL,
 --ratingsCount INT
 
+--);
+
+--CREATE TABLE Reviews(
+--	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+--	UserId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
+--	Isbn NVARCHAR(255),
+--	BookTitle NVARCHAR(255),
+--	Author NVARCHAR(255),
+--	UserName NVARCHAR(255),
+--	Review NVARCHAR(1500),
+--	DatePosted DATETIME,
+--	Votes INT
 --);
 
 --ALTER TABLE WishLists
@@ -52,6 +68,8 @@
 
 --SELECT * FROM DeniedLists;
 
+--SELECT * FROM Reviews;
+
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;
 
@@ -62,6 +80,8 @@
 --DELETE FROM ReadLists;
 
 --DELETE FROM DeniedLists;
+
+--DELETE FROM Reviews
 
 --SELECT * FROM FavoriteLists
 --JOIN Users ON FavoriteLists.FavoriteListId=Users.Id;

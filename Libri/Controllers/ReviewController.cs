@@ -32,12 +32,20 @@ namespace Libri.Controllers
         [HttpGet("GetReviewsByBook")]
         public List<Review> GetReviewsByBook(string isbn)
         {
+            if (context.Reviews.Where(r => r.Isbn == isbn).Count() < 1)
+            {
+                return null;
+            }
             return context.Reviews.Where(r => r.Isbn == isbn).ToList();
         }
 
         [HttpGet("GetReviewsByUser")]
         public List<Review> GetReviewsByUser(string userId)
         {
+            if (context.Reviews.Where(r => r.UserId == userId).Count() < 1)
+            {
+                return null;
+            }
             return context.Reviews.Where(r => r.UserId == userId).ToList();
         }
 

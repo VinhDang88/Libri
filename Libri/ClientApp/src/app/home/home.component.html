@@ -17,11 +17,11 @@
         /></a>
       </div>
       <div class="searchInfo">
-        <h4>
+        <h5>
           <a routerLink="/Book/{{ getIsbn(b) }}">{{ b.volumeInfo.title }}</a>
-        </h4>
-        <h5>Author(s): {{ b.volumeInfo.authors }}</h5>
-        <h5>Categories: {{ b.volumeInfo.categories }}</h5>
+        </h5>
+        <h6>Author(s): {{ b.volumeInfo.authors }}</h6>
+        <h6>Categories: {{ b.volumeInfo.categories }}</h6>
         <p *ngIf="b.volumeInfo.ratingsCount != undefined">
           Average Rating: {{ b.volumeInfo.averageRating }} / 5
         </p>

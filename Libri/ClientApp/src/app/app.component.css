@@ -1,4 +1,12 @@
 body{
     /* background-color: #9CC0E7; */
     background-color:#FAEACB;
+    padding-top: 50px;
+}
+
+.sticky{
+    background-color: #EEEEEE;
+    position:fixed;
+    top:0;
+    width: 100%;
 }

@@ -1,12 +1,85 @@
-.searchButtons{
-    width:100%;
+.thumbnail{
+    z-index: 1;
 }
 
-.buttonText{
-    font-size: xx-small;
+.bookInfo{
+    z-index: 1;
+}
+
+.listButtons{
+    width:100%;
+    z-index: 1;
 }
 
 .iconButton{
     border: none;
     background:none;
 }
+
+.buttonText{
+    font-size: xx-small;
+}
+
+.reviewButton{
+    z-index: 1;
+}
+
+.layer2{
+    position:absolute;
+    z-index: 2;
+    opacity: .8;
+}
+
+#bg {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+.layer3{
+    position:absolute;
+    z-index: 3;
+    width: 100%;
+    top:15%;
+    left:5%;
+}
+
+.reviewForm{
+    width: 50%;
+    display: block;
+    margin: auto;
+    margin-top:12%;
+    background-color: white;
+    padding-top: 0%;
+    padding-bottom: 1%;
+    border-radius: 4px;
+    border-width: 1px;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    background-color: #9CC0E7;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+}
+
+.reviewFormText{
+    margin-left:5%;
+}
+
+.reviewFormButton{
+    display:block;
+    margin: auto;
+    margin-top: 2%;
+    width: 90%;
+}
+
+textarea{
+    width: 90%;
+    padding-bottom: 15%;
+    display: block;
+    margin: auto;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    border-radius: 4px;
+    font-size: x-large;
+}
+

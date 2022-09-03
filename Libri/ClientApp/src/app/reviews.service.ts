@@ -15,33 +15,27 @@ export class ReviewsService {
     &author=${author}&username=${username}&review1=${review1}`, {});
   }
 
-  GetReviewsByBook(isbn:string)
-  {
+  GetReviewsByBook(isbn:string):any{
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetReviewsByBook?isbn=${isbn}`);
   }
 
-  GetReviewsByUser(userId:string)
-  {
+  GetReviewsByUser(userId:string):any{
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetReviewsByUser?userId=${userId}`);
   }
 
-  DeleteReview(userId:string, isbn:string, datePosted:Date)
-  {
+  DeleteReview(userId:string, isbn:string, datePosted:Date):any{
     return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteReview?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`);
   }
 
-  EditReview(userId:string, isbn:string, datePosted:Date, review1:string)
-  {
+  EditReview(userId:string, isbn:string, datePosted:Date, review1:string):any{
     return this.http.put(`${this.baseUrl}${this.endpoint}/EditReview?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}&review1=${review1}`, {});
   }
 
-  UpVote(userId:string, isbn:string, datePosted:Date)
-  {
+  UpVote(userId:string, isbn:string, datePosted:Date):any{
     return this.http.put(`${this.baseUrl}${this.endpoint}/UpVote?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`, {});
   }
 
-  DownVote(userId:string, isbn:string, datePosted:Date)
-  {
+  DownVote(userId:string, isbn:string, datePosted:Date):any{
     return this.http.put(`${this.baseUrl}${this.endpoint}/DownVote?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`, {});
   }
 }

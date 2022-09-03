@@ -1,5 +1,6 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
@@ -7,7 +8,10 @@ import { Denied } from '../denied';
 import { Favorites } from '../favorites';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
+import { Review } from '../review';
+import { ReviewsService } from '../reviews.service';
 import { Wish } from '../wish';
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-single-book',
@@ -24,8 +28,12 @@ export class SingleBookComponent implements OnInit {
     wish: Wish[] = [];
     read: Read[] = [];
     denied: Denied[] = [];  
+    showReviewForm:boolean = false;
+    newReview:Review = {} as Review;
+    reviews:Review[] = [];
 
-    constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService, private route:ActivatedRoute) { }
+    constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
+       private reviewsService: ReviewsService, private route:ActivatedRoute, @Inject(LOCALE_ID) private locale: string) { }
 
     ngOnInit(): void {
       const routeParams = this.route.snapshot.paramMap;
@@ -47,6 +55,7 @@ export class SingleBookComponent implements OnInit {
         this.getFavoriteList();
         this.getReadList();
         this.getDeniedList();
+        this.getReviews();
     })
   }
 
@@ -182,5 +191,32 @@ export class SingleBookComponent implements OnInit {
     {
     return <string>book.volumeInfo.imageLinks?.thumbnail;
     }
+  }
+
+  toggleReviewForm():boolean{
+    this.showReviewForm = !this.showReviewForm;
+    return this.showReviewForm;
+  }
+
+  PostReview(form:NgForm):any{
+    let review:string = form.form.value.review;
+    this.reviewsService.PostReview(this.user.id, this.getIsbn(this.displayBook),this.displayBook.volumeInfo.title, this.displayBook.volumeInfo.authors.toString(),
+    this.user.name, review).subscribe((response:Review) => {
+      console.log(response);
+      this.newReview = response;
+    })
+  }
+
+  getReviews():any{
+    this.reviewsService.GetReviewsByBook(this.getIsbn(this.displayBook)).subscribe((response:Review[]) => {
+      if(response != undefined){
+      this.reviews = response;
+      }
+    })
+  }
+
+  formatReviewDate(date:Date):string{
+    // return date.toLocaleString();
+    return formatDate(date,'short',this.locale);
   }
 }

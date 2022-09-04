@@ -58,6 +58,12 @@
 --	Downvoted BIT
 --);
 
+--CREATE TABLE Followers(
+--	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+--	FollowedBy NVARCHAR(255) FOREIGN KEY REFERENCES Users(Id),
+--	Following NVARCHAR(255)
+--);
+
 --DROP TABLE Votes;
 
 --DROP TABLE Reviews;
@@ -71,19 +77,19 @@
 --ALTER TABLE DeniedLists
 --ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 
---SELECT * FROM Users;
+----SELECT * FROM Users;
 
---SELECT * FROM FavoriteLists
+--SELECT * FROM FavoriteLists;
 
---SELECT * FROM WishLists
+--SELECT * FROM WishLists;
 
 --SELECT * FROM ReadLists;
 
 --SELECT * FROM DeniedLists;
 
-SELECT * FROM Reviews;
+--SELECT * FROM Reviews;
 
-SELECT * FROM Votes;
+--SELECT * FROM Votes;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;

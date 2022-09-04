@@ -98,7 +98,7 @@ namespace Libri.Controllers
         [HttpPut("UpVote")]
         public Review UpVote(string userId, int postId)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Id == postId);
+            Review review = context.Reviews.FirstOrDefault(r =>r.Id == postId);
             Vote vote = context.Votes.FirstOrDefault(v => v.UserId == userId && v.PostId == postId);
             if (vote == null)
             {
@@ -131,7 +131,7 @@ namespace Libri.Controllers
         [HttpPut("DownVote")]
         public Review DownVote(string userId, int postId)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Id == postId);
+            Review review = context.Reviews.FirstOrDefault(r => r.Id == postId);
             Vote vote = context.Votes.FirstOrDefault(v => v.UserId == userId && v.PostId == postId);
             if (vote == null)
             {

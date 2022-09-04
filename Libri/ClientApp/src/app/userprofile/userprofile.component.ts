@@ -1,11 +1,14 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
 import { Denied } from '../denied';
 import { Favorites } from '../favorites';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
+import { User } from '../user';
+import { UsersService } from '../users.service';
 import { Wish } from '../wish';
 
 @Component({
@@ -15,7 +18,8 @@ import { Wish } from '../wish';
 })
 
 export class UserprofileComponent implements OnInit {
-  user: SocialUser = {} as SocialUser;
+  activeUser:SocialUser = {} as SocialUser;
+  user: User = {} as User;
   loggedIn: boolean = false;
   wishList:Wish [] = [];
   favoriteList:Favorites [] = [];
@@ -29,18 +33,40 @@ export class UserprofileComponent implements OnInit {
   displayWishList:boolean = false;
   displayReadList:boolean = false;
   displayDeniedList:boolean = false;
+  pageOwner:boolean = false;
 
-  constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService) { }
+  constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
+     private route:ActivatedRoute, private usersService: UsersService) { }
 
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
+      this.activeUser = user;
+      console.log("active: "+ this.activeUser)
+      console.log("page: " +this.user)
+      this.loggedIn = (user != null); 
+    });
+
+    const routeParams = this.route.snapshot.paramMap;
+    let id:string = String(routeParams.get("id"));
+    this.usersService.GetUserById(id).subscribe((response:User) => {
+      this.user = response;
+      console.log("page: "+this.user)
+      this.checkIfPageOwner();
       this.getWishList();
       this.getReadList();
       this.getFavoriteList();
       this.getDeniedList();
-    });
+    })
+  }
+
+  checkIfPageOwner():boolean{
+    if(this.activeUser == null){
+      this.pageOwner = false
+    }
+    else if(this.loggedIn && this.activeUser.id == this.user.id){
+      this.pageOwner = true;
+    }
+    return this.pageOwner;
   }
 
   //Gives the User back a list of books they want to read in the future

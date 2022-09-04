@@ -15,4 +15,11 @@ export class UsersService {
     &name=${name}&photoUrl=${photoUrl}`, {});
   }
 
+  GetUsersByName(name:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetUsersByName?name=${name}`);
+  }
+
+  GetUserById(id:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetUserById?id=${id}`);
+  }
 }

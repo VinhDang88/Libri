@@ -40,5 +40,22 @@ namespace Libri.Controllers
             return user;
         }
 
+        [HttpGet("GetUserById")]
+        public User GetUserById(string id)
+        {
+            User user = context.Users.Find(id);
+            if (user == null)
+            {
+                return null;
+            }
+            return context.Users.First(u => u.Id == id);
+        }
+
+        [HttpGet("GetUsersByName")]
+        public List<User> GetUsersByName(string name)
+        {
+            return context.Users.Where(u => u.Name.ToLower().Contains(name.ToLower().Trim())).ToList();  
+        }
+
     }
 }

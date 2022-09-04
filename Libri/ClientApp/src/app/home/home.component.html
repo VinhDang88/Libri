@@ -1,3 +1,16 @@
+<div class="userSearchBar">
+  <form #Search="ngForm" (ngSubmit)="SearchUsers(Search)">
+    <input
+      class="usernameInput"
+      type="text"
+      name="username"
+      placeholder="Search for users"
+      ngModel
+    />
+    <button>Search</button>
+  </form>
+</div>
+
 <!-- searchbar, allows search w/ any combination of title, author, and subject -->
 <div class="searchBar">
   <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
@@ -6,6 +19,15 @@
     <input type="text" name="subject" placeholder="Search by subject" ngModel />
     <button>Search</button>
   </form>
+</div>
+
+<div *ngFor="let u of searchedUsers">
+  <a routerLink="/UserProfile/{{ u.id }}"
+    ><img class="zoom" src="{{ u.photoUrl }}"
+  /></a>
+  <a routerLink="/UserProfile/{{ u.id }}"
+    ><p>{{ u.name }}</p></a
+  >
 </div>
 
 <div *ngIf="books.items != undefined" class="searchResultsContainer">

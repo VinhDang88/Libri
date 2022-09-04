@@ -28,7 +28,7 @@ import { SingleBookComponent } from './single-book/single-book.component';
     SocialLoginModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'UserProfile', component:UserprofileComponent },
+      { path: 'UserProfile/:id', component:UserprofileComponent },
       { path: 'Book/:isbn', component:SingleBookComponent }
     ])
   ],

@@ -1,46 +1,35 @@
 <!-- User Information -->
-<h1 *ngIf="!loggedIn">Please sign in to see your profile!</h1>
-<div *ngIf="loggedIn" class="profileContainer">
-  <p>Welcome {{ user.firstName }}!</p>
+<!-- <h1 *ngIf="!loggedIn">Please sign in to see your profile!</h1> -->
+<div class="profileContainer">
+  <p *ngIf="checkIfPageOwner() && loggedIn">Welcome {{ user.firstName }}!</p>
+  <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
 
   <img src="{{ user.photoUrl }}" />
   <br />
   <br />
 
   <!-- Display number of items in each list -->
-  <p *ngIf="loggedIn && displayFavoriteList">
+  <p *ngIf="displayFavoriteList">
     # of Favorite List {{ favListItems.length }}
   </p>
-  <p *ngIf="loggedIn && displayWishList">
-    # of Wish List {{ wishListItems.length }}
-  </p>
-  <p *ngIf="loggedIn && displayReadList">
-    # of Read List {{ readListItems.length }}
-  </p>
-  <p *ngIf="loggedIn && displayDeniedList">
-    # of Denied List {{ deniedListItems.length }}
-  </p>
+  <p *ngIf="displayWishList"># of Wish List {{ wishListItems.length }}</p>
+  <p *ngIf="displayReadList"># of Read List {{ readListItems.length }}</p>
+  <p *ngIf="displayDeniedList"># of Denied List {{ deniedListItems.length }}</p>
 </div>
 
 <!-- Buttons -->
 <div class="buttonContainer">
-  <button class="displayButton" *ngIf="loggedIn" (click)="toggleFavoriteList()">
+  <button class="displayButton" (click)="toggleFavoriteList()">
     Favorites
   </button>
-  <button class="displayButton" *ngIf="loggedIn" (click)="toggleWishList()">
-    WishList
-  </button>
-  <button class="displayButton" *ngIf="loggedIn" (click)="toggleReadList()">
-    ReadList
-  </button>
-  <button class="displayButton" *ngIf="loggedIn" (click)="toggleDeniedList()">
-    DeniedList
-  </button>
+  <button class="displayButton" (click)="toggleWishList()">WishList</button>
+  <button class="displayButton" (click)="toggleReadList()">ReadList</button>
+  <button class="displayButton" (click)="toggleDeniedList()">DeniedList</button>
 </div>
 
 <!-- List Displays -->
 <div *ngIf="displayFavoriteList">
-  <div *ngIf="loggedIn" class="listContainer">
+  <div class="listContainer">
     <h3>Favorite List</h3>
     <div *ngFor="let f of favListItems">
       <div class="bookContainer">
@@ -62,7 +51,7 @@
             Rating not available
           </p>
         </div>
-        <div class="bookButtons">
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteFavoriteListObject(f)">
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />
@@ -86,8 +75,8 @@
 </div>
 
 <div *ngIf="displayWishList">
-  <div *ngIf="loggedIn" class="listContainer">
-    <h3 *ngIf="loggedIn">Wish List</h3>
+  <div class="listContainer">
+    <h3>Wish List</h3>
     <div *ngFor="let w of wishListItems">
       <div class="bookContainer">
         <div class="bookImage">
@@ -108,7 +97,7 @@
             Rating not available
           </p>
         </div>
-        <div class="bookButtons">
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteWishListObject(w)">
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />
@@ -121,8 +110,8 @@
 </div>
 
 <div *ngIf="displayReadList">
-  <div *ngIf="loggedIn" class="listContainer">
-    <h3 *ngIf="loggedIn">Read List</h3>
+  <div class="listContainer">
+    <h3>Read List</h3>
     <div *ngFor="let r of readListItems">
       <div class="bookContainer">
         <div class="bookImage">
@@ -143,7 +132,7 @@
             Rating not available
           </p>
         </div>
-        <div class="bookButtons">
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteReadListObject(r)">
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />
@@ -167,8 +156,8 @@
 </div>
 
 <div *ngIf="displayDeniedList">
-  <div *ngIf="loggedIn" class="listContainer">
-    <h3 *ngIf="loggedIn">Denied List</h3>
+  <div class="listContainer">
+    <h3>Denied List</h3>
     <div *ngFor="let d of deniedListItems">
       <div class="bookContainer">
         <div class="bookImage">
@@ -189,7 +178,7 @@
             Rating not available
           </p>
         </div>
-        <div class="bookButtons">
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteDeniedListObject(d)">
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />

@@ -7,6 +7,8 @@ import { Denied } from '../denied';
 import { Favorites } from '../favorites';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
+import { User } from '../user';
+import { UsersService } from '../users.service';
 import { Wish } from '../wish';
 
 @Component({
@@ -16,7 +18,7 @@ import { Wish } from '../wish';
 })
 
 export class HomeComponent {
-  constructor(private bookService: BooksService, private listsService: ListsService, private authService: SocialAuthService) {}
+  constructor(private bookService: BooksService, private listsService: ListsService, private authService: SocialAuthService, private usersService:UsersService) {}
   books: Books = {} as Books;
   title: string ="";
   author: string ="";
@@ -32,6 +34,8 @@ export class HomeComponent {
   denied: Denied[] = [];
   recommendationCount:number = 0;
   recommendedHasBooks:boolean = false;
+  searchedUsers:User[] = [];
+  searchedUsername:string = "";
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -55,6 +59,15 @@ export class HomeComponent {
     this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
       this.books = response;
       this.CheckForDuplicateSearch();
+    })
+  }
+
+  SearchUsers(form:NgForm):void{
+    this.searchedUsername = form.form.value.username;
+    console.log(this.searchedUsername);
+    this.usersService.GetUsersByName(this.searchedUsername).subscribe((response:User[]) => {
+      console.log(response)
+      this.searchedUsers = response;
     })
   }
 

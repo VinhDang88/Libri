@@ -31,6 +31,7 @@ export class SingleBookComponent implements OnInit {
     showReviewForm:boolean = false;
     newReview:Review = {} as Review;
     reviews:Review[] = [];
+    showReviews: boolean = false;
 
     constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
        private reviewsService: ReviewsService, private route:ActivatedRoute, @Inject(LOCALE_ID) private locale: string) { }
@@ -41,10 +42,12 @@ export class SingleBookComponent implements OnInit {
       this.bookService.getBooksByIsbn(isbn).subscribe((response:Books) => {
         if(response.totalItems != 0){
           this.displayBook = response.items[0];
+          this.getReviews();
         }
         else{
           this.bookService.getBooksById(isbn).subscribe((response:Item) =>{
-            this.displayBook = response;   
+            this.displayBook = response;  
+            this.getReviews(); 
           })
         }
       })
@@ -55,8 +58,8 @@ export class SingleBookComponent implements OnInit {
         this.getFavoriteList();
         this.getReadList();
         this.getDeniedList();
-        this.getReviews();
     })
+    
   }
 
   getIsbn(book: Item):string{
@@ -205,6 +208,11 @@ export class SingleBookComponent implements OnInit {
       console.log(response);
       this.newReview = response;
     })
+    this.getReviews();
+  }
+
+  toggleReviews():void{
+    this.showReviews = !this.showReviews;
   }
 
   getReviews():any{
@@ -215,8 +223,27 @@ export class SingleBookComponent implements OnInit {
     })
   }
 
+  getTopReviews():any{
+    this.reviewsService.GetTopReviewsByBook(this.getIsbn(this.displayBook)).subscribe((response:Review[]) => {
+      if(response != undefined){
+      this.reviews = response;
+      }
+    })
+  }
+
   formatReviewDate(date:Date):string{
-    // return date.toLocaleString();
     return formatDate(date,'short',this.locale);
+  }
+
+  Upvote(review:Review):any{
+    this.reviewsService.UpVote(this.user.id, review.id).subscribe((response:Review) =>
+      this.reviews[this.reviews.indexOf(review)] = response
+    )
+  }
+
+  Downvote(review:Review):any{
+    this.reviewsService.DownVote(this.user.id, review.id).subscribe((response:Review) =>
+    this.reviews[this.reviews.indexOf(review)] = response
+    )
   }
 }

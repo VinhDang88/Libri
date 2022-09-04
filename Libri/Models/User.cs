@@ -11,6 +11,7 @@ namespace Libri.Models
             FavoriteLists = new HashSet<FavoriteList>();
             ReadLists = new HashSet<ReadList>();
             Reviews = new HashSet<Review>();
+            Votes = new HashSet<Vote>();
             WishLists = new HashSet<WishList>();
         }
 
@@ -24,6 +25,7 @@ namespace Libri.Models
         public virtual ICollection<FavoriteList> FavoriteLists { get; set; }
         public virtual ICollection<ReadList> ReadLists { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; }
         public virtual ICollection<WishList> WishLists { get; set; }
     }
 }

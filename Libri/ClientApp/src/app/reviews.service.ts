@@ -19,8 +19,16 @@ export class ReviewsService {
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetReviewsByBook?isbn=${isbn}`);
   }
 
+  GetTopReviewsByBook(isbn:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetTopReviewsByBook?isbn=${isbn}`);
+  }
+
   GetReviewsByUser(userId:string):any{
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetReviewsByUser?userId=${userId}`);
+  }
+
+  GetTopReviewsByUser(userId:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetTopReviewsByUser?userId=${userId}`);
   }
 
   DeleteReview(userId:string, isbn:string, datePosted:Date):any{
@@ -31,11 +39,11 @@ export class ReviewsService {
     return this.http.put(`${this.baseUrl}${this.endpoint}/EditReview?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}&review1=${review1}`, {});
   }
 
-  UpVote(userId:string, isbn:string, datePosted:Date):any{
-    return this.http.put(`${this.baseUrl}${this.endpoint}/UpVote?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`, {});
+  UpVote(userId:string, postId:number):any{
+    return this.http.put(`${this.baseUrl}${this.endpoint}/UpVote?userId=${userId}&postId=${postId}`, {});
   }
 
-  DownVote(userId:string, isbn:string, datePosted:Date):any{
-    return this.http.put(`${this.baseUrl}${this.endpoint}/DownVote?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`, {});
+  DownVote(userId:string, postId:number):any{
+    return this.http.put(`${this.baseUrl}${this.endpoint}/DownVote?userId=${userId}&postId=${postId}`, {});
   }
 }

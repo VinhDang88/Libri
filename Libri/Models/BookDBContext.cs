@@ -21,6 +21,7 @@ namespace Libri.Models
         public virtual DbSet<ReadList> ReadLists { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Vote> Votes { get; set; } = null!;
         public virtual DbSet<WishList> WishLists { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -101,7 +102,7 @@ namespace Libri.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Reviews)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Reviews__UserId__6D0D32F4");
+                    .HasConstraintName("FK__Reviews__UserId__72C60C4A");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -115,6 +116,16 @@ namespace Libri.Models
                 entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.PhotoUrl).HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Vote>(entity =>
+            {
+                entity.Property(e => e.UserId).HasMaxLength(25);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Votes)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__Votes__UserId__75A278F5");
             });
 
             modelBuilder.Entity<WishList>(entity =>

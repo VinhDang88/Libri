@@ -36,7 +36,21 @@ namespace Libri.Controllers
             {
                 return null;
             }
-            return context.Reviews.Where(r => r.Isbn == isbn).ToList();
+            List<Review> reviews = context.Reviews.Where(r => r.Isbn == isbn).ToList();
+            reviews.Reverse();
+            return reviews;
+        }
+
+        [HttpGet("GetTopReviewsByBook")]
+        public List<Review> GetTopReviewsByBook(string isbn)
+        {
+            if (context.Reviews.Where(r => r.Isbn == isbn).Count() < 1)
+            {
+                return null;
+            }
+            List<Review> reviews = context.Reviews.Where(r => r.Isbn == isbn).ToList();
+            List<Review> topReviews = reviews.OrderByDescending(r => r.Votes).ThenByDescending(r => r.DatePosted).ToList();
+            return topReviews;
         }
 
         [HttpGet("GetReviewsByUser")]
@@ -46,7 +60,21 @@ namespace Libri.Controllers
             {
                 return null;
             }
-            return context.Reviews.Where(r => r.UserId == userId).ToList();
+            List<Review> reviews = context.Reviews.Where(r => r.UserId == userId).ToList();
+            reviews.Reverse();
+            return reviews;
+        }
+
+        [HttpGet("GetTopReviewsByUser")]
+        public List<Review> GetTopReviewsByUser(string userId)
+        {
+            if (context.Reviews.Where(r => r.UserId == userId).Count() < 1)
+            {
+                return null;
+            }
+            List<Review> reviews = context.Reviews.Where(r => r.UserId == userId).ToList();
+            List<Review> topReviews = reviews.OrderByDescending(r => r.Votes).ThenByDescending(r => r.DatePosted).ToList();
+            return topReviews;
         }
 
         [HttpDelete("DeleteReview")]
@@ -68,21 +96,69 @@ namespace Libri.Controllers
         }
 
         [HttpPut("UpVote")]
-        public Review UpVote(string userId, string isbn, DateTime datePosted)
+        public Review UpVote(string userId, int postId)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Isbn == isbn && r.DatePosted == datePosted);
-            review.Votes++;
-            context.SaveChanges();
-            return review;
+            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Id == postId);
+            Vote vote = context.Votes.FirstOrDefault(v => v.UserId == userId && v.PostId == postId);
+            if (vote == null)
+            {
+                vote = new Vote()
+                {
+                    UserId = userId,
+                    PostId = postId,
+                    Upvoted = true,
+                    Downvoted = false
+                };
+                review.Votes++;
+                context.Votes.Add(vote);
+                context.SaveChanges();
+                return review;
+            }
+            else if (vote.Upvoted == false && vote.Downvoted == true)
+            {
+                vote.Downvoted = false;
+                vote.Upvoted = true;
+                review.Votes += 2;
+                context.SaveChanges();
+                return review;
+            }
+            else
+            {
+                return review;
+            }
         }
 
         [HttpPut("DownVote")]
-        public Review DownVote(string userId, string isbn, DateTime datePosted)
+        public Review DownVote(string userId, int postId)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Isbn == isbn && r.DatePosted == datePosted);
-            review.Votes--;
-            context.SaveChanges();
-            return review;
+            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Id == postId);
+            Vote vote = context.Votes.FirstOrDefault(v => v.UserId == userId && v.PostId == postId);
+            if (vote == null)
+            {
+                vote = new Vote()
+                {
+                    UserId = userId,
+                    PostId = postId,
+                    Upvoted = false,
+                    Downvoted = true
+                };
+                review.Votes--;
+                context.Votes.Add(vote);
+                context.SaveChanges();
+                return review;
+            }
+            else if (vote.Downvoted == false && vote.Upvoted == true)
+            {
+                vote.Downvoted = true;
+                vote.Upvoted = false;
+                review.Votes -= 2;
+                context.SaveChanges();
+                return review;
+            }
+            else
+            {
+                return review;
+            }
         }
     }
 }

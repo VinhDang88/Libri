@@ -1,4 +1,5 @@
 export interface Review {
+    id:number;
     userId:string;
     isbn:string;
     bookTitle:string;

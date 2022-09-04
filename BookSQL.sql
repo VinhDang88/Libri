@@ -1,32 +1,34 @@
+--CREATE DATABASE BookDB;
+--USE BookDB;
+
 --CREATE TABLE Users (
 --Id NVARCHAR(25) PRIMARY KEY NOT NULL ,
 --FirstName NVARCHAR(255),
 --LastName NVARCHAR(255),
 --Name NVARCHAR(255),
 --PhotoUrl NVARCHAR(255)
-
 --);
 
 --CREATE TABLE WishLists (
---Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 --WishListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE ReadLists (
---Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 --ReadListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE DeniedLists (
---Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 --DeniedListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255)
 --);
 
 --CREATE TABLE FavoriteLists (
---Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
+--Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 --FavoriteListId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
 --Isbn NVARCHAR(255),
 --Title NVARCHAR(255),
@@ -34,7 +36,6 @@
 --Subject NVARCHAR(255),
 --averageRating REAL,
 --ratingsCount INT
-
 --);
 
 --CREATE TABLE Reviews(
@@ -48,6 +49,18 @@
 --	DatePosted DATETIME,
 --	Votes INT
 --);
+
+--CREATE TABLE Votes(
+--	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+--	UserId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
+--	PostId INT NOT NULL,
+--	Upvoted BIT,
+--	Downvoted BIT
+--);
+
+--DROP TABLE Votes;
+
+--DROP TABLE Reviews;
 
 --ALTER TABLE WishLists
 --ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
@@ -68,7 +81,9 @@
 
 --SELECT * FROM DeniedLists;
 
---SELECT * FROM Reviews;
+SELECT * FROM Reviews;
+
+SELECT * FROM Votes;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;
@@ -81,7 +96,9 @@
 
 --DELETE FROM DeniedLists;
 
---DELETE FROM Reviews
+--DELETE FROM Reviews;
+
+--DELTE FROM Votes;
 
 --SELECT * FROM FavoriteLists
 --JOIN Users ON FavoriteLists.FavoriteListId=Users.Id;

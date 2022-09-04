@@ -1,14 +1,26 @@
-.thumbnail{
+.container{
     z-index: 1;
+    background-color: #9CC0E7;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 2%;
+}
+
+.thumbnail{
+    width: 100%;
+    margin-top: 2%;
+    margin-left: 2%;
 }
 
 .bookInfo{
-    z-index: 1;
+    width: 100%;
 }
 
 .listButtons{
-    width:100%;
-    z-index: 1;
+    width: 110%;
+    margin-left: 2%;
 }
 
 .iconButton{
@@ -16,12 +28,31 @@
     background:none;
 }
 
+#icon{
+    font-size: 300%;
+}
+
 .buttonText{
     font-size: xx-small;
 }
 
-.reviewButton{
-    z-index: 1;
+.reviewButtonContainer{
+    display:block;
+    margin: auto;
+    border: 3px solid black;
+    border-radius: 8px;
+    width: fit-content;
+    padding:0%;
+    margin-bottom: 1%;
+}
+
+.review{
+    margin-right: 2%;
+    margin-left:2%;
+    margin-bottom: 1%;
+    border: 3px solid black;
+    border-radius: 8px;
+    padding: 1%;
 }
 
 .layer2{
@@ -43,13 +74,14 @@
     z-index: 3;
     width: 100%;
     top:15%;
-    left:5%;
+    left:3%;
 }
 
 .reviewForm{
-    width: 50%;
+    width: 80%;
     display: block;
     margin: auto;
+    margin-left: 8%;
     margin-top:12%;
     background-color: white;
     padding-top: 0%;
@@ -71,6 +103,12 @@
     margin: auto;
     margin-top: 2%;
     width: 90%;
+}
+
+.closeFormButton{
+    display: inline;
+    float: right;
+    margin-right: 5%;
 }
 
 textarea{

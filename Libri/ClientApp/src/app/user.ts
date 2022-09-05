@@ -4,4 +4,5 @@ export interface User {
     lastName:string;
     name:string;
     photoUrl:string;
+    sqlId:number;
 }

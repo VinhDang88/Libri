@@ -5,6 +5,7 @@ import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
 import { Denied } from '../denied';
 import { Favorites } from '../favorites';
+import { Follower } from '../follower';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
 import { User } from '../user';
@@ -34,28 +35,37 @@ export class UserprofileComponent implements OnInit {
   displayReadList:boolean = false;
   displayDeniedList:boolean = false;
   pageOwner:boolean = false;
+  following:string[] = [];
+  activeUserFollowedUsers:string[] = [];
+  followedUsers:string[] = [];
+ 
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
      private route:ActivatedRoute, private usersService: UsersService) { }
+     
 
   ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
-      this.activeUser = user;
-      console.log("active: "+ this.activeUser)
-      console.log("page: " +this.user)
-      this.loggedIn = (user != null); 
+    const routeParams = this.route.snapshot.paramMap;
+    let id:number = Number(routeParams.get("id"));
+    
+    this.authService.authState.subscribe((response:SocialUser) => {
+      this.activeUser = response;
+      this.loggedIn = (response != null); 
+      this.getActiveUserFollowedUsers();
+      // this.checkIfPageOwner();
     });
 
-    const routeParams = this.route.snapshot.paramMap;
-    let id:string = String(routeParams.get("id"));
-    this.usersService.GetUserById(id).subscribe((response:User) => {
+    this.usersService.GetUserBySqlId(id).subscribe((response:User) => {
       this.user = response;
-      console.log("page: "+this.user)
+      this.getPageOwnerFollowing();
+      this.getPageOwnerFollowedUsers();
       this.checkIfPageOwner();
       this.getWishList();
       this.getReadList();
       this.getFavoriteList();
       this.getDeniedList();
+      
+      this.followedByActiveUser();
     })
   }
 
@@ -159,16 +169,16 @@ export class UserprofileComponent implements OnInit {
   }
 
   getIsbn(book: Item):string{
-    // Contains ISBN-10 from the books
+    //contains identifiers for book
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
     let isbn: string = "";
-    // Puts ISBNs from industry identifier into empty string array
+    //if book has an isbn_10 it is assigned 
     bookIds.forEach((id) => {
       if(id.type == "ISBN_10"){
         isbn = id.identifier
       }
     })
-    // Grabbing first string out of the array that matches ISBN
+    // if isbn_10 is missing assigns isbn_13 instead
     if(isbn == ""){
       bookIds.forEach((id) => {
         if(id.type == "ISBN_13"){
@@ -176,6 +186,7 @@ export class UserprofileComponent implements OnInit {
         }
       })
     }
+    //if isbns are not found assigns book id instead
     if(isbn == ""){
       isbn = book.id
     }
@@ -282,5 +293,44 @@ export class UserprofileComponent implements OnInit {
     this.displayFavoriteList = false;
     this.displayWishList = false;
     this.displayReadList = false;
+  }
+
+  followUser():any{
+    if(!this.pageOwner){
+      this.usersService.FollowUser(this.user.id, this.activeUser.id).subscribe((response:Follower) => {
+        this.activeUserFollowedUsers.push(response.userFollowedId);
+      })
+    }
+  }
+
+  unfollowUser():any{
+    if(!this.pageOwner){
+      this.usersService.UnFollow(this.user.id, this.activeUser.id).subscribe((response:Follower) => {
+        let i = this.activeUserFollowedUsers.indexOf(response.userFollowedId);
+        this.activeUserFollowedUsers.splice(i, 1);
+      })
+    }
+  }
+
+  getPageOwnerFollowing():any{
+    this.usersService.GetFollowing(this.user.id).subscribe((response:string[]) => {
+      this.following = response;
+    })
+  }
+
+  getPageOwnerFollowedUsers():any{
+    this.usersService.GetFollowedUsers(this.user.id).subscribe((response:string[]) => {
+      this.followedUsers = response;
+    })
+  }
+
+  getActiveUserFollowedUsers():any{
+    this.usersService.GetFollowedUsers(this.activeUser.id).subscribe((response:string[]) => {
+      this.activeUserFollowedUsers = response;
+    })
+  }
+
+  followedByActiveUser():boolean{
+    return this.activeUserFollowedUsers.some(f => f == this.user.id)
   }
 }

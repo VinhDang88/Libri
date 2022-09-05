@@ -37,23 +37,29 @@ export class SingleBookComponent implements OnInit {
        private reviewsService: ReviewsService, private route:ActivatedRoute, @Inject(LOCALE_ID) private locale: string) { }
 
     ngOnInit(): void {
+      //displayed book's isbn is stored from the page url
       const routeParams = this.route.snapshot.paramMap;
       let isbn:string = String(routeParams.get("isbn"))
+      //gets the book to display using the isbn from the route
       this.bookService.getBooksByIsbn(isbn).subscribe((response:Books) => {
+        //if book had an isbn return will be an array containing a single item
         if(response.totalItems != 0){
           this.displayBook = response.items[0];
           this.getReviews();
         }
         else{
+          //if book id was used because of missing isbn return will be a single item
           this.bookService.getBooksById(isbn).subscribe((response:Item) =>{
             this.displayBook = response;  
             this.getReviews(); 
           })
         }
       })
+      //logs in user
       this.authService.authState.subscribe((user) => {
         this.user = user;
         this.loggedIn = (user != null);
+        //gets current users lists so they can be added to
         this.getWishList();
         this.getFavoriteList();
         this.getReadList();
@@ -63,16 +69,16 @@ export class SingleBookComponent implements OnInit {
   }
 
   getIsbn(book: Item):string{
-    // Contains ISBN-10 from the books
+    // Contains book identifiers
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
     let isbn: string = "";
-    // Puts ISBNs from industry identifier into empty string array
+    // Check for isbn_10 and assign it if found
     bookIds.forEach((id) => {
       if(id.type == "ISBN_10"){
         isbn = id.identifier
       }
     })
-    // Grabbing first string out of the array that matches ISBN
+    // check for isbn_13 and assign it if no isbn_10
     if(isbn == ""){
       bookIds.forEach((id) => {
         if(id.type == "ISBN_13"){
@@ -80,28 +86,30 @@ export class SingleBookComponent implements OnInit {
         }
       })
     }
+    //if no isbn assign id instead
     if(isbn == ""){
       isbn = book.id
     }
     return isbn;
   }
 
-  getId(book:Item):string{
-    return book.id;
-  }
-
   addFavorite(book:Item):any{
+    //sets empty category of categories is missing
     if(book.volumeInfo.categories == undefined){
       book.volumeInfo.categories = [];
     }
+    //sets empty author if author is missing
     if(book.volumeInfo.authors == undefined){
       book.volumeInfo.authors = [];
     }
+    //sets empty title if title is missing
     if(book.volumeInfo.title == undefined){
       book.volumeInfo.title = "";
     }
+    //gathers info need to add a book and calls list service to add to favorites
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
+      //push response to favorites array to update on page
       this.favoritesArray.push(response)
       console.log(response);
     });
@@ -110,6 +118,7 @@ export class SingleBookComponent implements OnInit {
   addToWishList(book:Item):any{
     this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
       console.log(response);
+      //push response to wish array to update on page
       this.wish.push(response);
     });
   }
@@ -117,6 +126,7 @@ export class SingleBookComponent implements OnInit {
   addToReadList(book:Item):any{
     this.listsService.addToReadList(this.getIsbn(book), this.user.id).subscribe((response:Read) => {
       console.log(response);
+      //push response to read array to update on page
       this.read.push(response);
     });
   }
@@ -124,16 +134,17 @@ export class SingleBookComponent implements OnInit {
   addToDeniedList(book:Item):any{
     this.listsService.addToDeniedList(this.getIsbn(book), this.user.id).subscribe((response:Denied) => {
       console.log(response);
+      //push response to denied list to update on page
       this.denied.push(response);
     });
   }
   
-  //Create a toggle that will hide Favorite list button after user clicks on the button
+  //determines if book is already favorited
   CheckIfInFavoriteList(book:Item):boolean{
       return this.favoritesArray.some(f => f.isbn.trim().toString() == this.getIsbn(book))
   }
   
-  //Create a toggle that will hide Wish list button after user clicks on the button
+  //determines if book is already in wishlist
   CheckIfInWishList(book:Item):boolean{
     let wish: Wish = {
       wishListId: this.user.id,
@@ -142,6 +153,7 @@ export class SingleBookComponent implements OnInit {
     return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
     }
 
+  //determines if book is already in readlist
   CheckIfInReadList(book:Item):boolean{
     let read: Read = {
       readListId: this.user.id,
@@ -150,6 +162,7 @@ export class SingleBookComponent implements OnInit {
     return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
     }
 
+  //determines if book is already in denied list
   CheckIfInDeniedList(book:Item):boolean{
     let denied: Denied = {
       deniedListId: this.user.id,
@@ -157,7 +170,7 @@ export class SingleBookComponent implements OnInit {
     }
     return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
     }
-    
+      
   getWishList():any{
     this.listsService.getWishList(this.user.id).subscribe((response:Wish[]) => {
       this.wish = response;
@@ -215,6 +228,7 @@ export class SingleBookComponent implements OnInit {
     this.showReviews = !this.showReviews;
   }
 
+  //gets all reviews for displayed book
   getReviews():any{
     this.reviewsService.GetReviewsByBook(this.getIsbn(this.displayBook)).subscribe((response:Review[]) => {
       if(response != undefined){
@@ -222,7 +236,8 @@ export class SingleBookComponent implements OnInit {
       }
     })
   }
-
+  
+  //orders reviews by most votes
   getTopReviews():any{
     this.reviewsService.GetTopReviewsByBook(this.getIsbn(this.displayBook)).subscribe((response:Review[]) => {
       if(response != undefined){
@@ -231,6 +246,7 @@ export class SingleBookComponent implements OnInit {
     })
   }
 
+  //formats date of review for better display
   formatReviewDate(date:Date):string{
     return formatDate(date,'short',this.locale);
   }

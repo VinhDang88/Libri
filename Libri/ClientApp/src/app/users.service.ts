@@ -22,4 +22,24 @@ export class UsersService {
   GetUserById(id:string):any{
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetUserById?id=${id}`);
   }
+
+  GetUserBySqlId(id:number):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetUserBySqlId?id=${id}`)
+  }
+
+  FollowUser(userFollowedId:string, userId:string):any{
+    return this.http.post(`${this.baseUrl}${this.endpoint}/FollowUser?userFollowedId=${userFollowedId}&userId=${userId}`, {});
+  }
+
+  UnFollow(userFollowedId:string, userId:string):any{
+    return this.http.delete(`${this.baseUrl}${this.endpoint}/UnFollow?userFollowedId=${userFollowedId}&userId=${userId}`);
+  }
+
+  GetFollowing(userId:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetFollowing?userId=${userId}`);
+  }  
+
+  GetFollowedUsers(userId:string):any{
+    return this.http.get(`${this.baseUrl}${this.endpoint}/GetFollowedUsers?userId=${userId}`);
+  }
 }

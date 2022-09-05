@@ -31,12 +31,12 @@ export class ReviewsService {
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetTopReviewsByUser?userId=${userId}`);
   }
 
-  DeleteReview(userId:string, isbn:string, datePosted:Date):any{
-    return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteReview?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}`);
+  DeleteReview(id:number):any{
+    return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteReview?id=${id}`);
   }
 
-  EditReview(userId:string, isbn:string, datePosted:Date, review1:string):any{
-    return this.http.put(`${this.baseUrl}${this.endpoint}/EditReview?userId=${userId}&isbn=${isbn}&datePosted=${datePosted}&review1=${review1}`, {});
+  EditReview(id: number, review1:string):any{
+    return this.http.put(`${this.baseUrl}${this.endpoint}/EditReview?id=${id}&review1=${review1}`, {});
   }
 
   UpVote(userId:string, postId:number):any{

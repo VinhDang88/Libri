@@ -1,3 +1,4 @@
+<!-- search bar to find users if name contains the text that is input -->
 <div class="userSearchBar">
   <form #Search="ngForm" (ngSubmit)="SearchUsers(Search)">
     <input
@@ -21,24 +22,31 @@
   </form>
 </div>
 
+<!-- display users from search -->
 <div *ngFor="let u of searchedUsers">
-  <a routerLink="/UserProfile/{{ u.id }}"
+  <!-- clickable image that routes to displayed user's profile -->
+  <a routerLink="/UserProfile/{{ u.sqlId }}"
     ><img class="zoom" src="{{ u.photoUrl }}"
   /></a>
-  <a routerLink="/UserProfile/{{ u.id }}"
+  <!-- username also routes to displayed user's profile -->
+  <a routerLink="/UserProfile/{{ u.sqlId }}"
     ><p>{{ u.name }}</p></a
   >
 </div>
 
+<!-- container for display books from search -->
 <div *ngIf="books.items != undefined" class="searchResultsContainer">
   <div *ngFor="let b of books.items">
     <div class="searchResult">
+      <!-- book cover thumbnail image routes to single book info page -->
       <div class="searchImage">
         <a routerLink="/Book/{{ getIsbn(b) }}"
           ><img class="zoom" src="{{ getThumbnail(b) }}"
         /></a>
       </div>
+      <!-- holds information from book to display -->
       <div class="searchInfo">
+        <!-- book title routes to single book info page -->
         <h5>
           <a routerLink="/Book/{{ getIsbn(b) }}">{{ b.volumeInfo.title }}</a>
         </h5>
@@ -51,7 +59,9 @@
           Rating not available
         </p>
       </div>
+      <!-- holds buttons for books from search -->
       <div class="searchButtons">
+        <!-- button that adds book to favorites -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInFavoriteList(b)"
@@ -61,7 +71,9 @@
           <br />
           <p class="buttonText">Favorite</p>
         </button>
+        <!-- if user is not logged in they will get a message instead of buttons -->
         <p *ngIf="!loggedIn">Log in to create personalized lists</p>
+        <!-- button that adds book to wishlist -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInWishList(b)"
@@ -71,6 +83,7 @@
           <br />
           <p class="buttonText">Wish List</p>
         </button>
+        <!-- button that adds book to readlist -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInReadList(b)"
@@ -82,6 +95,7 @@
           <br />
           <p class="buttonText">Already Read</p>
         </button>
+        <!-- button that adds book to denied list -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInDeniedList(b)"

@@ -60,16 +60,16 @@
 
 --CREATE TABLE Followers(
 --	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
---	FollowedBy NVARCHAR(255) FOREIGN KEY REFERENCES Users(Id),
---	Following NVARCHAR(255)
+--	UserFollowedId NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
+--	UserFollowingId NVARCHAR(25)
 --);
 
 --DROP TABLE Votes;
 
 --DROP TABLE Reviews;
 
---ALTER TABLE WishLists
---ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
+--ALTER TABLE Users
+--ADD SqlId INT NOT NULL IDENTITY(1,1);
 
 --ALTER TABLE ReadLists
 --ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
@@ -77,7 +77,7 @@
 --ALTER TABLE DeniedLists
 --ADD Id INT NOT NULL PRIMARY KEY IDENTITY(1,1);
 
-----SELECT * FROM Users;
+--SELECT * FROM Users;
 
 --SELECT * FROM FavoriteLists;
 
@@ -90,6 +90,8 @@
 --SELECT * FROM Reviews;
 
 --SELECT * FROM Votes;
+
+SELECT * FROM Followers;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;

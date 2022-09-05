@@ -18,6 +18,7 @@ namespace Libri.Models
 
         public virtual DbSet<DeniedList> DeniedLists { get; set; } = null!;
         public virtual DbSet<FavoriteList> FavoriteLists { get; set; } = null!;
+        public virtual DbSet<Follower> Followers { get; set; } = null!;
         public virtual DbSet<ReadList> ReadLists { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
@@ -29,7 +30,7 @@ namespace Libri.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=libri.database.windows.net;Initial Catalog=BookDB;User Id=sunnysunnysunny; Password=Banhxeoturtlepizza15!;");
+                optionsBuilder.UseSqlServer($"Data Source={Secrets.dataSource};Initial Catalog=BookDB;User Id={Secrets.userId}; Password={Secrets.password};");
             }
         }
 
@@ -67,6 +68,18 @@ namespace Libri.Models
                     .WithMany(p => p.FavoriteLists)
                     .HasForeignKey(d => d.FavoriteListId)
                     .HasConstraintName("FK__FavoriteL__Favor__6754599E");
+            });
+
+            modelBuilder.Entity<Follower>(entity =>
+            {
+                entity.Property(e => e.UserFollowedId).HasMaxLength(25);
+
+                entity.Property(e => e.UserFollowingId).HasMaxLength(25);
+
+                entity.HasOne(d => d.UserFollowed)
+                    .WithMany(p => p.Followers)
+                    .HasForeignKey(d => d.UserFollowedId)
+                    .HasConstraintName("FK__Followers__UserF__7B5B524B");
             });
 
             modelBuilder.Entity<ReadList>(entity =>
@@ -116,6 +129,8 @@ namespace Libri.Models
                 entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.PhotoUrl).HasMaxLength(255);
+
+                entity.Property(e => e.SqlId).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Vote>(entity =>

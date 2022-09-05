@@ -78,18 +78,18 @@ namespace Libri.Controllers
         }
 
         [HttpDelete("DeleteReview")]
-        public Review RemoveReview(string userId, string isbn, DateTime datePosted)
+        public Review RemoveReview(int id)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Isbn == isbn && r.DatePosted == datePosted);
+            Review review = context.Reviews.FirstOrDefault(r => r.Id == id);
             context.Reviews.Remove(review);
             context.SaveChanges();
             return review;
         }
 
         [HttpPut("EditReview")]
-        public Review EditReview(string userId, string isbn, DateTime datePosted, string review1)
+        public Review EditReview(int id, string review1)
         {
-            Review review = context.Reviews.FirstOrDefault(r => r.UserId == userId && r.Isbn == isbn && r.DatePosted == datePosted);
+            Review review = context.Reviews.FirstOrDefault(r => r.Id == id);
             review.Review1 = review1;
             context.SaveChanges();
             return review;

@@ -54,8 +54,65 @@ namespace Libri.Controllers
         [HttpGet("GetUsersByName")]
         public List<User> GetUsersByName(string name)
         {
-            return context.Users.Where(u => u.Name.ToLower().Contains(name.ToLower().Trim())).ToList();  
+            return context.Users.Where(u => u.Name.ToLower().Contains(name.ToLower().Trim())).ToList();
         }
 
+        [HttpGet("GetUserBySqlId")]
+        public User GetUserBySqlId(int id)
+        {
+            return context.Users.FirstOrDefault(u => u.SqlId == id);
+        }
+
+        [HttpPost("FollowUser")]
+        public Follower FollowUser(string userFollowedId, string userId)
+        {
+            bool following = context.Followers.FirstOrDefault(f => f.UserFollowedId == userFollowedId && f.UserFollowingId == userId) != null;
+            if (!following && userFollowedId != userId)
+            {
+                Follower follower = new Follower()
+                {
+                    UserFollowedId = userFollowedId,
+                    UserFollowingId = userId,
+                };
+                context.Followers.Add(follower);
+                context.SaveChanges();
+                return follower;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+
+        [HttpDelete("UnFollow")]
+        public Follower UnFollow(string userFollowedId, string userId)
+        {
+            Follower unFollowed = context.Followers.FirstOrDefault(f => f.UserFollowedId == userFollowedId && f.UserFollowingId == userId);
+            if(unFollowed != null)
+            {
+                context.Followers.Remove(unFollowed);
+                context.SaveChanges();
+            }
+            return unFollowed;
+        }
+
+        [HttpGet("GetFollowing")]
+        public List<string> GetFollowing(string userId)
+        {
+            List<Follower> following = context.Followers.Where(f => f.UserFollowedId == userId).ToList();
+            List<string> result = new List<string>();
+            following.ForEach(f => result.Add(f.UserFollowingId));
+            return result;
+        }
+
+        [HttpGet("GetFollowedUsers")]
+        public List<string> GetFollowedUsers(string userId)
+        {
+            List<Follower> followedUsers = context.Followers.Where(f => f.UserFollowingId == userId).ToList();
+            List<string> result = new List<String>();
+            followedUsers.ForEach(f => result.Add(f.UserFollowedId));
+            return result;
+        }
     }
 }

@@ -3,6 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-0"
   >
     <div class="container">
+      <!-- displays site name that routes to home page -->
       <a class="navbar-brand" [routerLink]="['/']">Libri</a>
       <button
         class="navbar-toggler"
@@ -20,6 +21,7 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
+          <!-- nab link to home page -->
           <li
             class="nav-item"
             [routerLinkActive]="['link-active']"
@@ -27,14 +29,19 @@
           >
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <!-- Button links to user profile -->
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <!-- nav link to user profile, only displays if there is a logged in user -->
+          <li
+            *ngIf="loggedIn"
+            class="nav-item"
+            [routerLinkActive]="['link-active']"
+          >
             <a
               class="nav-link text-dark"
-              [routerLink]="['/UserProfile/{{user.id}}']"
+              [routerLink]="['UserProfile/', activeUserId]"
               >Profile</a
             >
           </li>
+          <!-- google signout button -->
           <li class="nav-item">
             <button
               class="btn btn-outline-dark"
@@ -43,6 +50,7 @@
             >
               Sign Out
             </button>
+            <!-- google login button -->
             <asl-google-signin-button
               *ngIf="!loggedIn"
               type="icon"

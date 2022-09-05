@@ -17,18 +17,28 @@ export class NavMenuComponent implements OnInit {
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
   newUser: User = {} as User;
+  activeUser:User = {} as User;
+  activeUserId:number = 0;
 
-  ngOnInit(): void {
-
+  ngOnInit():void {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
       //Takes google login information and stores inside our database
       this.userService.addUsers(this.user.id, this.user.firstName, this.user.lastName, this.user.name, this.user.photoUrl).subscribe((response:User)=>{
         this.newUser = response;
-        console.log(response)
+        //timeout to makes sure login runs first before getting sql table id of active user
+        setTimeout(() => this.getActiveUser(), .1);
       })
     });
+  }
+
+  getActiveUser():number{
+    //takes active logged in socialuser and gets matching user's sql table id
+    this.userService.GetUserById(this.user.id).subscribe((response:User) => {
+      this.activeUserId = response.sqlId;
+    })
+    return this.activeUserId;
   }
   //Closes google login window
   collapse() {

@@ -5,6 +5,19 @@
   <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
 
   <img src="{{ user.photoUrl }}" />
+  <button
+    *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+    (click)="followUser()"
+  >
+    follow
+  </button>
+  <button
+    *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+    (click)="unfollowUser()"
+  >
+    unfollow
+  </button>
+
   <br />
   <br />
 
@@ -17,7 +30,7 @@
   <p *ngIf="displayDeniedList"># of Denied List {{ deniedListItems.length }}</p>
 </div>
 
-<!-- Buttons -->
+<!-- Buttons for changing display -->
 <div class="buttonContainer">
   <button class="displayButton" (click)="toggleFavoriteList()">
     Favorites

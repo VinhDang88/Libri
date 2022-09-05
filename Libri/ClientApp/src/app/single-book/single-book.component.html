@@ -1,9 +1,12 @@
+<!-- contain for single book info -->
 <div class="container">
   <div class="row">
     <div class="col-md-3 col-sm-3">
+      <!-- book cover thumbnail -->
       <img class="thumbnail" src="{{ getThumbnail(displayBook) }}" />
-
+      <!-- buttons for adding to list and seeing reviews -->
       <div class="listButtons">
+        <!-- add displayed book to favorites button -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInFavoriteList(displayBook)"
@@ -13,7 +16,9 @@
           <br />
           <p class="buttonText">Favorite</p>
         </button>
+        <!-- message displayed instead of list add buttons if user is not logged in -->
         <p *ngIf="!loggedIn">Log in to create personalized lists</p>
+        <!-- add displayed book to wishlist button -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInWishList(displayBook)"
@@ -23,6 +28,7 @@
           <br />
           <p class="buttonText">Wish List</p>
         </button>
+        <!-- add displayed book to readlist button -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInReadList(displayBook)"
@@ -34,6 +40,7 @@
           <br />
           <p class="buttonText">Already Read</p>
         </button>
+        <!-- add displayed book to denied list button -->
         <button
           class="iconButton"
           *ngIf="loggedIn && !CheckIfInDeniedList(displayBook)"
@@ -43,6 +50,7 @@
           <br />
           <p class="buttonText">Uninterested</p>
         </button>
+        <!-- button that toggles display for reviews of displayed book -->
         <button
           *ngIf="!showReviews"
           class="iconButton"
@@ -67,6 +75,7 @@
     </div>
 
     <div class="col-md-8 col-sm-8">
+      <!-- holds all info for displayed book -->
       <div class="bookInfo">
         <h1>{{ displayBook.volumeInfo.title }}</h1>
         <h2>Categories: {{ displayBook.volumeInfo.categories }}</h2>
@@ -90,14 +99,18 @@
   </div>
 </div>
 
+<!-- display that holds buttons and reviews -->
 <div *ngIf="showReviews" class="container">
   <div class="col-md-12 col-sm-12">
+    <!-- container that holds buttons for review interactions -->
     <div class="reviewButtonContainer">
+      <!-- button that brings up form over page to write a review -->
       <button *ngIf="loggedIn" class="iconButton" (click)="toggleReviewForm()">
         <span id="icon" class="material-symbols-outlined"> history_edu </span>
         <br />
         <p class="buttonText">Write a Review</p>
       </button>
+      <!-- button that displays reviews by most recent(default view) -->
       <button class="iconButton" (click)="getReviews()">
         <span id="icon" class="material-symbols-outlined">
           nest_clock_farsight_analog
@@ -105,6 +118,7 @@
         <br />
         <p class="buttonText">Most Recent</p>
       </button>
+      <!-- button for ordering reviews by most upvotes -->
       <button class="iconButton" (click)="getTopReviews()">
         <span id="icon" class="material-symbols-outlined">
           local_fire_department
@@ -114,23 +128,30 @@
       </button>
     </div>
 
+    <!-- black screen image appears behind write review form to block page -->
     <div *ngIf="showReviewForm" class="layer2">
       <img src="../../assets/background.png" id="bg" />
     </div>
 
+    <!-- container that holds all reviews for displayed book -->
     <div *ngIf="showReviews">
+      <!-- loops through all reviews of displayed book -->
       <div *ngFor="let r of reviews">
+        <!-- container that holds an individual review of displayed book -->
         <div class="review">
+          <!-- displays review info and text -->
           <h6>{{ r.userName }}</h6>
           <h6>{{ r.bookTitle }} by {{ r.author }}</h6>
           <h6>{{ formatReviewDate(r.datePosted) }}</h6>
           <p>{{ r.review1 }}</p>
           <p>Votes: {{ r.votes }}</p>
+          <!-- button that upvotes review -->
           <button class="iconButton" *ngIf="loggedIn" (click)="Upvote(r)">
             <span id="icon" class="material-symbols-outlined"> thumb_up </span>
             <br />
             <p class="buttonText">Upvote</p>
           </button>
+          <!-- button that downvotes review -->
           <button class="iconButton" *ngIf="loggedIn" (click)="Downvote(r)">
             <span id="icon" class="material-symbols-outlined">
               thumb_down
@@ -144,22 +165,29 @@
   </div>
 </div>
 
+<!-- form for writing a review, floats above page  -->
 <div *ngIf="showReviewForm" class="layer3">
   <div class="reviewForm">
+    <!-- on submit the review is posted and the form disappears -->
     <form #Submit="ngForm" (ngSubmit)="PostReview(Submit); toggleReviewForm()">
+      <!-- button to close form without submitting review -->
       <button class="iconButton closeFormButton" (click)="toggleReviewForm()">
         <span id="icon" class="material-symbols-outlined"> close </span>
       </button>
+      <!-- displays review writer and book review is being written for -->
       <h6 class="reviewFormText">{{ user.name }}</h6>
       <h6 class="reviewFormText">
         Write a review for {{ displayBook.volumeInfo.title }} by
         {{ displayBook.volumeInfo.authors }}
       </h6>
+      <!-- label for review text input -->
       <label class="reviewFormText" for="review" name="review" id="review"
         >Review:</label
       >
       <br />
+      <!-- text area for user to type review text -->
       <textarea name="review" ngModel></textarea>
+      <!-- button to submit the review form -->
       <button class="reviewFormButton">Post Review</button>
     </form>
   </div>

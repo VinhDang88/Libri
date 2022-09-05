@@ -41,33 +41,44 @@ export class UserprofileComponent implements OnInit {
  
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
-     private route:ActivatedRoute, private usersService: UsersService) { }
+     private route:ActivatedRoute, private usersService: UsersService,) { }
      
 
   ngOnInit(): void {
-    const routeParams = this.route.snapshot.paramMap;
-    let id:number = Number(routeParams.get("id"));
-    
     this.authService.authState.subscribe((response:SocialUser) => {
       this.activeUser = response;
       this.loggedIn = (response != null); 
       this.getActiveUserFollowedUsers();
-      // this.checkIfPageOwner();
     });
 
-    this.usersService.GetUserBySqlId(id).subscribe((response:User) => {
-      this.user = response;
-      this.getPageOwnerFollowing();
-      this.getPageOwnerFollowedUsers();
-      this.checkIfPageOwner();
-      this.getWishList();
-      this.getReadList();
-      this.getFavoriteList();
-      this.getDeniedList();
-      
-      this.followedByActiveUser();
-    })
+    this.route.params.subscribe(routeParams => {
+      //emptying lists when user id changes
+      this.favListItems = [];
+      this.wishListItems = [];
+      this.readListItems = [];
+      this.deniedListItems = [];
+      this.following = [];
+      this.followedUsers = [];
+      this.activeUserFollowedUsers = [];
+      //getting new user for profile
+      this.usersService.GetUserBySqlId(routeParams.id).subscribe((response:User) => {
+        this.user = response;
+        //filling lists with new user's lists
+        this.getPageOwnerFollowing();
+        this.getPageOwnerFollowedUsers();
+        this.followedByActiveUser();
+        this.checkIfPageOwner();
+        this.getWishList();
+        this.getReadList();
+        this.getFavoriteList();
+        this.getDeniedList(); 
+      })
+  });
+    
+    console.log(this.activeUser)
+    console.log(this.user)
   }
+  
 
   checkIfPageOwner():boolean{
     if(this.activeUser == null){
@@ -152,6 +163,20 @@ export class UserprofileComponent implements OnInit {
             this.favListItems.push(i);
           })
         }
+        else{
+          this.bookService.getBooksById(f.isbn).subscribe((response:Item) => {
+            response.volumeInfo.industryIdentifiers.forEach((i) => { 
+              //if searched by id make sure it gets correct id
+              if(i.type == "ISBN_10"){
+                i.identifier = response.id;
+              }
+              if(i.type == "ISBN_13"){
+                i.identifier = response.id;
+              }
+            })
+            this.favListItems.push(response);
+          })
+        }
       })
     })
   }
@@ -177,7 +202,7 @@ export class UserprofileComponent implements OnInit {
       if(id.type == "ISBN_10"){
         isbn = id.identifier
       }
-    })
+    });
     // if isbn_10 is missing assigns isbn_13 instead
     if(isbn == ""){
       bookIds.forEach((id) => {
@@ -194,6 +219,8 @@ export class UserprofileComponent implements OnInit {
   }
 
   deleteFavoriteListObject(book:Item):any{
+    console.log(this.user.id)
+    console.log(this.getIsbn(book))
     this.listsService.deleteFavoriteListObject(this.getIsbn(book), this.user.id).subscribe((response:Favorites) => {
       console.log(response);
       let i = this.favListItems.indexOf(book);

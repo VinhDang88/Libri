@@ -44,7 +44,7 @@ namespace Libri.Controllers
         [HttpDelete("DeleteFavoriteListObject")]
         public FavoriteList DeleteFavoriteListObject(string isbn, string favoriteListId)
         {
-            FavoriteList favoriteList = context.FavoriteLists.FirstOrDefault(f => f.Isbn == isbn && f.FavoriteListId == favoriteListId);
+            FavoriteList favoriteList = context.FavoriteLists.First(f => f.Isbn == isbn && f.FavoriteListId == favoriteListId);
             if (favoriteList == null)
             {
                 return null;

@@ -12,6 +12,7 @@ namespace Libri.Models
             Followers = new HashSet<Follower>();
             ReadLists = new HashSet<ReadList>();
             Reviews = new HashSet<Review>();
+            UserReccomendations = new HashSet<UserReccomendation>();
             Votes = new HashSet<Vote>();
             WishLists = new HashSet<WishList>();
         }
@@ -28,6 +29,7 @@ namespace Libri.Models
         public virtual ICollection<Follower> Followers { get; set; }
         public virtual ICollection<ReadList> ReadLists { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<UserReccomendation> UserReccomendations { get; set; }
         public virtual ICollection<Vote> Votes { get; set; }
         public virtual ICollection<WishList> WishLists { get; set; }
     }

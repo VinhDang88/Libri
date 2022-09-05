@@ -5,9 +5,11 @@ import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
 import { Denied } from '../denied';
 import { Favorites } from '../favorites';
+import { Follower } from '../follower';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
 import { User } from '../user';
+import { UserReccomendation } from '../user-reccomendation';
 import { UsersService } from '../users.service';
 import { Wish } from '../wish';
 
@@ -36,6 +38,8 @@ export class HomeComponent {
   recommendedHasBooks:boolean = false;
   searchedUsers:User[] = [];
   searchedUsername:string = "";
+  following:string[] = [];
+  userFollowing:User[] = [];
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -47,6 +51,7 @@ export class HomeComponent {
       this.getDeniedList();
       this.getRecommendations(this.user.id);
       this.CheckForDuplicates();
+      this.getUserFollowing();
     });
   }
 
@@ -88,16 +93,16 @@ export class HomeComponent {
   }
 
   getIsbn(book: Item):string{
-    // Contains identifiers from the books
+    //contains identifiers for book
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
     let isbn: string = "";
-    // tries to get Isbn_10
+    //if book has an isbn_10 it is assigned 
     bookIds.forEach((id) => {
       if(id.type == "ISBN_10"){
         isbn = id.identifier
       }
-    })
-    // looks for isbn_13 if Isbn_10 was not found
+    });
+    // if isbn_10 is missing assigns isbn_13 instead
     if(isbn == ""){
       bookIds.forEach((id) => {
         if(id.type == "ISBN_13"){
@@ -105,7 +110,7 @@ export class HomeComponent {
         }
       })
     }
-    //uses the id if no isbn was found
+    //if isbns are not found assigns book id instead
     if(isbn == ""){
       isbn = book.id
     }
@@ -272,6 +277,38 @@ export class HomeComponent {
       this.favoritesArray = response;
       // console.log(response)
     })
+  }
+
+  //fills list with users that are following the current user
+  getUserFollowing():any{
+    //gets the list of string ids of users that are following the current user
+    this.usersService.GetFollowing(this.user.id).subscribe((response:string[]) => {
+      this.following = response;
+    })
+    //gets a list of user objects from the ids that are following the current user
+    this.following.forEach((f:string) => {
+      //for each string/id gets the user that matches 
+      this.usersService.GetUserById(f).subscribe((response:User) => {
+        this.userFollowing.push(response);
+      })
+    })
+  }
+
+  sendReccomendation(book:Item, reccomendedTo:User):any{
+    if(book.volumeInfo.categories == undefined){
+      book.volumeInfo.categories = [];
+    }
+    if(book.volumeInfo.authors == undefined){
+      book.volumeInfo.authors = [];
+    }
+    if(book.volumeInfo.title == undefined){
+      book.volumeInfo.title = "";
+    }
+    this.usersService.SendReccomendation(reccomendedTo.id, this.user.id, this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+    book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book)).subscribe(
+      (response:UserReccomendation) => {
+        return response;
+      })
   }
 
   nextRecommendation():number{

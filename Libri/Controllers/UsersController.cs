@@ -114,5 +114,35 @@ namespace Libri.Controllers
             followedUsers.ForEach(f => result.Add(f.UserFollowedId));
             return result;
         }
+
+        [HttpPost("SendReccomdation")]
+        public UserReccomendation SendReccomendation(string reccomendedTo, string reccomendedBy, string isbn, string title, string author, string subject, float averageRating, int ratingsCount, string bookThumbnailUrl)
+        {
+            List<UserReccomendation> userReccomendations = new List<UserReccomendation>();
+            UserReccomendation userReccomendation = new UserReccomendation()
+            {
+                ReccomendedTo = reccomendedTo,
+                RecomendedBy = reccomendedBy,
+                Isbn = isbn,
+                Title = title,
+                Author = author,
+                Subject = subject,
+                AverageRating = averageRating,
+                RatingsCount = ratingsCount,
+                BookThumbnailUrl = bookThumbnailUrl
+            };
+            if(!userReccomendations.Contains(userReccomendation))
+            {
+                context.UserReccomendations.Add(userReccomendation);
+                context.SaveChanges();
+            }
+            return userReccomendation;
+        }
+
+        [HttpGet("GetUserReccomendations")]
+        public List<UserReccomendation> GetUserReccomendations(string userId)
+        {
+            return context.UserReccomendations.Where(r => r.ReccomendedTo == userId).ToList();
+        }
     }
 }

@@ -64,6 +64,19 @@
 --	UserFollowingId NVARCHAR(25)
 --);
 
+--CREATE TABLE UserReccomendations(
+--	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+--	ReccomendedTo NVARCHAR(25) FOREIGN KEY REFERENCES Users(Id),
+--	RecomendedBy NVARCHAR(25),
+--	Isbn NVARCHAR(255),
+--	Title NVARCHAR(255),
+--	Author NVARCHAR(255),
+--	Subject NVARCHAR(255),
+--	averageRating REAL,
+--	ratingsCount INT,
+--	BookThumbnailUrl NVARCHAR(255),
+--);
+
 --DROP TABLE Votes;
 
 --DROP TABLE Reviews;
@@ -92,6 +105,8 @@
 --SELECT * FROM Votes;
 
 SELECT * FROM Followers;
+
+SELECT * FROM UserReccomendations;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;

@@ -22,6 +22,7 @@ namespace Libri.Models
         public virtual DbSet<ReadList> ReadLists { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<UserReccomendation> UserReccomendations { get; set; } = null!;
         public virtual DbSet<Vote> Votes { get; set; } = null!;
         public virtual DbSet<WishList> WishLists { get; set; } = null!;
 
@@ -131,6 +132,32 @@ namespace Libri.Models
                 entity.Property(e => e.PhotoUrl).HasMaxLength(255);
 
                 entity.Property(e => e.SqlId).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<UserReccomendation>(entity =>
+            {
+                entity.Property(e => e.Author).HasMaxLength(255);
+
+                entity.Property(e => e.AverageRating).HasColumnName("averageRating");
+
+                entity.Property(e => e.BookThumbnailUrl).HasMaxLength(255);
+
+                entity.Property(e => e.Isbn).HasMaxLength(255);
+
+                entity.Property(e => e.RatingsCount).HasColumnName("ratingsCount");
+
+                entity.Property(e => e.ReccomendedTo).HasMaxLength(25);
+
+                entity.Property(e => e.RecomendedBy).HasMaxLength(25);
+
+                entity.Property(e => e.Subject).HasMaxLength(255);
+
+                entity.Property(e => e.Title).HasMaxLength(255);
+
+                entity.HasOne(d => d.ReccomendedToNavigation)
+                    .WithMany(p => p.UserReccomendations)
+                    .HasForeignKey(d => d.ReccomendedTo)
+                    .HasConstraintName("FK__UserRecco__Recco__7E37BEF6");
             });
 
             modelBuilder.Entity<Vote>(entity =>

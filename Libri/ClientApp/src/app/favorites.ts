@@ -5,5 +5,7 @@ export interface Favorites {
     author:string;
     subject:string;
     averageRating:number;
-    ratingsCount:number
-}
+    ratingsCount:number;
+    description:string;
+    thumbnail:string;
+};

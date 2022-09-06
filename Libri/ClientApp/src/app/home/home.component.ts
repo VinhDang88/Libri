@@ -51,10 +51,9 @@ export class HomeComponent {
       this.getWishList();
       this.getReadList();
       this.getDeniedList();
-      this.getRecommendations(this.user.id);
       this.CheckForDuplicates();
-      this.getUserFollowing();
       this.getFavoriteAuthor();
+      this.getUserFollowing();
     });
   }
 
@@ -66,7 +65,9 @@ export class HomeComponent {
 
     this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
       this.books = response;
+      console.log(this.books)
       this.CheckForDuplicateSearch();
+      console.log(this.books)
     })
   }
 
@@ -130,8 +131,11 @@ export class HomeComponent {
     if(book.volumeInfo.title == undefined){
       book.volumeInfo.title = "";
     }
+    if(book.volumeInfo.description == undefined){
+      book.volumeInfo.description = "";
+    }
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
-    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
+    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, book.volumeInfo.description, this.getThumbnail(book)).subscribe((response: Favorites)=>{
       this.favoritesArray.push(response)
       console.log(response);
     });
@@ -141,8 +145,10 @@ export class HomeComponent {
     this.listsService.GetTopFavoriteAuthors(this.user.id).subscribe((response:string[]) => {
       console.log(response);
       this.topAuthors = response;
+      this.getRecommendations(this.user.id);
     })
   }
+
   getTopAuthor(author:string):Item[]{
     let books: Books = {} as Books;  
     this.bookService.getBooks("",author,"").subscribe((response:Books) => {
@@ -209,7 +215,6 @@ export class HomeComponent {
       t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
     ))
     )
-  
     // console.log(result);
     this.recommendations.forEach((r:Item) => {
       if(this.CheckIfInDeniedList(r)) {
@@ -289,6 +294,7 @@ export class HomeComponent {
       this.denied = response;
     })
   }
+
   getFavoriteList():any{
     this.listsService.getUserFavorites(this.user.id).subscribe((response:Favorites[]) =>{
       this.favoritesArray = response;
@@ -338,7 +344,6 @@ export class HomeComponent {
       (response:UserReccomendation) => {
         let i = this.notRecommendedTo.indexOf(reccomendedTo)
         this.notRecommendedTo.splice(i,1);
-        
       })
   }
 
@@ -379,7 +384,6 @@ export class HomeComponent {
     }
   }
   
-
   nextFromReadList(book:Item):number{
     if(this.CheckIfInFavoriteList(book) && this.recommendationCount < this.recommendations.length - 1){
       console.log(this.recommendationCount)
@@ -392,45 +396,32 @@ export class HomeComponent {
   }
 
   getRecommendations(userId: string):any{
-    
     //get list of favorites
     this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
       response.forEach((f:Favorites) => {
-          //search by isbn to get favorites as book objects
-          this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
-            console.log(response)
-            //after getting favorites as book objects, search by description to get possible recommendations
-            if(response.items != undefined){
-              response.items.forEach((i:Item) => {
-                // if no description, won't use it for search
-                if(i.volumeInfo.description != undefined)
-                {
-                  this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-                    //add books from descriptions search 
-                    response.items.forEach((i:Item) => {
-                        this.recommendations.push(i);
-                    })
-                    //remove duplicate titles
-                    this.CheckForDuplicates();
-                  })
-                }             
-                //search based on author
-                this.bookService.getBooks("", i.volumeInfo.authors.toString(), "").subscribe((response:Books) => {
-                  response.items.forEach((i:Item) => {
-                    //add result from author search
-                    if(!this.recommendations.includes(i))
-                    {
-                      this.recommendations.push(i)
-                    }
-                  })
-                  //remove duplicate titles
-                  this.CheckForDuplicates();
-                })
-            })
-          }
+        // // Going to get description here
+        // this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
+        //   //add books from descriptions search 
+        //   response.items.forEach((i:Item) => {
+        //       this.recommendations.push(i);
+        //   })
+        // })
+      })
+      //search based on author
+      this.topAuthors.forEach(t => {
+        this.bookService.getBooks("", t, "").subscribe((response:Books) => {
+          response.items.forEach((i:Item) => {
+            //add result from author search
+            if(!this.recommendations.includes(i))
+            {
+              this.recommendations.push(i)
+            }
+          })
         })
       })
+      //remove duplicate titles
+      this.CheckForDuplicates();
+      console.log(this.recommendations);
     })
-    console.log(this.recommendations);
-  };
+  }
 }

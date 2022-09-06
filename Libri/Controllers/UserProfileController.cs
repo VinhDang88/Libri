@@ -12,7 +12,7 @@ namespace Libri.Controllers
 
         //Allows user to favorite a single book
         [HttpPost("AddFavorite")]
-        public FavoriteList AddFavorite(string? favoriteListId, string? isbn, string? title, string? author, string? subject, float? averageRating, int? ratingsCount)
+        public FavoriteList AddFavorite(string? favoriteListId, string? isbn, string? title, string? author, string? subject, float? averageRating, int? ratingsCount, string? description, string? thumbnail)
         {
             if (context.FavoriteLists.Where(b => b.Isbn == isbn && b.FavoriteListId == favoriteListId).Count() > 0)
             {
@@ -26,7 +26,9 @@ namespace Libri.Controllers
                 Author = author,
                 Subject = subject,
                 AverageRating = averageRating,
-                RatingsCount = ratingsCount
+                RatingsCount = ratingsCount,
+                Description = description,
+                Thumbnail = thumbnail
             };
             context.FavoriteLists.Add(favorite);
             context.SaveChanges();

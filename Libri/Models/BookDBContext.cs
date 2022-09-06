@@ -55,6 +55,8 @@ namespace Libri.Models
 
                 entity.Property(e => e.AverageRating).HasColumnName("averageRating");
 
+                entity.Property(e => e.Description).HasMaxLength(4000);
+
                 entity.Property(e => e.FavoriteListId).HasMaxLength(25);
 
                 entity.Property(e => e.Isbn).HasMaxLength(255);
@@ -62,6 +64,8 @@ namespace Libri.Models
                 entity.Property(e => e.RatingsCount).HasColumnName("ratingsCount");
 
                 entity.Property(e => e.Subject).HasMaxLength(255);
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(255);
 
                 entity.Property(e => e.Title).HasMaxLength(255);
 

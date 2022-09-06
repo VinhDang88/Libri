@@ -13,6 +13,8 @@ namespace Libri.Models
         public string? Subject { get; set; }
         public float? AverageRating { get; set; }
         public int? RatingsCount { get; set; }
+        public string? Description { get; set; }
+        public string? Thumbnail { get; set; }
 
         public virtual User? FavoriteListNavigation { get; set; }
     }

@@ -11,7 +11,7 @@ export class ListsService {
   endpoint: string = "api/UserProfile";
 
     // allows user to add favorite book to their profile once logged in
-    addToFavoriteBooks(favoriteListId:string, isbn:string, title:string, author:string, subject:string,averageRating:number, ratingsCount:number):any{
+    addToFavoriteBooks(favoriteListId:string, isbn:string, title:string, author:string, subject:string,averageRating:number, ratingsCount:number, description:string, thumbnail:string):any{
       // console.log(averageRating)
       if(subject == undefined){
         subject = "";
@@ -23,7 +23,7 @@ export class ListsService {
         ratingsCount = 0;
       }
       return this.http.post(`${this.baseUrl}${this.endpoint}/AddFavorite?favoriteListId=${favoriteListId}&isbn=${isbn}
-      &title=${title}&author=${author}&subject=${subject}&averageRating=${averageRating}&ratingsCount=${ratingsCount}`, {});
+      &title=${title}&author=${author}&subject=${subject}&averageRating=${averageRating}&ratingsCount=${ratingsCount}&description=${description}&thumbnail=${thumbnail}`, {});
     }
   
     getUserFavorites(userId: string): any{

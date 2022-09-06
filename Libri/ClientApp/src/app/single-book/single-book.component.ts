@@ -108,7 +108,7 @@ export class SingleBookComponent implements OnInit {
     }
     //gathers info need to add a book and calls list service to add to favorites
     this.listsService.addToFavoriteBooks(this.user.id, <string>this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
-    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount).subscribe((response: Favorites)=>{
+    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, book.volumeInfo.description, this.getThumbnail(book)).subscribe((response: Favorites)=>{
       //push response to favorites array to update on page
       this.favoritesArray.push(response)
       console.log(response);

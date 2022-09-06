@@ -115,14 +115,14 @@ namespace Libri.Controllers
             return result;
         }
 
-        [HttpPost("SendReccomdation")]
-        public UserReccomendation SendReccomendation(string reccomendedTo, string reccomendedBy, string isbn, string title, string author, string subject, float averageRating, int ratingsCount, string bookThumbnailUrl)
+        [HttpPost("SendReccomendation")]
+        public UserReccomendation SendReccomendation(string reccomendedTo, string recomendedBy, string isbn, string title, string author, string subject, float averageRating, int ratingsCount, string bookThumbnailUrl)
         {
             List<UserReccomendation> userReccomendations = new List<UserReccomendation>();
             UserReccomendation userReccomendation = new UserReccomendation()
             {
                 ReccomendedTo = reccomendedTo,
-                RecomendedBy = reccomendedBy,
+                RecomendedBy = recomendedBy,
                 Isbn = isbn,
                 Title = title,
                 Author = author,

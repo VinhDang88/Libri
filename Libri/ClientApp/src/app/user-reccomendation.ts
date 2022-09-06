@@ -1,7 +1,7 @@
 export interface UserReccomendation {
     id:number;
     reccomendedTo:string;
-    recommendBy:string;
+    recomendedBy:string;
     isbn:string;
     title:string;
     author:string;

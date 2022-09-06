@@ -12,16 +12,6 @@
   </form>
 </div>
 
-<!-- searchbar, allows search w/ any combination of title, author, and subject -->
-<div class="searchBar">
-  <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
-    <input type="text" name="title" placeholder="Search by title" ngModel />
-    <input type="text" name="author" placeholder="Search by author" ngModel />
-    <input type="text" name="subject" placeholder="Search by subject" ngModel />
-    <button>Search</button>
-  </form>
-</div>
-
 <!-- display users from search -->
 <div *ngFor="let u of searchedUsers">
   <!-- clickable image that routes to displayed user's profile -->
@@ -32,6 +22,16 @@
   <a routerLink="/UserProfile/{{ u.sqlId }}"
     ><p>{{ u.name }}</p></a
   >
+</div>
+
+<!-- searchbar, allows search w/ any combination of title, author, and subject -->
+<div class="searchBar">
+  <form #Submit="ngForm" (ngSubmit)="SearchBooks(Submit)">
+    <input type="text" name="title" placeholder="Search by title" ngModel />
+    <input type="text" name="author" placeholder="Search by author" ngModel />
+    <input type="text" name="subject" placeholder="Search by subject" ngModel />
+    <button>Search</button>
+  </form>
 </div>
 
 <!-- container for display books from search -->
@@ -155,6 +155,27 @@
     >
       Ratings not available
     </h3>
+    <button
+      (click)="
+        toggleUserRecommendation();
+        getNotRecommendedTo(userFollowing, recommendations[recommendationCount])
+      "
+    >
+      recommend
+    </button>
+    <div *ngIf="toggleUserRecommendations" class="reccomendToUsers">
+      <div *ngFor="let u of notRecommendedTo">
+        <img
+          src="{{ u.photoUrl }}"
+          (click)="sendReccomendation(recommendations[recommendationCount], u)"
+        />
+        <h6
+          (click)="sendReccomendation(recommendations[recommendationCount], u)"
+        >
+          {{ u.name }}
+        </h6>
+      </div>
+    </div>
   </div>
   <!-- holds list buttons in recommended container -->
   <div class="recommendedButtons">

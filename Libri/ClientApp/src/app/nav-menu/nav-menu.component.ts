@@ -17,7 +17,6 @@ export class NavMenuComponent implements OnInit {
   user: SocialUser = {} as SocialUser;
   loggedIn: boolean = false;
   newUser: User = {} as User;
-  activeUser:User = {} as User;
   activeUserId:number = 0;
 
   ngOnInit():void {

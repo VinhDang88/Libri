@@ -45,7 +45,7 @@ export class UsersService {
 
   SendReccomendation(reccomendedTo:string, reccomendedBy:string, isbn:string, title:string, author:string, subject:string,
      averageRating:number, ratingsCount:number, bookThumbnailUrl:string):any{
-    return this.http.post(`${this.baseUrl}${this.endpoint}/SendReccomendation?$reccomendedTo=${reccomendedTo}&reccomendedBy=${reccomendedBy}
+    return this.http.post(`${this.baseUrl}${this.endpoint}/SendReccomendation?reccomendedTo=${reccomendedTo}&recomendedBy=${reccomendedBy}
     &isbn=${isbn}&title=${title},&author=${author}&subject=${subject}&averageRating=${averageRating}&ratingsCount=${ratingsCount}
     &bookThumbnailUrl=${bookThumbnailUrl}`, {});
   }

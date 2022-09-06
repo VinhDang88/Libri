@@ -5,7 +5,6 @@ import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
 import { Denied } from '../denied';
 import { Favorites } from '../favorites';
-import { Follower } from '../follower';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
 import { User } from '../user';
@@ -40,6 +39,8 @@ export class HomeComponent {
   searchedUsername:string = "";
   following:string[] = [];
   userFollowing:User[] = [];
+  toggleUserRecommendations:boolean = false;
+  notRecommendedTo:User[] = [];
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -283,15 +284,19 @@ export class HomeComponent {
   getUserFollowing():any{
     //gets the list of string ids of users that are following the current user
     this.usersService.GetFollowing(this.user.id).subscribe((response:string[]) => {
-      this.following = response;
+      response.forEach((f:string) => {
+         //gets a list of user objects from the ids that are following the current user
+        this.usersService.GetUserById(f).subscribe((response:User) => {
+          this.userFollowing.push(response);
+        })
+      });
     })
-    //gets a list of user objects from the ids that are following the current user
-    this.following.forEach((f:string) => {
-      //for each string/id gets the user that matches 
-      this.usersService.GetUserById(f).subscribe((response:User) => {
-        this.userFollowing.push(response);
-      })
-    })
+    console.log(this.userFollowing)
+    return this.userFollowing;
+  }
+
+  toggleUserRecommendation():boolean{
+    return this.toggleUserRecommendations = !this.toggleUserRecommendations;
   }
 
   sendReccomendation(book:Item, reccomendedTo:User):any{
@@ -304,11 +309,35 @@ export class HomeComponent {
     if(book.volumeInfo.title == undefined){
       book.volumeInfo.title = "";
     }
+    if(book.volumeInfo.averageRating == undefined)
+    {
+      book.volumeInfo.averageRating = 0;
+    }
+    if(book.volumeInfo.ratingsCount == undefined)
+    {
+      book.volumeInfo.ratingsCount = 0;
+    }
     this.usersService.SendReccomendation(reccomendedTo.id, this.user.id, this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book)).subscribe(
       (response:UserReccomendation) => {
-        return response;
+        let i = this.notRecommendedTo.indexOf(reccomendedTo)
+        this.notRecommendedTo.splice(i,1);
+        
       })
+  }
+
+  getNotRecommendedTo(followers:User[], book:Item):User[]
+  {
+    this.notRecommendedTo = []
+    followers.forEach(u => {
+      this.usersService.GetUserReccomendations(u.id).subscribe((response:UserReccomendation[]) => {
+        let notRecommended:boolean = (response.some((r:UserReccomendation) => r.isbn == this.getIsbn(book)) == false)
+        if(notRecommended){
+          this.notRecommendedTo.push(u)
+        }
+      })
+    })
+    return this.notRecommendedTo;
   }
 
   nextRecommendation():number{

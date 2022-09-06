@@ -42,7 +42,6 @@ export class BooksService {
     return this.http.get(`${this.urlId}${id}`);
   }
   
-  
 }
 
 

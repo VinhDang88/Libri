@@ -69,4 +69,8 @@ export class ListsService {
     deleteFavoriteListObject(isbn:string, favoriteListId:string):any{
       return this.http.delete(`${this.baseUrl}${this.endpoint}/DeleteFavoriteListObject?isbn=${isbn}&favoriteListId=${favoriteListId}`)
     }
+
+    GetTopFavoriteAuthors(userId:string):any{
+      return this.http.get(`${this.baseUrl}${this.endpoint}/GetTopFavoriteAuthors?userId=${userId}`);
+    }
 }

@@ -41,6 +41,60 @@ namespace Libri.Controllers
             return userFavorites;
         }
 
+        [HttpGet("GetTopFavoriteAuthors")]
+        public List<string> GetTopFavoriteAuthors(string userId)
+        {
+            Dictionary<string, int> topAuthors = new Dictionary<string, int>();
+
+            List<FavoriteList> userFavorites = context.FavoriteLists.Where(f => f.FavoriteListId == userId).ToList();
+            List<string> authors = new List<string>();
+            List<FavoriteList> distinctAuthors = userFavorites.DistinctBy(f => f.Author).ToList();
+            distinctAuthors.ForEach(f => authors.Add(f.Author));
+            authors.ForEach(a => topAuthors.Add(a, 0));
+            foreach (FavoriteList f in userFavorites)
+            {
+                foreach(KeyValuePair<string, int> kvp in topAuthors)
+                {
+                    if (kvp.Key == f.Author)
+                    {
+                        topAuthors[kvp.Key]++;
+                    }
+                }
+            }
+            authors.Clear();
+            foreach (KeyValuePair<string, int> kvp in topAuthors)
+            {
+                if (topAuthors[kvp.Key] == topAuthors.Values.Max())
+                {
+                    authors.Add(kvp.Key);
+                    topAuthors.Remove(kvp.Key);
+
+                    break;
+                }
+            }
+            foreach (KeyValuePair<string, int> kvp in topAuthors)
+            {
+                if (topAuthors[kvp.Key] == topAuthors.Values.Max())
+                {
+                    authors.Add(kvp.Key);
+                    topAuthors.Remove(kvp.Key);
+
+                    break;
+                }
+            }
+            foreach (KeyValuePair<string, int> kvp in topAuthors)
+            {
+                if (topAuthors[kvp.Key] == topAuthors.Values.Max())
+                {
+                    authors.Add(kvp.Key);
+                    topAuthors.Remove(kvp.Key);
+
+                    break;
+                }
+            }
+            return authors;
+        }
+
         [HttpDelete("DeleteFavoriteListObject")]
         public FavoriteList DeleteFavoriteListObject(string isbn, string favoriteListId)
         {

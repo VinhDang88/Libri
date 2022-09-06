@@ -41,6 +41,7 @@ export class HomeComponent {
   userFollowing:User[] = [];
   toggleUserRecommendations:boolean = false;
   notRecommendedTo:User[] = [];
+  topAuthors:string[] = [];
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -53,6 +54,7 @@ export class HomeComponent {
       this.getRecommendations(this.user.id);
       this.CheckForDuplicates();
       this.getUserFollowing();
+      this.getFavoriteAuthor();
     });
   }
 
@@ -135,6 +137,20 @@ export class HomeComponent {
     });
   }
 
+  getFavoriteAuthor():any{
+    this.listsService.GetTopFavoriteAuthors(this.user.id).subscribe((response:string[]) => {
+      console.log(response);
+      this.topAuthors = response;
+    })
+  }
+  getTopAuthor(author:string):Item[]{
+    let books: Books = {} as Books;  
+    this.bookService.getBooks("",author,"").subscribe((response:Books) => {
+      books = response;
+    })
+    return books.items;
+  }
+
   addToWishList(book:Item):any{
     this.listsService.addToWishList(this.getIsbn(book), this.user.id).subscribe((response:Wish) => {
       console.log(response);
@@ -194,30 +210,30 @@ export class HomeComponent {
     ))
     )
   
-    console.log(result);
+    // console.log(result);
     this.recommendations.forEach((r:Item) => {
       if(this.CheckIfInDeniedList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInFavoriteList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInReadList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInWishList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
     })
-    console.log(result);
+    // console.log(result);
     this.recommendations = result;
   }
 
@@ -382,6 +398,7 @@ export class HomeComponent {
       response.forEach((f:Favorites) => {
           //search by isbn to get favorites as book objects
           this.bookService.getBooksByIsbn(f.isbn).subscribe((response:Books) => {
+            console.log(response)
             //after getting favorites as book objects, search by description to get possible recommendations
             if(response.items != undefined){
               response.items.forEach((i:Item) => {

@@ -43,14 +43,14 @@ export class UsersService {
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetFollowedUsers?userId=${userId}`);
   }
 
-  SendReccomendation(reccomendedTo:string, reccomendedBy:string, isbn:string, title:string, author:string, subject:string,
+  SendRecommendation(reccomendedTo:string, reccomendedBy:string, isbn:string, title:string, author:string, subject:string,
      averageRating:number, ratingsCount:number, bookThumbnailUrl:string):any{
     return this.http.post(`${this.baseUrl}${this.endpoint}/SendReccomendation?reccomendedTo=${reccomendedTo}&recomendedBy=${reccomendedBy}
     &isbn=${isbn}&title=${title},&author=${author}&subject=${subject}&averageRating=${averageRating}&ratingsCount=${ratingsCount}
     &bookThumbnailUrl=${bookThumbnailUrl}`, {});
   }
 
-  GetUserReccomendations(userId:string):any{
+  GetUserRecommendations(userId:string):any{
     return this.http.get(`${this.baseUrl}${this.endpoint}/GetUserReccomendations?userId=${userId}`);
   }
 }

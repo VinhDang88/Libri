@@ -31,7 +31,7 @@
           </li>
           <!-- nav link to user profile, only displays if there is a logged in user -->
           <li
-            *ngIf="loggedIn"
+            *ngIf="activeUserId != 0"
             class="nav-item"
             [routerLinkActive]="['link-active']"
           >

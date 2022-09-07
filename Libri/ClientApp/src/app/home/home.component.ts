@@ -71,9 +71,9 @@ export class HomeComponent {
 
     this.bookService.getBooks(this.title,this.author,this.subject).subscribe((response:Books)=>{
       this.books = response;
-      console.log(this.books)
+      // console.log(this.books)
       this.CheckForDuplicateSearch();
-      console.log(this.books)
+      // console.log(this.books)
     })
   }
 
@@ -106,19 +106,21 @@ export class HomeComponent {
     //contains identifiers for book
     let bookIds: IndustryIdentifier[] = book.volumeInfo.industryIdentifiers;
     let isbn: string = "";
-    //if book has an isbn_10 it is assigned 
-    bookIds.forEach((id) => {
-      if(id.type == "ISBN_10"){
-        isbn = id.identifier
-      }
-    });
-    // if isbn_10 is missing assigns isbn_13 instead
-    if(isbn == ""){
+    if(bookIds != undefined){
+      //if book has an isbn_10 it is assigned 
       bookIds.forEach((id) => {
-        if(id.type == "ISBN_13"){
+        if(id.type == "ISBN_10"){
           isbn = id.identifier
         }
-      })
+      });
+      // if isbn_10 is missing assigns isbn_13 instead
+      if(isbn == ""){
+        bookIds.forEach((id) => {
+          if(id.type == "ISBN_13"){
+            isbn = id.identifier
+          }
+        })
+      }
     }
     //if isbns are not found assigns book id instead
     if(isbn == ""){
@@ -152,6 +154,7 @@ export class HomeComponent {
       console.log(response);
       this.topAuthors = response;
       this.getRecommendations(this.user.id);
+      this.CheckForDuplicates();
     })
   }
 
@@ -236,7 +239,7 @@ export class HomeComponent {
         // console.log(r.volumeInfo.title)
       } 
     })
-    // console.log(result);
+    console.log(result);
     this.recommendations = result;
   }
 
@@ -251,22 +254,22 @@ export class HomeComponent {
       if(this.CheckIfInDeniedList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInFavoriteList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInReadList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
       else if(this.CheckIfInWishList(r)) {
         let i = result.indexOf(r)
         result.splice(i,1);
-        console.log(r.volumeInfo.title)
+        // console.log(r.volumeInfo.title)
       } 
     })
     // console.log(result);
@@ -322,7 +325,7 @@ export class HomeComponent {
     return this.toggleUserRecommendations = !this.toggleUserRecommendations;
   }
 
-  sendReccomendation(book:Item, reccomendedTo:User):any{
+  sendRecommendation(book:Item, reccomendedTo:User):any{
     if(book.volumeInfo.categories == undefined){
       book.volumeInfo.categories = [];
     }
@@ -340,7 +343,7 @@ export class HomeComponent {
     {
       book.volumeInfo.ratingsCount = 0;
     }
-    this.usersService.SendReccomendation(reccomendedTo.id, this.user.id, this.getIsbn(book), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+    this.usersService.SendRecommendation(reccomendedTo.id, this.user.id.trim().toString(), this.getIsbn(book), book.volumeInfo.title.trim().toString(), book.volumeInfo.authors.toString(),
     book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book)).subscribe(
       (response:UserReccomendation) => {
         let i = this.notRecommendedTo.indexOf(reccomendedTo)
@@ -352,7 +355,7 @@ export class HomeComponent {
   {
     this.notRecommendedTo = [];
     followers.forEach(u => {
-      this.usersService.GetUserReccomendations(u.id).subscribe((response:UserReccomendation[]) => {
+      this.usersService.GetUserRecommendations(u.id).subscribe((response:UserReccomendation[]) => {
         let notRecommended:boolean = (response.some((r:UserReccomendation) => r.isbn == this.getIsbn(book)) == false)
         if(notRecommended){
           this.notRecommendedTo.push(u)
@@ -441,13 +444,6 @@ export class HomeComponent {
           {
             this.topAuthorBooks3 = response;
           }
-          response.items.forEach((i:Item) => {
-            //add result from author search
-            if(!this.recommendations.includes(i))
-            {
-              this.recommendations.push(i)
-            }
-          })
           //remove duplicate titles
           this.CheckForDuplicates();
           console.log(this.recommendations);

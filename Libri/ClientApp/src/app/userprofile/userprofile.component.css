@@ -7,16 +7,20 @@
     font-weight: bold;
     left: -1px;
     padding: 10px 7px 5px;
-
+    width: 80%;
     max-height:500px;
     overflow:scroll;
     overflow-x:hidden;
+    margin-left: 10%;
+    margin-top: 2%;
 }
 
 .buttonContainer{
     display: flex;
     flex-direction: row;
-    margin-bottom: 2%;
+    margin-bottom: .25%;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .displayButton{
@@ -31,6 +35,8 @@
     margin-top: 2%;
     margin-bottom: 2%;
     padding: 10px 7px 5px;
+    width: 80%;
+    margin-left: 10%;
 }
 
 h1,h2,h3,h4,h5,h6,p{
@@ -85,4 +91,25 @@ a:hover{
 
 a:link{
     text-decoration: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

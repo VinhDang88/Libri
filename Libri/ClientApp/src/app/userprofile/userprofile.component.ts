@@ -38,7 +38,12 @@ export class UserprofileComponent implements OnInit {
   following:string[] = [];
   activeUserFollowedUsers:string[] = [];
   followedUsers:string[] = [];
- 
+  followingUsers:User[] = [];
+  beingFollowedByUsers:User[] = [];
+  displayFollowers:boolean = false;
+  displayWhoUserIsFollowing:boolean = false;
+  displayRecommendationsByOthers:boolean = false;
+  displayReviewsByUser:boolean = false;
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
      private route:ActivatedRoute, private usersService: UsersService,) { }
@@ -60,6 +65,8 @@ export class UserprofileComponent implements OnInit {
       this.following = [];
       this.followedUsers = [];
       this.activeUserFollowedUsers = [];
+      this.followingUsers = [];
+      this.beingFollowedByUsers = [];
       //getting new user for profile
       this.usersService.GetUserBySqlId(routeParams.id).subscribe((response:User) => {
         this.user = response;
@@ -296,30 +303,90 @@ export class UserprofileComponent implements OnInit {
 
   toggleFavoriteList():any{
     this.displayFavoriteList = !this.displayFavoriteList;
-    this.displayDeniedList = false;
     this.displayWishList = false;
     this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
   }
 
   toggleWishList():any{
-    this.displayWishList = !this.displayWishList;
     this.displayFavoriteList = false;
-    this.displayDeniedList = false;
+    this.displayWishList = !this.displayWishList;
     this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
   }
 
   toggleReadList():any{
-    this.displayReadList = !this.displayReadList;
     this.displayFavoriteList = false;
     this.displayWishList = false;
+    this.displayReadList = !this.displayReadList;
     this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
   }
 
   toggleDeniedList():any{
-    this.displayDeniedList = !this.displayDeniedList;
     this.displayFavoriteList = false;
     this.displayWishList = false;
     this.displayReadList = false;
+    this.displayDeniedList = ! this.displayDeniedList;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
+  }
+
+  toggleFollowers():any{
+    this.displayFavoriteList = false;
+    this.displayWishList = false;
+    this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = !this.displayFollowers;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
+  }
+
+  toggleBeingFollowedBy():any{
+    this.displayFavoriteList = false;
+    this.displayWishList = false;
+    this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = !this.displayWhoUserIsFollowing;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = false;
+  }
+
+  toggleRecommendationsByOtherUsers():any{
+    this.displayFavoriteList = false;
+    this.displayWishList = false;
+    this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = !this.displayRecommendationsByOthers;
+    this.displayReviewsByUser = false;
+  }
+
+  toggleUserReviews():any{
+    this.displayFavoriteList = false;
+    this.displayWishList = false;
+    this.displayReadList = false;
+    this.displayDeniedList = false;
+    this.displayFollowers = false;
+    this.displayWhoUserIsFollowing = false;
+    this.displayRecommendationsByOthers = false;
+    this.displayReviewsByUser = !this.displayReviewsByUser;
   }
 
   followUser():any{
@@ -342,13 +409,19 @@ export class UserprofileComponent implements OnInit {
   getPageOwnerFollowing():any{
     this.usersService.GetFollowing(this.user.id).subscribe((response:string[]) => {
       this.following = response;
-    })
+      response.forEach(u => {
+        this.usersService.GetUserById(u).subscribe((response:User) => {
+          this.followingUsers.push(response);
+    })})})
   }
 
   getPageOwnerFollowedUsers():any{
     this.usersService.GetFollowedUsers(this.user.id).subscribe((response:string[]) => {
       this.followedUsers = response;
-    })
+      response.forEach(u => {
+        this.usersService.GetUserById(u).subscribe((response:User) => {
+          this.beingFollowedByUsers.push(response);
+    })})})
   }
 
   getActiveUserFollowedUsers():any{

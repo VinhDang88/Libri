@@ -9,6 +9,7 @@
       (click)="
         searchDropdownToggle = !searchDropdownToggle; searchType = 'Books'
       "
+      class="dropdownBox"
     >
       Books
     </p>
@@ -17,6 +18,7 @@
       (click)="
         searchDropdownToggle = !searchDropdownToggle; searchType = 'Users'
       "
+      class="dropdownBox"
     >
       Users
     </p>
@@ -52,15 +54,19 @@
 <!-- </div> -->
 
 <!-- display users from search -->
-<div *ngFor="let u of searchedUsers">
-  <!-- clickable image that routes to displayed user's profile -->
-  <a routerLink="/UserProfile/{{ u.sqlId }}"
-    ><img class="zoom" src="{{ u.photoUrl }}"
-  /></a>
-  <!-- username also routes to displayed user's profile -->
-  <a routerLink="/UserProfile/{{ u.sqlId }}">
-    <p>{{ u.name }}</p>
-  </a>
+<div class="searchedUser">
+  <div *ngFor="let u of searchedUsers">
+    <!-- clickable image that routes to displayed user's profile -->
+    <div class="userSearchSeparation">
+      <a routerLink="/UserProfile/{{ u.sqlId }}"
+        ><img class="zoom" src="{{ u.photoUrl }}"
+      /></a>
+      <!-- username also routes to displayed user's profile -->
+      <a routerLink="/UserProfile/{{ u.sqlId }}">
+        <p>{{ u.name }}</p>
+      </a>
+    </div>
+  </div>
 </div>
 
 <!-- container for display books from search -->
@@ -204,16 +210,16 @@
         getNotRecommendedTo(userFollowing, recommendations[recommendationCount])
       "
     >
-      recommend
+      Recommend
     </button>
     <div *ngIf="toggleUserRecommendations" class="reccomendToUsers">
       <div *ngFor="let u of notRecommendedTo">
         <img
           src="{{ u.photoUrl }}"
-          (click)="sendReccomendation(recommendations[recommendationCount], u)"
+          (click)="sendRecommendation(recommendations[recommendationCount], u)"
         />
         <h6
-          (click)="sendReccomendation(recommendations[recommendationCount], u)"
+          (click)="sendRecommendation(recommendations[recommendationCount], u)"
         >
           {{ u.name }}
         </h6>
@@ -297,7 +303,10 @@
   </button>
 </div>
 
-<h1 *ngIf="topAuthorBooks.items != undefined">{{ topAuthors[0] }}</h1>
+<!-- Displays top recommended author -->
+<h3 *ngIf="topAuthorBooks.items != undefined" class="authorRecommend">
+  Recommendation based on: {{ topAuthors[0] }}
+</h3>
 <div *ngIf="topAuthorBooks.items != undefined" class="searchResultsContainer">
   <div class="searchBook" *ngFor="let b of topAuthorBooks.items">
     <div class="searchResult">
@@ -379,7 +388,10 @@
   </div>
 </div>
 
-<h1 *ngIf="topAuthorBooks2.items != undefined">{{ topAuthors[1] }}</h1>
+<!-- Displays second recommended author -->
+<h3 *ngIf="topAuthorBooks2.items != undefined" class="authorRecommend">
+  Recommendation based on: {{ topAuthors[1] }}
+</h3>
 <div *ngIf="topAuthorBooks2.items != undefined" class="searchResultsContainer">
   <div class="searchBook" *ngFor="let b of topAuthorBooks2.items">
     <div class="searchResult">
@@ -461,7 +473,10 @@
   </div>
 </div>
 
-<h1 *ngIf="topAuthorBooks3.items != undefined">{{ topAuthors[2] }}</h1>
+<!-- Displays third recommended author -->
+<h3 *ngIf="topAuthorBooks3.items != undefined" class="authorRecommend">
+  Recommendation based on: {{ topAuthors[2] }}
+</h3>
 <div *ngIf="topAuthorBooks3.items != undefined" class="searchResultsContainer">
   <div class="searchBook" *ngFor="let b of topAuthorBooks3.items">
     <div class="searchResult">

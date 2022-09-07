@@ -16,6 +16,25 @@
     margin-top:2%;
 }
 
+.searchedUser{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.userSearchSeparation{
+    margin-right: 1%;
+    margin-left: 1%;
+}
+
+.dropdownBox{
+    background-color: #EEEEEE;
+    border: 3px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    margin:0%;
+}
+
 .searchResultsContainer{
     display: flex;
     color: #3B3C3E;
@@ -37,6 +56,7 @@
     border-radius: 5px 0 4px 0; */
     /* padding: 10px 7px 5px; */
 }
+
 .searchBook{
     margin-right: .2%;
 }
@@ -71,11 +91,12 @@
     transition: transform .5s;
     width: auto;
     height: auto;
-    margin: 0 auto;
+    margin: auto;
   }
   
-  .zoom:hover {
+.zoom:hover {
     transform: scale(1.1);
+    z-index: 0;
   }
 
 .searchInfo{
@@ -96,8 +117,6 @@
 #searchIcon{
     font-size: 220%;
 }
-
-
 
 .recommendedContainer{
     display:flex;
@@ -171,6 +190,10 @@ a:hover{
 
 a:link{
     text-decoration: none;
+}
+
+.authorRecommend{
+    margin-left: 10%
 }
 
 /* width */

@@ -9,25 +9,40 @@
     *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
     (click)="followUser()"
   >
-    follow
+    Follow
   </button>
   <button
     *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
     (click)="unfollowUser()"
   >
-    unfollow
+    Unfollow
   </button>
-
-  <br />
-  <br />
 
   <!-- Display number of items in each list -->
   <p *ngIf="displayFavoriteList">
     # of Favorite List {{ favListItems.length }}
   </p>
-  <p *ngIf="displayWishList"># of Wish List {{ wishListItems.length }}</p>
-  <p *ngIf="displayReadList"># of Read List {{ readListItems.length }}</p>
-  <p *ngIf="displayDeniedList"># of Denied List {{ deniedListItems.length }}</p>
+  <p *ngIf="displayWishList">
+    # of Books in Your Wish List {{ wishListItems.length }}
+  </p>
+  <p *ngIf="displayReadList">
+    # of Books in Your Read List {{ readListItems.length }}
+  </p>
+  <p *ngIf="displayDeniedList">
+    # of Books in Your Denied List {{ deniedListItems.length }}
+  </p>
+  <p *ngIf="displayFollowers">
+    # of People That Follow You {{ followingUsers.length }}
+  </p>
+  <p *ngIf="displayWhoUserIsFollowing">
+    # of People You Follow {{ beingFollowedByUsers.length }}
+  </p>
+  <!-- <p *ngIf="displayRecommendationsByOthers">
+    # of Books Recommended By Followers {{ deniedListItems.length }}
+  </p>
+  <p *ngIf="displayReviewsByUser">
+    # of Reviews You Wrote {{ deniedListItems.length }}
+  </p> -->
 </div>
 
 <!-- Buttons for changing display -->
@@ -38,6 +53,20 @@
   <button class="displayButton" (click)="toggleWishList()">WishList</button>
   <button class="displayButton" (click)="toggleReadList()">ReadList</button>
   <button class="displayButton" (click)="toggleDeniedList()">DeniedList</button>
+</div>
+
+<!-- Buttons for viewing follower information -->
+<div class="buttonContainer">
+  <button class="displayButton" (click)="toggleFollowers()">Followers</button>
+  <button class="displayButton" (click)="toggleBeingFollowedBy()">
+    Following
+  </button>
+  <button class="displayButton" (click)="toggleRecommendationsByOtherUsers()">
+    Recommended By Followers
+  </button>
+  <button class="displayButton" (click)="toggleUserReviews()">
+    Your Reviews
+  </button>
 </div>
 
 <!-- List Displays -->
@@ -202,3 +231,41 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="displayFollowers">
+  <div class="listContainer">
+    <h3>Followers:</h3>
+    <div *ngFor="let f of followingUsers">
+      <div class="profileContainer">
+        <p *ngIf="checkIfPageOwner() && loggedIn">{{ f.name }}</p>
+        <img src="{{ f.photoUrl }}" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="displayWhoUserIsFollowing">
+  <div class="listContainer">
+    <h3>Following:</h3>
+    <div *ngFor="let f of beingFollowedByUsers">
+      <div class="profileContainer">
+        <p *ngIf="checkIfPageOwner() && loggedIn">{{ f.name }}</p>
+        <img src="{{ f.photoUrl }}" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="displayRecommendationsByOthers">
+  <div class="listContainer">
+    <h3>Other User Recommendations:</h3>
+    <div *ngFor="let ur of userRecommendations"></div>
+  </div>
+</div>
+
+<div *ngIf="displayReviewsByUser">
+  <div class="listContainer">
+    <h3>Your Reviews:</h3>
+    <div *ngFor="let r of userReviews"></div>
+  </div>
+</div> -->

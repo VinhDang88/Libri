@@ -1,46 +1,70 @@
 .searchBar{
     display: flex;
     justify-content: center;
-    margin-top: 1%;
-    margin-bottom: 2%;
+    height: 30px;
 }
 
 .userSearchBar{
-    margin-top: 2%;
     display:flex;
     justify-content: center;
+    height: 100%;
+}
+
+.chooseSearch{
+    display: flex;
+    justify-content: center;
+    margin-top:2%;
 }
 
 .searchResultsContainer{
     display: flex;
-    justify-content: space-between;
-    background-color: #9CC0E7;
-    border: 3px solid black;
-    border-radius: 5px 0 4px 0;
     color: #3B3C3E;
     font-size: 12px;
     font-weight: bold;
     left: -1px;
-    padding: 10px 7px 5px;
-
+    width:80%;
+    margin-left: 10%;
+    height: 10%;
+    padding: none;
+    border: none;
     max-width: 100%;
     overflow:scroll;
     overflow-y:hidden;
+    margin-bottom: 1%;
+     /* justify-content: space-between; */
+    /* background-color: #9CC0E7; */
+    /* border: 3px solid black;
+    border-radius: 5px 0 4px 0; */
+    /* padding: 10px 7px 5px; */
+}
+.searchBook{
+    margin-right: .2%;
 }
 
 .searchResult{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-right: 5%;
     height: 100%;
     width: 300px;
-    
+    border: 3px solid black;
+    border-radius: 5px;
+    background-color: #9CC0E7;
+}
+
+.searchImageAndButtons{
+    display:flex;
+    justify-content: center;
 }
 
 .searchImage{
     width:100%;
+    /* width: 153px;
+    height: 231px; */
     margin-bottom: 2%;
+    margin-right: 0%;
+    margin-left: 8%;
+    margin-top: 4%;
 }
 
 .zoom {
@@ -58,11 +82,19 @@
     font-size: smaller;
     width:100%;
     margin-bottom: 1%;
+    text-align: center;
 }
 
 .searchButtons{
     width:100%;
-    float:inline-end;
+    margin:none;
+    padding: none;
+    display:flex;
+    flex-direction: column;
+}
+
+#searchIcon{
+    font-size: 220%;
 }
 
 
@@ -74,7 +106,9 @@
     border-radius: 5px;
     padding:2%;
     background-color: #9CC0E7;
-    
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 1%;
 }
 
 .recommendedThumbnail{
@@ -103,6 +137,7 @@
 
 .nextRecommendButton{
     margin-right: 3%;
+    background-color: #EEEEEE;
 }
 
 #icon{
@@ -116,6 +151,10 @@
 .iconButton{
     border: none;
     background:none;
+}
+
+h1{
+    margin-left: 10%;
 }
 
 h1,h2,h3,h4,h5,h6,p{
@@ -134,3 +173,23 @@ a:link{
     text-decoration: none;
 }
 
+/* width */
+::-webkit-scrollbar {
+    height: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

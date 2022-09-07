@@ -27,7 +27,7 @@ export class BooksService {
       route = route+`+subject:${subject}`;
     }
 
-    return this.http.get(`${route}&maxResults=40`);
+    return this.http.get(`${route}&langRestrict=en&maxResults=40`);
   }
 
   getBooksByIsbn(isbn:string):any{
@@ -35,7 +35,7 @@ export class BooksService {
   }
 
   searchByDescription(description:string):any{
-    return this.http.get(`${this.url}${description}`);
+    return this.http.get(`${this.url}${description}&langRestrict=en`);
   }
 
   getBooksById(id:string):any{

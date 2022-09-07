@@ -52,7 +52,13 @@ namespace Libri.Controllers
             List<string> authors = new List<string>();
             List<FavoriteList> distinctAuthors = userFavorites.DistinctBy(f => f.Author).ToList();
             distinctAuthors.ForEach(f => authors.Add(f.Author));
-            authors.ForEach(a => topAuthors.Add(a, 0));
+            authors.ForEach(a => 
+            {
+                if (a != null) 
+                {
+                    topAuthors.Add(a, 0);
+                } 
+            });
             foreach (FavoriteList f in userFavorites)
             {
                 foreach(KeyValuePair<string, int> kvp in topAuthors)

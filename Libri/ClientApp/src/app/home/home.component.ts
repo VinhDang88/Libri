@@ -42,6 +42,11 @@ export class HomeComponent {
   toggleUserRecommendations:boolean = false;
   notRecommendedTo:User[] = [];
   topAuthors:string[] = [];
+  topAuthorBooks: Books = {} as Books;
+  topAuthorBooks2: Books = {} as Books;
+  topAuthorBooks3: Books = {} as Books;
+  searchType:string = "Books";
+  searchDropdownToggle:boolean = false;
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -51,10 +56,11 @@ export class HomeComponent {
       this.getWishList();
       this.getReadList();
       this.getDeniedList();
-      this.CheckForDuplicates();
-      this.getFavoriteAuthor();
       this.getUserFollowing();
+      this.getFavoriteAuthor();
+      this.CheckForDuplicates();
     });
+    
   }
 
   //Queries a book based on the users form and gives back top result.
@@ -147,14 +153,6 @@ export class HomeComponent {
       this.topAuthors = response;
       this.getRecommendations(this.user.id);
     })
-  }
-
-  getTopAuthor(author:string):Item[]{
-    let books: Books = {} as Books;  
-    this.bookService.getBooks("",author,"").subscribe((response:Books) => {
-      books = response;
-    })
-    return books.items;
   }
 
   addToWishList(book:Item):any{
@@ -318,6 +316,9 @@ export class HomeComponent {
   }
 
   toggleUserRecommendation():boolean{
+    if(this.toggleUserRecommendations){
+      this.notRecommendedTo = [];
+    }
     return this.toggleUserRecommendations = !this.toggleUserRecommendations;
   }
 
@@ -349,7 +350,7 @@ export class HomeComponent {
 
   getNotRecommendedTo(followers:User[], book:Item):User[]
   {
-    this.notRecommendedTo = []
+    this.notRecommendedTo = [];
     followers.forEach(u => {
       this.usersService.GetUserReccomendations(u.id).subscribe((response:UserReccomendation[]) => {
         let notRecommended:boolean = (response.some((r:UserReccomendation) => r.isbn == this.getIsbn(book)) == false)
@@ -366,6 +367,18 @@ export class HomeComponent {
     if(this.recommendationCount < this.recommendations.length - 1){
       console.log(this.recommendationCount)
       return this.recommendationCount++;
+    }
+    else{
+      console.log(this.recommendationCount)
+      return this.recommendationCount;
+    }
+  }
+
+  previousRecommendation():number{
+    console.log(this.recommendations.length)
+    if(this.recommendationCount > 0){
+      console.log(this.recommendationCount)
+      return this.recommendationCount--;
     }
     else{
       console.log(this.recommendationCount)
@@ -399,17 +412,35 @@ export class HomeComponent {
     //get list of favorites
     this.listsService.getUserFavorites(userId).subscribe((response:Favorites[]) => {
       response.forEach((f:Favorites) => {
-        // // Going to get description here
-        // this.bookService.searchByDescription(i.volumeInfo.description).subscribe((response:Books) => {
-        //   //add books from descriptions search 
-        //   response.items.forEach((i:Item) => {
-        //       this.recommendations.push(i);
-        //   })
-        // })
+        // Going to get description here
+        if(f.description != undefined){
+          this.bookService.searchByDescription(f.description).subscribe((response:Books) => {
+            //add books from descriptions search 
+            response.items.forEach((i:Item) => {
+              if(!this.recommendations.includes(i)){
+                this.recommendations.push(i);
+              }
+            })
+            //remove duplicate titles
+          this.CheckForDuplicates();
+          })
+        }
       })
       //search based on author
       this.topAuthors.forEach(t => {
         this.bookService.getBooks("", t, "").subscribe((response:Books) => {
+          if(this.topAuthors.indexOf(t) == 0)
+          {
+            this.topAuthorBooks = response;
+          }
+          if(this.topAuthors.indexOf(t) == 1)
+          {
+            this.topAuthorBooks2 = response;
+          }
+          if(this.topAuthors.indexOf(t) == 2)
+          {
+            this.topAuthorBooks3 = response;
+          }
           response.items.forEach((i:Item) => {
             //add result from author search
             if(!this.recommendations.includes(i))
@@ -417,11 +448,11 @@ export class HomeComponent {
               this.recommendations.push(i)
             }
           })
+          //remove duplicate titles
+          this.CheckForDuplicates();
+          console.log(this.recommendations);
         })
       })
-      //remove duplicate titles
-      this.CheckForDuplicates();
-      console.log(this.recommendations);
     })
   }
 }

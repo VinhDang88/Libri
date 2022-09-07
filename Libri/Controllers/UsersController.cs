@@ -132,6 +132,7 @@ namespace Libri.Controllers
                 RatingsCount = ratingsCount,
                 BookThumbnailUrl = bookThumbnailUrl
             };
+            
             if(!userReccomendations.Contains(userReccomendation))
             {
                 context.UserReccomendations.Add(userReccomendation);

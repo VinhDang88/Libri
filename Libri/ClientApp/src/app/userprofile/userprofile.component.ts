@@ -1,5 +1,6 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, OnInit } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Books, IndustryIdentifier, Item } from '../books';
 import { BooksService } from '../books.service';
@@ -8,7 +9,10 @@ import { Favorites } from '../favorites';
 import { Follower } from '../follower';
 import { ListsService } from '../lists.service';
 import { Read } from '../read';
+import { Review } from '../review';
+import { ReviewsService } from '../reviews.service';
 import { User } from '../user';
+import { UserReccomendation } from '../user-reccomendation';
 import { UsersService } from '../users.service';
 import { Wish } from '../wish';
 
@@ -44,9 +48,11 @@ export class UserprofileComponent implements OnInit {
   displayWhoUserIsFollowing:boolean = false;
   displayRecommendationsByOthers:boolean = false;
   displayReviewsByUser:boolean = false;
+  userRecommendations:UserReccomendation[] = []; 
+  userReviews:Review[] = [];
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
-     private route:ActivatedRoute, private usersService: UsersService,) { }
+     private route:ActivatedRoute, private usersService: UsersService, private reviewService: ReviewsService, @Inject(LOCALE_ID) private locale: string) { }
      
 
   ngOnInit(): void {
@@ -55,7 +61,7 @@ export class UserprofileComponent implements OnInit {
       this.loggedIn = (response != null); 
       this.getActiveUserFollowedUsers();
     });
-
+    
     this.route.params.subscribe(routeParams => {
       //emptying lists when user id changes
       this.favListItems = [];
@@ -67,6 +73,8 @@ export class UserprofileComponent implements OnInit {
       this.activeUserFollowedUsers = [];
       this.followingUsers = [];
       this.beingFollowedByUsers = [];
+      this.userRecommendations = [];
+      this.userReviews = [];
       //getting new user for profile
       this.usersService.GetUserBySqlId(routeParams.id).subscribe((response:User) => {
         this.user = response;
@@ -79,8 +87,10 @@ export class UserprofileComponent implements OnInit {
         this.getReadList();
         this.getFavoriteList();
         this.getDeniedList(); 
+        this.getUserRecommendation();
+        this.getUserReview();
       })
-  });
+    });
     
     console.log(this.activeUser)
     console.log(this.user)
@@ -432,5 +442,32 @@ export class UserprofileComponent implements OnInit {
 
   followedByActiveUser():boolean{
     return this.activeUserFollowedUsers.some(f => f == this.user.id)
+  }
+
+  getUserRecommendation():any{
+    this.usersService.GetUserRecommendations(this.user.id).subscribe((response:UserReccomendation[])=>{
+      this.userRecommendations = response;
+    })
+  }
+  getUserReview():any{
+    this.reviewService.GetReviewsByUser(this.user.id).subscribe((response:Review[])=>{
+      this.userReviews = response
+    })
+  }
+
+  formatReviewDate(date:Date):string{
+    return formatDate(date,'short',this.locale);
+  }
+
+  Upvote(review:Review):any{
+    this.reviewService.UpVote(this.user.id, review.id).subscribe((response:Review) =>
+      this.userReviews[this.userReviews.indexOf(review)] = response
+    )
+  }
+
+  Downvote(review:Review):any{
+    this.reviewService.DownVote(this.user.id, review.id).subscribe((response:Review) =>
+    this.userReviews[this.userReviews.indexOf(review)] = response
+    )
   }
 }

@@ -106,7 +106,7 @@
 
 --SELECT * FROM Followers;
 
---SELECT * FROM UserReccomendations;
+SELECT * FROM UserReccomendations;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;

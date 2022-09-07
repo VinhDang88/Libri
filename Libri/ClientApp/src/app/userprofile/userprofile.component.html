@@ -5,16 +5,10 @@
   <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
 
   <img src="{{ user.photoUrl }}" />
-  <button
-    *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
-    (click)="followUser()"
-  >
+  <button *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn" (click)="followUser()">
     Follow
   </button>
-  <button
-    *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
-    (click)="unfollowUser()"
-  >
+  <button *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn" (click)="unfollowUser()">
     Unfollow
   </button>
 
@@ -50,9 +44,9 @@
   <button class="displayButton" (click)="toggleFavoriteList()">
     Favorites
   </button>
-  <button class="displayButton" (click)="toggleWishList()">WishList</button>
-  <button class="displayButton" (click)="toggleReadList()">ReadList</button>
-  <button class="displayButton" (click)="toggleDeniedList()">DeniedList</button>
+  <button class="displayButton" (click)="toggleWishList()">Wish List</button>
+  <button class="displayButton" (click)="toggleReadList()">Read List</button>
+  <button class="displayButton" (click)="toggleDeniedList()">Uninterested</button>
 </div>
 
 <!-- Buttons for viewing follower information -->
@@ -62,7 +56,7 @@
     Following
   </button>
   <button class="displayButton" (click)="toggleRecommendationsByOtherUsers()">
-    Recommended By Followers
+    Recommendations
   </button>
   <button class="displayButton" (click)="toggleUserReviews()">
     Your Reviews
@@ -76,14 +70,12 @@
     <div *ngFor="let f of favListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(f) }}"
-            ><img src="{{ getThumbnail(f) }}"
-          /></a>
+          <a routerLink="/Book/{{ getIsbn(f) }}"><img src="{{ getThumbnail(f) }}" /></a>
         </div>
         <div class="bookInfo">
-          <a routerLink="/Book/{{ getIsbn(f) }}"
-            ><h4>{{ f.volumeInfo.title }}</h4></a
-          >
+          <a routerLink="/Book/{{ getIsbn(f) }}">
+            <h4>{{ f.volumeInfo.title }}</h4>
+          </a>
           <h5>Author(s): {{ f.volumeInfo.authors }}</h5>
           <h5>Categories: {{ f.volumeInfo.categories }}</h5>
           <p *ngIf="f.volumeInfo.ratingsCount != undefined">
@@ -95,15 +87,10 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteFavoriteListObject(f)">
-            <span id="icon" class="material-symbols-outlined"> delete </span
-            ><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span><br />
             <p class="buttonText">Remove</p>
           </button>
-          <button
-            class="iconButton"
-            *ngIf="!checkIfInReadList(f)"
-            (click)="addToReadList(f)"
-          >
+          <button class="iconButton" *ngIf="!checkIfInReadList(f)" (click)="addToReadList(f)">
             <span id="icon" class="material-symbols-outlined">
               bookmark_added
             </span>
@@ -122,9 +109,7 @@
     <div *ngFor="let w of wishListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(w) }}"
-            ><img src="{{ getThumbnail(w) }}"
-          /></a>
+          <a routerLink="/Book/{{ getIsbn(w) }}"><img src="{{ getThumbnail(w) }}" /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -141,8 +126,7 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteWishListObject(w)">
-            <span id="icon" class="material-symbols-outlined"> delete </span
-            ><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span><br />
             <p class="buttonText">Remove</p>
           </button>
         </div>
@@ -157,9 +141,7 @@
     <div *ngFor="let r of readListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(r) }}"
-            ><img src="{{ getThumbnail(r) }}"
-          /></a>
+          <a routerLink="/Book/{{ getIsbn(r) }}"><img src="{{ getThumbnail(r) }}" /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -176,15 +158,10 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteReadListObject(r)">
-            <span id="icon" class="material-symbols-outlined"> delete </span
-            ><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span><br />
             <p class="buttonText">Remove</p>
           </button>
-          <button
-            class="iconButton"
-            *ngIf="!checkIfInFavoriteList(r)"
-            (click)="addFavorite(r)"
-          >
+          <button class="iconButton" *ngIf="!checkIfInFavoriteList(r)" (click)="addFavorite(r)">
             <span id="icon" class="material-symbols-outlined">
               hotel_class
             </span>
@@ -203,9 +180,7 @@
     <div *ngFor="let d of deniedListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(d) }}"
-            ><img src="{{ getThumbnail(d) }}"
-          /></a>
+          <a routerLink="/Book/{{ getIsbn(d) }}"><img src="{{ getThumbnail(d) }}" /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -222,8 +197,7 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteDeniedListObject(d)">
-            <span id="icon" class="material-symbols-outlined"> delete </span
-            ><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span><br />
             <p class="buttonText">Remove</p>
           </button>
         </div>
@@ -256,16 +230,60 @@
   </div>
 </div>
 
-<!-- <div *ngIf="displayRecommendationsByOthers">
+<div *ngIf="displayRecommendationsByOthers">
   <div class="listContainer">
     <h3>Other User Recommendations:</h3>
-    <div *ngFor="let ur of userRecommendations"></div>
+    <div *ngFor="let ur of userRecommendations">
+      <div class="bookContainer">
+        <div class="bookImage">
+          <a routerLink="/Book/{{ur.isbn}}"><img src="{{ ur.bookThumbnailUrl}}" /></a>
+        </div>
+        <div class="bookInfo">
+          <h4>
+            <a routerLink="/Book/{{ ur.isbn }}">{{ ur.title}}</a>
+          </h4>
+          <h5>Author(s): {{ ur.author }}</h5>
+          <h5>Categories: {{ ur.subject }}</h5>
+          <p *ngIf="ur.ratingsCount != undefined">
+            Rating: {{ ur.averageRating }} / 5
+          </p>
+          <p *ngIf="ur.ratingsCount == undefined">
+            Rating not available
+          </p>
+        </div>
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div *ngIf="displayReviewsByUser">
   <div class="listContainer">
     <h3>Your Reviews:</h3>
-    <div *ngFor="let r of userReviews"></div>
+    <div *ngFor="let r of userReviews">
+      <!-- container that holds an individual review of displayed book -->
+      <div class="review">
+        <!-- displays review info and text -->
+        <h6>{{ r.userName }}</h6>
+        <h6>{{ r.bookTitle }} by {{ r.author }}</h6>
+        <h6>{{ formatReviewDate(r.datePosted) }}</h6>
+        <p>{{ r.review1 }}</p>
+        <p>Votes: {{ r.votes }}</p>
+        <!-- button that upvotes review -->
+        <button class="iconButton" *ngIf="loggedIn" (click)="Upvote(r)">
+          <span id="icon" class="material-symbols-outlined"> thumb_up </span>
+          <br />
+          <p class="buttonText">Upvote</p>
+        </button>
+        <!-- button that downvotes review -->
+        <button class="iconButton" *ngIf="loggedIn" (click)="Downvote(r)">
+          <span id="icon" class="material-symbols-outlined">
+            thumb_down
+          </span>
+          <br />
+          <p class="buttonText">Downvote</p>
+        </button>
+      </div>
+    </div>
   </div>
-</div> -->

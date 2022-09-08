@@ -117,7 +117,7 @@ namespace Libri.Controllers
         }
 
         [HttpPost("SendReccomendation")]
-        public UserReccomendation SendReccomendation(string? reccomendedTo, string? recomendedBy, string? isbn, string? title, string? author, string? subject, float? averageRating, int? ratingsCount, string? bookThumbnailUrl)
+        public UserReccomendation SendReccomendation(string? reccomendedTo, string? recomendedBy, string? isbn, string? title, string? author, string? subject, float? averageRating, int? ratingsCount, string? bookThumbnailUrl, string? description)
         {
             List<UserReccomendation> userReccomendations = new List<UserReccomendation>();
             UserReccomendation userReccomendation = new UserReccomendation()
@@ -130,7 +130,8 @@ namespace Libri.Controllers
                 Subject = subject,
                 AverageRating = averageRating,
                 RatingsCount = ratingsCount,
-                BookThumbnailUrl = bookThumbnailUrl
+                BookThumbnailUrl = bookThumbnailUrl,
+                Description = description
             };
             
             if(!userReccomendations.Contains(userReccomendation))

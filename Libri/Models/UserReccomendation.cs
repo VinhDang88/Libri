@@ -15,6 +15,7 @@ namespace Libri.Models
         public float? AverageRating { get; set; }
         public int? RatingsCount { get; set; }
         public string? BookThumbnailUrl { get; set; }
+        public string? Description { get; set; }
 
         public virtual User? ReccomendedToNavigation { get; set; }
     }

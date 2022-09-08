@@ -40,6 +40,7 @@ export class HomeComponent {
   following:string[] = [];
   userFollowing:User[] = [];
   toggleUserRecommendations:boolean = false;
+  toggleUserRecommendedRecommendations:boolean = false;
   notRecommendedTo:User[] = [];
   topAuthors:string[] = [];
   topAuthorBooks: Books = {} as Books;
@@ -47,6 +48,9 @@ export class HomeComponent {
   topAuthorBooks3: Books = {} as Books;
   searchType:string = "Books";
   searchDropdownToggle:boolean = false;
+  recommendedBook:Item = {} as Item;
+  userRecommendBook:UserReccomendation = {} as UserReccomendation;
+  recommendedByUsers:UserReccomendation[] = [];
   
   ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -58,6 +62,7 @@ export class HomeComponent {
       this.getDeniedList();
       this.getUserFollowing();
       this.getFavoriteAuthor();
+      this.getRecommendationsFromUsers();
       this.CheckForDuplicates();
     });
     
@@ -78,11 +83,16 @@ export class HomeComponent {
   }
 
   SearchUsers(form:NgForm):void{
+    this.searchedUsers = [];
     this.searchedUsername = form.form.value.username;
     console.log(this.searchedUsername);
     this.usersService.GetUsersByName(this.searchedUsername).subscribe((response:User[]) => {
       console.log(response)
-      this.searchedUsers = response;
+      response.forEach((u:User) => {
+        if(u.id != this.user.id){
+          this.searchedUsers.push(u);
+        }
+      })
     })
   }
 
@@ -149,6 +159,26 @@ export class HomeComponent {
     });
   }
 
+  addRecommendedFavorite(book:UserReccomendation):any{
+    if(book.subject == undefined){
+      book.subject = "";
+    }
+    if(book.author == undefined){
+      book.author = "";
+    }
+    if(book.title == undefined){
+      book.title = "";
+    }
+    if(book.description == undefined){
+      book.description = "";
+    }
+    this.listsService.addToFavoriteBooks(this.user.id, <string>book.isbn, book.title, book.author,
+    book.subject, <number>book.averageRating, <number>book.ratingsCount, book.description, book.bookThumbnailUrl).subscribe((response: Favorites)=>{
+      this.favoritesArray.push(response)
+      console.log(response);
+    });
+  }
+
   getFavoriteAuthor():any{
     this.listsService.GetTopFavoriteAuthors(this.user.id).subscribe((response:string[]) => {
       console.log(response);
@@ -178,7 +208,28 @@ export class HomeComponent {
       this.denied.push(response);
     });
   }
-  
+
+  addRecommendedToWishList(book:UserReccomendation):any{
+    this.listsService.addToWishList(book.isbn, this.user.id).subscribe((response:Wish) => {
+      console.log(response);
+      this.wish.push(response);
+    });
+  }
+
+  addRecommendedToReadList(book:UserReccomendation):any{
+    this.listsService.addToReadList(book.isbn, this.user.id).subscribe((response:Read) => {
+      console.log(response);
+      this.read.push(response);
+    });
+  }
+
+  addRecommendedToDeniedList(book:UserReccomendation):any{
+    this.listsService.addToDeniedList(book.isbn, this.user.id).subscribe((response:Denied) => {
+      console.log(response);
+      this.denied.push(response);
+    });
+  }
+
   //Create a toggle that will hide Favorite list button after user clicks on the button
   CheckIfInFavoriteList(book:Item):boolean{
       return this.favoritesArray.some(f => f.isbn.trim().toString() == this.getIsbn(book))
@@ -207,6 +258,36 @@ export class HomeComponent {
       isbn: this.getIsbn(book)
     }
     return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
+  }
+
+  //Create a toggle that will hide Favorite list button after user clicks on the button
+  CheckIfRecommendedInFavoriteList(book:UserReccomendation):boolean{
+    return this.favoritesArray.some(f => f.isbn.trim().toString() == book.isbn)
+  }
+
+  //Create a toggle that will hide Wish list button after user clicks on the button
+  CheckIfRecommendedInWishList(book:UserReccomendation):boolean{
+  let wish: Wish = {
+    wishListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.wish.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
+  }
+
+  CheckIfRecommendedInReadList(book:UserReccomendation):boolean{
+  let read: Read = {
+    readListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.read.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
+  }
+
+  CheckIfRecommendedInDeniedList(book:UserReccomendation):boolean{
+  let denied: Denied = {
+    deniedListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.denied.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
   }
 
   CheckForDuplicates():void{
@@ -256,24 +337,56 @@ export class HomeComponent {
         result.splice(i,1);
         // console.log(r.volumeInfo.title)
       } 
-      else if(this.CheckIfInFavoriteList(r)) {
-        let i = result.indexOf(r)
-        result.splice(i,1);
-        // console.log(r.volumeInfo.title)
-      } 
-      else if(this.CheckIfInReadList(r)) {
-        let i = result.indexOf(r)
-        result.splice(i,1);
-        // console.log(r.volumeInfo.title)
-      } 
-      else if(this.CheckIfInWishList(r)) {
-        let i = result.indexOf(r)
-        result.splice(i,1);
-        // console.log(r.volumeInfo.title)
-      } 
+      // else if(this.CheckIfInFavoriteList(r)) {
+      //   let i = result.indexOf(r)
+      //   result.splice(i,1);
+      //   // console.log(r.volumeInfo.title)
+      // } 
+      // else if(this.CheckIfInReadList(r)) {
+      //   let i = result.indexOf(r)
+      //   result.splice(i,1);
+      //   // console.log(r.volumeInfo.title)
+      // } 
+      // else if(this.CheckIfInWishList(r)) {
+      //   let i = result.indexOf(r)
+      //   result.splice(i,1);
+      //   // console.log(r.volumeInfo.title)
+      // } 
     })
     // console.log(result);
     this.books.items = result;
+  }
+
+  CheckForDuplicateAny(books:Item[]):Item[]{
+    //remove dups based on book title
+    books = books.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
+    ))
+    )
+    books.forEach((r:Item) => {
+      if(this.CheckIfInDeniedList(r)) {
+        let i = books.indexOf(r)
+        books.splice(i,1);
+      } 
+    })
+    return books;
+  }
+
+  CheckForDuplicateUserRecommended(books:UserReccomendation[]):UserReccomendation[]{
+    //remove dups based on book title
+    books = books.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.title.trim() == value.title.trim()
+    ))
+    )
+    books.forEach((r:UserReccomendation) => {
+      if(this.denied.map(d => d.isbn).includes(r.isbn)) {
+        let i = books.indexOf(r)
+        books.splice(i,1);
+      } 
+    })
+    return books;
   }
 
   getWishList():any{
@@ -319,10 +432,17 @@ export class HomeComponent {
   }
 
   toggleUserRecommendation():boolean{
-    if(this.toggleUserRecommendations){
+    if(this.toggleUserRecommendedRecommendations){
       this.notRecommendedTo = [];
     }
-    return this.toggleUserRecommendations = !this.toggleUserRecommendations;
+    return this.toggleUserRecommendedRecommendations = !this.toggleUserRecommendedRecommendations;
+  }
+
+  toggleUserRecommendedRecommendation():boolean{
+    if(this.toggleUserRecommendedRecommendations){
+      this.notRecommendedTo = [];
+    }
+    return this.toggleUserRecommendedRecommendations = !this.toggleUserRecommendedRecommendations;
   }
 
   sendRecommendation(book:Item, reccomendedTo:User):any{
@@ -343,8 +463,42 @@ export class HomeComponent {
     {
       book.volumeInfo.ratingsCount = 0;
     }
+    if(book.volumeInfo.description == undefined)
+    {
+      book.volumeInfo.description = "";
+    }
     this.usersService.SendRecommendation(reccomendedTo.id, this.user.id.trim().toString(), this.getIsbn(book), book.volumeInfo.title.trim().toString(), book.volumeInfo.authors.toString(),
-    book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book)).subscribe(
+    book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book), book.volumeInfo.description).subscribe(
+      (response:UserReccomendation) => {
+        let i = this.notRecommendedTo.indexOf(reccomendedTo)
+        this.notRecommendedTo.splice(i,1);
+      })
+  }
+
+  sendUserRecommendation(book:UserReccomendation, reccomendedTo:User):any{
+    if(book.subject == undefined){
+      book.subject = "";
+    }
+    if(book.author == undefined){
+      book.author = "";
+    }
+    if(book.title == undefined){
+      book.title = "";
+    }
+    if(book.averageRating == undefined)
+    {
+      book.averageRating = 0;
+    }
+    if(book.ratingsCount == undefined)
+    {
+      book.ratingsCount = 0;
+    }
+    if(book.description == undefined)
+    {
+      book.description = "";
+    }
+    this.usersService.SendRecommendation(reccomendedTo.id, this.user.id.trim().toString(), book.isbn, book.title.trim().toString(), book.author.toString(),
+    book.subject.toString(),<number>book.averageRating, <number>book.ratingsCount, book.bookThumbnailUrl, book.description).subscribe(
       (response:UserReccomendation) => {
         let i = this.notRecommendedTo.indexOf(reccomendedTo)
         this.notRecommendedTo.splice(i,1);
@@ -353,6 +507,7 @@ export class HomeComponent {
 
   getNotRecommendedTo(followers:User[], book:Item):User[]
   {
+    this.recommendedBook = book;
     this.notRecommendedTo = [];
     followers.forEach(u => {
       this.usersService.GetUserRecommendations(u.id).subscribe((response:UserReccomendation[]) => {
@@ -363,6 +518,28 @@ export class HomeComponent {
       })
     })
     return this.notRecommendedTo;
+  }
+
+  getNotRecommendedToUsersRecommended(followers:User[], book:UserReccomendation):User[]
+  {
+    this.userRecommendBook = book;
+    this.notRecommendedTo = [];
+    followers.forEach(u => {
+      this.usersService.GetUserRecommendations(u.id).subscribe((response:UserReccomendation[]) => {
+        let notRecommended:boolean = (response.some((r:UserReccomendation) => r.isbn == book.isbn) == false)
+        if(notRecommended){
+          this.notRecommendedTo.push(u)
+        }
+      })
+    })
+    return this.notRecommendedTo;
+  }
+
+  getRecommendationsFromUsers():any{
+    this.usersService.GetUserRecommendations(this.user.id).subscribe((response:UserReccomendation[]) => {
+      this.recommendedByUsers = response;
+      this.CheckForDuplicateUserRecommended(this.recommendedByUsers);
+    })
   }
 
   nextRecommendation():number{

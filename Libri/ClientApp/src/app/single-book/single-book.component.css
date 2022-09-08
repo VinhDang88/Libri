@@ -71,10 +71,10 @@
   }
 
 .layer3{
-    position:absolute;
+    position:fixed;
     z-index: 3;
     width: 100%;
-    top:15%;
+    top:1%;
     left:3%;
 }
 

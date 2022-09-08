@@ -5,11 +5,21 @@
   <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
 
   <img src="{{ user.photoUrl }}" />
-  <button *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn" (click)="followUser()">
-    Follow
+  <button
+    class="iconButton"
+    *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+    (click)="followUser()"
+  >
+    <span id="icon" class="material-symbols-outlined"> person_add </span>
+    <p class="buttonText">Follow</p>
   </button>
-  <button *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn" (click)="unfollowUser()">
-    Unfollow
+  <button
+    class="iconButton"
+    *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+    (click)="unfollowUser()"
+  >
+    <span id="icon" class="material-symbols-outlined"> person_off </span>
+    <p class="buttonText">Unfollow</p>
   </button>
 
   <!-- Display number of items in each list -->
@@ -46,7 +56,9 @@
   </button>
   <button class="displayButton" (click)="toggleWishList()">Wish List</button>
   <button class="displayButton" (click)="toggleReadList()">Read List</button>
-  <button class="displayButton" (click)="toggleDeniedList()">Uninterested</button>
+  <button class="displayButton" (click)="toggleDeniedList()">
+    Uninterested
+  </button>
 </div>
 
 <!-- Buttons for viewing follower information -->
@@ -70,7 +82,9 @@
     <div *ngFor="let f of favListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(f) }}"><img src="{{ getThumbnail(f) }}" /></a>
+          <a routerLink="/Book/{{ getIsbn(f) }}"
+            ><img src="{{ getThumbnail(f) }}"
+          /></a>
         </div>
         <div class="bookInfo">
           <a routerLink="/Book/{{ getIsbn(f) }}">
@@ -87,10 +101,15 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteFavoriteListObject(f)">
-            <span id="icon" class="material-symbols-outlined"> delete </span><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
             <p class="buttonText">Remove</p>
           </button>
-          <button class="iconButton" *ngIf="!checkIfInReadList(f)" (click)="addToReadList(f)">
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInReadList(f)"
+            (click)="addToReadList(f)"
+          >
             <span id="icon" class="material-symbols-outlined">
               bookmark_added
             </span>
@@ -109,7 +128,9 @@
     <div *ngFor="let w of wishListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(w) }}"><img src="{{ getThumbnail(w) }}" /></a>
+          <a routerLink="/Book/{{ getIsbn(w) }}"
+            ><img src="{{ getThumbnail(w) }}"
+          /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -126,7 +147,8 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteWishListObject(w)">
-            <span id="icon" class="material-symbols-outlined"> delete </span><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
             <p class="buttonText">Remove</p>
           </button>
         </div>
@@ -141,7 +163,9 @@
     <div *ngFor="let r of readListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(r) }}"><img src="{{ getThumbnail(r) }}" /></a>
+          <a routerLink="/Book/{{ getIsbn(r) }}"
+            ><img src="{{ getThumbnail(r) }}"
+          /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -158,10 +182,15 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteReadListObject(r)">
-            <span id="icon" class="material-symbols-outlined"> delete </span><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
             <p class="buttonText">Remove</p>
           </button>
-          <button class="iconButton" *ngIf="!checkIfInFavoriteList(r)" (click)="addFavorite(r)">
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInFavoriteList(r)"
+            (click)="addFavorite(r)"
+          >
             <span id="icon" class="material-symbols-outlined">
               hotel_class
             </span>
@@ -180,7 +209,9 @@
     <div *ngFor="let d of deniedListItems">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ getIsbn(d) }}"><img src="{{ getThumbnail(d) }}" /></a>
+          <a routerLink="/Book/{{ getIsbn(d) }}"
+            ><img src="{{ getThumbnail(d) }}"
+          /></a>
         </div>
         <div class="bookInfo">
           <h4>
@@ -197,7 +228,8 @@
         </div>
         <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
           <button class="iconButton" (click)="deleteDeniedListObject(d)">
-            <span id="icon" class="material-symbols-outlined"> delete </span><br />
+            <span id="icon" class="material-symbols-outlined"> delete </span
+            ><br />
             <p class="buttonText">Remove</p>
           </button>
         </div>
@@ -236,23 +268,22 @@
     <div *ngFor="let ur of userRecommendations">
       <div class="bookContainer">
         <div class="bookImage">
-          <a routerLink="/Book/{{ur.isbn}}"><img src="{{ ur.bookThumbnailUrl}}" /></a>
+          <a routerLink="/Book/{{ ur.isbn }}"
+            ><img src="{{ ur.bookThumbnailUrl }}"
+          /></a>
         </div>
         <div class="bookInfo">
           <h4>
-            <a routerLink="/Book/{{ ur.isbn }}">{{ ur.title}}</a>
+            <a routerLink="/Book/{{ ur.isbn }}">{{ ur.title }}</a>
           </h4>
           <h5>Author(s): {{ ur.author }}</h5>
           <h5>Categories: {{ ur.subject }}</h5>
           <p *ngIf="ur.ratingsCount != undefined">
             Rating: {{ ur.averageRating }} / 5
           </p>
-          <p *ngIf="ur.ratingsCount == undefined">
-            Rating not available
-          </p>
+          <p *ngIf="ur.ratingsCount == undefined">Rating not available</p>
         </div>
-        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
-        </div>
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons"></div>
       </div>
     </div>
   </div>
@@ -278,12 +309,11 @@
         </button>
         <!-- button that downvotes review -->
         <button class="iconButton" *ngIf="loggedIn" (click)="Downvote(r)">
-          <span id="icon" class="material-symbols-outlined">
-            thumb_down
-          </span>
+          <span id="icon" class="material-symbols-outlined"> thumb_down </span>
           <br />
           <p class="buttonText">Downvote</p>
         </button>
       </div>
     </div>
   </div>
+</div>

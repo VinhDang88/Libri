@@ -9,4 +9,5 @@ export interface UserReccomendation {
     averageRating:number;
     ratingsCount:number;
     bookThumbnailUrl:string;
+    description:string;
 }

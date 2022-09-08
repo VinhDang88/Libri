@@ -20,11 +20,29 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    border: 3px solid black;
+    background-color: #9CC0E7;
+    max-width: 30%;
+    overflow:scroll;
+    overflow-y:hidden;
+    margin-left: 35%;
+    margin-top: 1%;
 }
 
 .userSearchSeparation{
-    margin-right: 1%;
-    margin-left: 1%;
+    display:flex;
+    margin-top: 20%;
+    margin-right: 5%;
+}
+
+.dropdownButtonText{
+    margin-bottom: .1%;
+}
+
+.dropButtonTextAndIcon{
+    display: flex;
+    justify-content: center;
+    height: 75%;
 }
 
 .dropdownBox{
@@ -50,11 +68,6 @@
     overflow:scroll;
     overflow-y:hidden;
     margin-bottom: 1%;
-     /* justify-content: space-between; */
-    /* background-color: #9CC0E7; */
-    /* border: 3px solid black;
-    border-radius: 5px 0 4px 0; */
-    /* padding: 10px 7px 5px; */
 }
 
 .searchBook{
@@ -79,9 +92,6 @@
 
 .searchImage{
     width:100%;
-    /* width: 153px;
-    height: 231px; */
-    margin-bottom: 2%;
     margin-right: 0%;
     margin-left: 8%;
     margin-top: 4%;
@@ -150,6 +160,10 @@
     width: 50%;
 }
 
+.recommendationRecommendButton{
+    background: none;
+  }
+
 .recommendedButtons{
     padding-right: 3%;
 }
@@ -157,6 +171,56 @@
 .nextRecommendButton{
     margin-right: 3%;
     background-color: #EEEEEE;
+}
+
+.layer2{
+    position:absolute;
+    z-index: 2;
+    opacity: .8;
+}
+
+#bg {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+.layer3{
+    position:fixed;
+    z-index: 3;
+    width: 200%;
+    top:40%;
+    left:18%;
+}
+
+.recommendUser{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #9CC0E7;
+    max-width: 30%;
+    margin-top: 1%;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 1px;
+    padding-top: 5px;
+}
+
+.recommendBoxUsers{
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
+    margin-left: 10%;
+    overflow:scroll;
+    overflow-y:hidden;
+}
+
+.closeFormButton{
+    display: inline;
+    float: right;
+    margin-right: 5%;
 }
 
 #icon{
@@ -215,4 +279,10 @@ a:link{
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+
+  .scrollRecommendButton{
+    display: block;
+    margin:auto;
+    background: none;
   }

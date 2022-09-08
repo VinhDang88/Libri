@@ -146,6 +146,8 @@ namespace Libri.Models
 
                 entity.Property(e => e.BookThumbnailUrl).HasMaxLength(255);
 
+                entity.Property(e => e.Description).HasMaxLength(4000);
+
                 entity.Property(e => e.Isbn).HasMaxLength(255);
 
                 entity.Property(e => e.RatingsCount).HasColumnName("ratingsCount");

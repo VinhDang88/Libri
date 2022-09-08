@@ -1,52 +1,48 @@
 <!-- User Information -->
 <!-- <h1 *ngIf="!loggedIn">Please sign in to see your profile!</h1> -->
 <div class="profileContainer">
-  <p *ngIf="checkIfPageOwner() && loggedIn">Welcome {{ user.firstName }}!</p>
-  <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
+  <div>
+    <p *ngIf="checkIfPageOwner() && loggedIn">Welcome {{ user.firstName }}!</p>
+    <p *ngIf="!checkIfPageOwner()">{{ user.name }}</p>
 
-  <img src="{{ user.photoUrl }}" />
-  <button
-    class="iconButton"
-    *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
-    (click)="followUser()"
-  >
-    <span id="icon" class="material-symbols-outlined"> person_add </span>
-    <p class="buttonText">Follow</p>
-  </button>
-  <button
-    class="iconButton"
-    *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
-    (click)="unfollowUser()"
-  >
-    <span id="icon" class="material-symbols-outlined"> person_off </span>
-    <p class="buttonText">Unfollow</p>
-  </button>
+    <img src="{{ user.photoUrl }}" />
+  </div>
+  <div>
+    <button
+      class="followButton"
+      *ngIf="!followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+      (click)="followUser()"
+    >
+      <span id="icon" class="material-symbols-outlined"> person_add </span>
+      <p class="buttonText">Follow</p>
+    </button>
+    <button
+      class="followButton"
+      *ngIf="followedByActiveUser() && !checkIfPageOwner() && loggedIn"
+      (click)="unfollowUser()"
+    >
+      <span id="icon" class="material-symbols-outlined"> person_off </span>
+      <p class="buttonText">Unfollow</p>
+    </button>
+  </div>
 
   <!-- Display number of items in each list -->
-  <p *ngIf="displayFavoriteList">
-    # of Favorite List {{ favListItems.length }}
-  </p>
-  <p *ngIf="displayWishList">
-    # of Books in Your Wish List {{ wishListItems.length }}
-  </p>
-  <p *ngIf="displayReadList">
-    # of Books in Your Read List {{ readListItems.length }}
-  </p>
-  <p *ngIf="displayDeniedList">
-    # of Books in Your Denied List {{ deniedListItems.length }}
-  </p>
-  <p *ngIf="displayFollowers">
-    # of People That Follow You {{ followingUsers.length }}
-  </p>
-  <p *ngIf="displayWhoUserIsFollowing">
-    # of People You Follow {{ beingFollowedByUsers.length }}
-  </p>
-  <!-- <p *ngIf="displayRecommendationsByOthers">
-    # of Books Recommended By Followers {{ deniedListItems.length }}
-  </p>
-  <p *ngIf="displayReviewsByUser">
-    # of Reviews You Wrote {{ deniedListItems.length }}
-  </p> -->
+  <div class="pageOwnerInfo">
+    <p># of Favorites: {{ favListItems.length }}</p>
+    <p># in Wishlist: {{ wishListItems.length }}</p>
+    <p># of Books Read: {{ readListItems.length }}</p>
+    <p># of Books Blocked: {{ deniedListItems.length }}</p>
+  </div>
+  <div class="pageOwnerInfo">
+    <p>Followers: {{ followingUsers.length }}</p>
+    <p>Following: {{ beingFollowedByUsers.length }}</p>
+    <p>Recommendations Received: {{ userRecommendations.length }}</p>
+    <p>Reviews Written: {{ userReviews.length }}</p>
+  </div>
+  <div class="pageOwnerInfo">
+    <p>Top Authors:</p>
+    <p *ngFor="let a of pageOwnerTopAuthors">{{ a }}</p>
+  </div>
 </div>
 
 <!-- Buttons for changing display -->
@@ -529,12 +525,19 @@
 
 <div *ngIf="displayFollowers">
   <div class="listContainer">
-    <h3>Followers:</h3>
+    <h3 class="listLabel">Followers:</h3>
     <div *ngFor="let f of followingUsers">
       <div class="profileContainer">
-        <a routerLink="/UserProfile/{{ f.sqlId }}">
-          <img class="zoom" src="{{ f.photoUrl }}" />
-          <p>{{ f.name }}</p>
+        <a
+          routerLink="/UserProfile/{{ f.sqlId }}"
+          (click)="user = getNewPageOwner(f)"
+        >
+          <img
+            class="zoom"
+            (click)="user = getNewPageOwner(f)"
+            src="{{ f.photoUrl }}"
+          />
+          <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
         </a>
       </div>
     </div>
@@ -543,12 +546,19 @@
 
 <div *ngIf="displayWhoUserIsFollowing">
   <div class="listContainer">
-    <h3>Following:</h3>
+    <h3 class="listLabel">Following:</h3>
     <div *ngFor="let f of beingFollowedByUsers">
       <div class="profileContainer">
-        <a routerLink="/UserProfile/{{ f.sqlId }}">
-          <img class="zoom" src="{{ f.photoUrl }}" />
-          <p>{{ f.name }}</p>
+        <a
+          routerLink="/UserProfile/{{ f.sqlId }}"
+          (click)="user = getNewPageOwner(f)"
+        >
+          <img
+            class="zoom"
+            (click)="user = getNewPageOwner(f)"
+            src="{{ f.photoUrl }}"
+          />
+          <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
         </a>
       </div>
     </div>
@@ -585,7 +595,7 @@
 <div *ngIf="displayReviewsByUser">
   <div class="listContainer">
     <h3 *ngIf="checkIfPageOwner()">Your Reviews:</h3>
-    <h3 *ngIf="!checkIfPageOwner()">{{ user.name }}'s Reviews</h3>
+    <h3 *ngIf="!checkIfPageOwner()">{{ user.firstName }}'s Reviews</h3>
     <div *ngFor="let r of userReviews">
       <!-- container that holds an individual review of displayed book -->
       <div class="review">

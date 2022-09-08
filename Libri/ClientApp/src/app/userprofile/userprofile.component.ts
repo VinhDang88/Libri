@@ -34,12 +34,10 @@ export class UserprofileComponent implements OnInit{
   favListItems:Item[] = [];
   deniedListItems:Item[] = [];
   readListItems:Item[] = [];
-
   activeUserWishList:Wish[] = [];
   activeUserFavoriteList:Favorites[] = [];
   activeUserDeniedLists:Denied[] = [];
   activeUserReadLists: Read[] = [];
-
   displayFavoriteList:boolean = true;
   displayWishList:boolean = false;
   displayReadList:boolean = false;
@@ -56,6 +54,7 @@ export class UserprofileComponent implements OnInit{
   displayReviewsByUser:boolean = false;
   userRecommendations:UserReccomendation[] = []; 
   userReviews:Review[] = [];
+  pageOwnerTopAuthors:string[] = [];
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
      private route:ActivatedRoute, private usersService: UsersService, private reviewService: ReviewsService, @Inject(LOCALE_ID) private locale: string) { }
@@ -98,6 +97,7 @@ export class UserprofileComponent implements OnInit{
         this.getDeniedList(); 
         this.getUserRecommendation();
         this.getUserReview();
+        this.getPageOwnerTopAuthors();
         this.getActiveUserFavoriteList();
         this.getActiveUserWishList();
         this.getActiveUserReadList();
@@ -109,16 +109,24 @@ export class UserprofileComponent implements OnInit{
     console.log(this.user)
   }
 
-  CallGets():void{
-    
+  getNewPageOwner(user:User):User{
+    this.usersService.GetUserById(user.id).subscribe((response:User) => {
+      this.user = response
+    }) 
+    return this.user;
+  }
+
+  reload():void{
+    location.reload();
   }
   
 
   checkIfPageOwner():boolean{
+    this.pageOwner = false;
     if(this.activeUser == null){
       this.pageOwner = false
     }
-    else if(this.loggedIn && this.activeUser.id == this.user.id){
+    else if(this.loggedIn && this.activeUser.id == this.user.id && this.activeUser.photoUrl == this.user.photoUrl){
       this.pageOwner = true;
     }
     return this.pageOwner;
@@ -583,5 +591,12 @@ getActiveUserFavoriteList():any{
     this.reviewService.DownVote(this.user.id, review.id).subscribe((response:Review) =>
     this.userReviews[this.userReviews.indexOf(review)] = response
     )
+  }
+
+  getPageOwnerTopAuthors():string[]{
+    this.listsService.GetTopFavoriteAuthors(this.user.id).subscribe((response:string[]) => {
+      this.pageOwnerTopAuthors = response;
+    })
+    return this.pageOwnerTopAuthors;
   }
 }

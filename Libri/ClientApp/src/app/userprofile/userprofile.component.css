@@ -13,6 +13,22 @@
     overflow-x:hidden;
     margin-left: 10%;
     margin-top: 2%;
+    margin-bottom: 3%;
+}
+
+.followButton{
+    margin-top: 25%;
+    border: none;
+    background:none;
+}
+
+.pageOwnerInfo{
+    border:3px solid black;
+    border-radius: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .buttonContainer{
@@ -30,12 +46,18 @@
 }
 
 .profileContainer{
+    display: flex;
+    justify-content: space-between;
     border: 3px solid black;
+    border-radius: 5px 0 4px 0;
     background-color: #9CC0E7;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    margin:4%;
     padding: 10px 7px 5px;
     width: 80%;
+    margin-left: 10%;
+}
+
+.listLabel{
     margin-left: 10%;
 }
 
@@ -124,4 +146,14 @@ a:link{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.review{
+    margin-right: 2%;
+    margin-left:2%;
+    margin-bottom: 1%;
+    border: 3px solid black;
+    border-radius: 8px;
+    padding: 1%;
+    font-size: small;
 }

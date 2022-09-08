@@ -70,8 +70,19 @@
   <button class="displayButton" (click)="toggleRecommendationsByOtherUsers()">
     Recommendations
   </button>
-  <button class="displayButton" (click)="toggleUserReviews()">
+  <button
+    *ngIf="checkIfPageOwner()"
+    class="displayButton"
+    (click)="toggleUserReviews()"
+  >
     Your Reviews
+  </button>
+  <button
+    *ngIf="!checkIfPageOwner()"
+    class="displayButton"
+    (click)="toggleUserReviews()"
+  >
+    {{ user.firstName }}'s Reviews
   </button>
 </div>
 
@@ -521,8 +532,10 @@
     <h3>Followers:</h3>
     <div *ngFor="let f of followingUsers">
       <div class="profileContainer">
-        <p *ngIf="checkIfPageOwner() && loggedIn">{{ f.name }}</p>
-        <img src="{{ f.photoUrl }}" />
+        <a routerLink="/UserProfile/{{ f.sqlId }}">
+          <img class="zoom" src="{{ f.photoUrl }}" />
+          <p>{{ f.name }}</p>
+        </a>
       </div>
     </div>
   </div>
@@ -533,8 +546,10 @@
     <h3>Following:</h3>
     <div *ngFor="let f of beingFollowedByUsers">
       <div class="profileContainer">
-        <p *ngIf="checkIfPageOwner() && loggedIn">{{ f.name }}</p>
-        <img src="{{ f.photoUrl }}" />
+        <a routerLink="/UserProfile/{{ f.sqlId }}">
+          <img class="zoom" src="{{ f.photoUrl }}" />
+          <p>{{ f.name }}</p>
+        </a>
       </div>
     </div>
   </div>
@@ -569,7 +584,8 @@
 
 <div *ngIf="displayReviewsByUser">
   <div class="listContainer">
-    <h3>Your Reviews:</h3>
+    <h3 *ngIf="checkIfPageOwner()">Your Reviews:</h3>
+    <h3 *ngIf="!checkIfPageOwner()">{{ user.name }}'s Reviews</h3>
     <div *ngFor="let r of userReviews">
       <!-- container that holds an individual review of displayed book -->
       <div class="review">

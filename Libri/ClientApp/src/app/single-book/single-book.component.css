@@ -234,6 +234,11 @@ textarea{
     margin: auto;
 }
 
+.zoom:hover {
+    transform: scale(1.1);
+    z-index: 0;
+  }
+
 .searchInfo{
     font-size: smaller;
     width:100%;

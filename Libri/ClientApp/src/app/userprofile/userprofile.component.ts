@@ -22,7 +22,7 @@ import { Wish } from '../wish';
   styleUrls: ['./userprofile.component.css']
 })
 
-export class UserprofileComponent implements OnInit {
+export class UserprofileComponent implements OnInit{
   activeUser:SocialUser = {} as SocialUser;
   user: User = {} as User;
   loggedIn: boolean = false;
@@ -34,6 +34,12 @@ export class UserprofileComponent implements OnInit {
   favListItems:Item[] = [];
   deniedListItems:Item[] = [];
   readListItems:Item[] = [];
+
+  activeUserWishList:Wish[] = [];
+  activeUserFavoriteList:Favorites[] = [];
+  activeUserDeniedLists:Denied[] = [];
+  activeUserReadLists: Read[] = [];
+
   displayFavoriteList:boolean = true;
   displayWishList:boolean = false;
   displayReadList:boolean = false;
@@ -54,13 +60,16 @@ export class UserprofileComponent implements OnInit {
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
      private route:ActivatedRoute, private usersService: UsersService, private reviewService: ReviewsService, @Inject(LOCALE_ID) private locale: string) { }
      
-
+  
+  
   ngOnInit(): void {
+    this.route.params.subscribe(routeParams => {
     this.authService.authState.subscribe((response:SocialUser) => {
       this.activeUser = response;
       this.loggedIn = (response != null); 
       this.getActiveUserFollowedUsers();
     });
+  });
     
     this.route.params.subscribe(routeParams => {
       //emptying lists when user id changes
@@ -89,11 +98,19 @@ export class UserprofileComponent implements OnInit {
         this.getDeniedList(); 
         this.getUserRecommendation();
         this.getUserReview();
+        this.getActiveUserFavoriteList();
+        this.getActiveUserWishList();
+        this.getActiveUserReadList();
+        this.getActiveUserDeniedList();
       })
     });
     
     console.log(this.activeUser)
     console.log(this.user)
+  }
+
+  CallGets():void{
+    
   }
   
 
@@ -198,6 +215,32 @@ export class UserprofileComponent implements OnInit {
     })
   }
 
+
+  getActiveUserWishList():any{
+    this.listsService.getWishList(this.activeUser.id).subscribe((response:Wish[]) => {
+      this.activeUserWishList = response;
+    });
+  }
+
+ getActiveUserReadList():any{
+    this.listsService.getReadList(this.activeUser.id).subscribe((response:Read[]) => {
+      this.activeUserReadLists = response;
+    });
+  }
+
+getActiveUserDeniedList():any{
+    this.listsService.getDeniedList(this.activeUser.id).subscribe((response:Denied[]) => {
+      this.activeUserDeniedLists = response;
+    })
+  }
+
+getActiveUserFavoriteList():any{
+    this.listsService.getUserFavorites(this.activeUser.id).subscribe((response:Favorites[]) => {
+      this.activeUserFavoriteList = response;
+    })
+  }
+
+
   getThumbnail(book:Item):string{
     if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null)
     {
@@ -299,6 +342,47 @@ export class UserprofileComponent implements OnInit {
     });
   }
 
+
+  addToActiveUserReadList(book:Item):any{
+    this.listsService.addToReadList(this.getIsbn(book), this.activeUser.id).subscribe((response:Read) => {
+      console.log(response);
+      this.activeUserReadLists.push(response);
+    });
+  }
+
+  addActiveUserFavorite(book:Item):any{
+    if(book.volumeInfo.categories == undefined){
+      book.volumeInfo.categories = [];
+    }
+    if(book.volumeInfo.authors == undefined){
+      book.volumeInfo.authors = [];
+    }
+    if(book.volumeInfo.title == undefined){
+      book.volumeInfo.title = "";
+    }
+    this.listsService.addToFavoriteBooks(this.activeUser.id, this.getIsbn(book).trim().toString(), book.volumeInfo.title, book.volumeInfo.authors.toString(),
+    book.volumeInfo.categories.toString(), <number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, book.volumeInfo.description, this.getThumbnail(book)).subscribe((response: Favorites) => {
+      this.activeUserFavoriteList.push(response)
+      console.log(response);
+    });
+  }
+
+  addToActiveUserWishList(book:Item):any{
+    this.listsService.addToWishList(this.getIsbn(book), this.activeUser.id).subscribe((response:Wish) => {
+      console.log(response);
+      this.activeUserWishList.push(response);
+    });
+  }
+
+  addToActiveUserDeniedList(book:Item):any{
+    this.listsService.addToDeniedList(this.getIsbn(book), this.activeUser.id).subscribe((response:Denied) => {
+      console.log(response);
+      this.activeUserDeniedLists.push(response);
+    });
+  }
+
+
+
   checkIfInReadList(book:Item):boolean{
     let read: Read = {
       readListId: this.user.id,
@@ -310,6 +394,36 @@ export class UserprofileComponent implements OnInit {
   checkIfInFavoriteList(book:Item):boolean{
     return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book)) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book))
   }
+
+
+  checkIfInActiveUserReadList(book:Item):boolean{
+    let read: Read = {
+      readListId: this.activeUser.id,
+      isbn: this.getIsbn(book)
+    }
+    return this.activeUserReadLists.some(r => r.isbn == read.isbn && r.readListId == read.readListId)
+  }
+
+  checkIfInActiveUserFavoriteList(book:Item):boolean{
+    return this.activeUserFavoriteList.some(f => f.isbn.trim().toString() == this.getIsbn(book).trim().toString() && f.favoriteListId == this.activeUser.id)
+  }
+
+  checkIfInActiveUserWishList(book:Item):boolean{
+    let wish: Wish = {
+      wishListId: this.activeUser.id,
+      isbn: this.getIsbn(book)
+    }
+    return this.activeUserWishList.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
+  }
+
+  checkIfInActiveUserDeniedList(book:Item):boolean{
+    let denied: Denied = {
+      deniedListId: this.activeUser.id,
+      isbn: this.getIsbn(book)
+    }
+    return this.activeUserDeniedLists.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
+  }
+
 
   toggleFavoriteList():any{
     this.displayFavoriteList = !this.displayFavoriteList;

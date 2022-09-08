@@ -248,6 +248,7 @@
     <div class="recommendBoxUsers">
       <div *ngFor="let u of notRecommendedTo">
         <img
+          class="zoom"
           src="{{ u.photoUrl }}"
           (click)="sendRecommendation(recommendedBook, u)"
         />

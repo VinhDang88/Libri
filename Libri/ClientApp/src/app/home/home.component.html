@@ -419,6 +419,7 @@
     <div class="recommendBoxUsers">
       <div *ngFor="let u of notRecommendedTo">
         <img
+          class="zoom"
           src="{{ u.photoUrl }}"
           (click)="sendRecommendation(recommendedBook, u)"
         />
@@ -452,6 +453,7 @@
     <div class="recommendBoxUsers">
       <div *ngFor="let u of notRecommendedTo">
         <img
+          class="zoom"
           src="{{ u.photoUrl }}"
           (click)="sendUserRecommendation(userRecommendBook, u)"
         />
@@ -463,7 +465,7 @@
   </div>
 </div>
 
-<h3 *ngIf="recommendedByUsers != undefined && loggedIn" class="authorRecommend">
+<h3 *ngIf="recommendedByUsers.length > 0 && loggedIn" class="authorRecommend">
   Recommended by people you follow:
 </h3>
 <div

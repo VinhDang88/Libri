@@ -62,7 +62,7 @@ export class HomeComponent {
       this.getDeniedList();
       this.getUserFollowing();
       this.getFavoriteAuthor();
-      this.getRecommendationsFromUsers();
+      // this.getRecommendationsFromUsers();
       this.CheckForDuplicates();
     });
     
@@ -542,6 +542,14 @@ export class HomeComponent {
     })
   }
 
+  getUserRecommendedName(id:string):string{
+    let user:User = {} as User
+    this.usersService.GetUserById(id).subscribe((response:User) => {
+      user = response;
+    })
+    return user.name;
+  }
+
   nextRecommendation():number{
     console.log(this.recommendations.length)
     if(this.recommendationCount < this.recommendations.length - 1){
@@ -622,10 +630,12 @@ export class HomeComponent {
             this.topAuthorBooks3 = response;
           }
           //remove duplicate titles
-          this.CheckForDuplicates();
+          // this.CheckForDuplicates();
+          this.getRecommendationsFromUsers();
           console.log(this.recommendations);
         })
       })
     })
+    
   }
 }

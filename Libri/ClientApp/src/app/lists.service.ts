@@ -22,6 +22,7 @@ export class ListsService {
       if(ratingsCount == undefined){
         ratingsCount = 0;
       }
+      thumbnail = thumbnail.replace(/&/g, "%26");
       return this.http.post(`${this.baseUrl}${this.endpoint}/AddFavorite?favoriteListId=${favoriteListId}&isbn=${isbn}
       &title=${title}&author=${author}&subject=${subject}&averageRating=${averageRating}&ratingsCount=${ratingsCount}&description=${description}&thumbnail=${thumbnail}`, {});
     }

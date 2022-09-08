@@ -116,6 +116,78 @@
             <br />
             <p class="buttonText">Already Read</p>
           </button>
+          <button class="iconButton" *ngIf="checkIfInReadList(f)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+        </div>
+        <!-- if not logged list buttons will be viewable -->
+        <div *ngIf="!checkIfPageOwner() && loggedIn" class="bookButtons">
+          <!-- add favorite -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserFavoriteList(f)"
+            (click)="addActiveUserFavorite(f)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserFavoriteList(f)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+          <!-- add to readlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserReadList(f)"
+            (click)="addToActiveUserReadList(f)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserReadList(f)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+          <!-- add to wishlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserWishList(f)"
+            (click)="addToActiveUserWishList(f)"
+          >
+            <span id="icon" class="material-symbols-outlined"> menu_book </span>
+            <br />
+            <p class="buttonText">Wishlist</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserWishList(f)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Wish List</p>
+          </button>
+          <!-- add to denied list -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserDeniedList(f)"
+            (click)="addToActiveUserDeniedList(f)"
+          >
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Uninterested</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserDeniedList(f)">
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Blocked</p>
+          </button>
         </div>
       </div>
     </div>
@@ -150,6 +222,73 @@
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />
             <p class="buttonText">Remove</p>
+          </button>
+        </div>
+        <!-- if not logged list buttons will be viewable -->
+        <div *ngIf="!checkIfPageOwner() && loggedIn" class="bookButtons">
+          <!-- add favorite -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserFavoriteList(w)"
+            (click)="addActiveUserFavorite(w)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserFavoriteList(w)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+          <!-- add to readlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserReadList(w)"
+            (click)="addToActiveUserReadList(w)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserReadList(w)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+          <!-- add to wishlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserWishList(w)"
+            (click)="addToActiveUserWishList(w)"
+          >
+            <span id="icon" class="material-symbols-outlined"> menu_book </span>
+            <br />
+            <p class="buttonText">Wishlist</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserWishList(w)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Wish List</p>
+          </button>
+          <!-- add to denied list -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserDeniedList(w)"
+            (click)="addToActiveUserDeniedList(w)"
+          >
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Uninterested</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserDeniedList(w)">
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Blocked</p>
           </button>
         </div>
       </div>
@@ -197,6 +336,78 @@
             <br />
             <p class="buttonText">Favorite</p>
           </button>
+          <button class="iconButton" *ngIf="checkIfInFavoriteList(r)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+        </div>
+        <!-- if not logged list buttons will be viewable -->
+        <div *ngIf="!checkIfPageOwner() && loggedIn" class="bookButtons">
+          <!-- add favorite -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserFavoriteList(r)"
+            (click)="addActiveUserFavorite(r)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserFavoriteList(r)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+          <!-- add to readlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserReadList(r)"
+            (click)="addToActiveUserReadList(r)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserReadList(r)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+          <!-- add to wishlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserWishList(r)"
+            (click)="addToActiveUserWishList(r)"
+          >
+            <span id="icon" class="material-symbols-outlined"> menu_book </span>
+            <br />
+            <p class="buttonText">Wishlist</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserWishList(r)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Wish List</p>
+          </button>
+          <!-- add to denied list -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserDeniedList(r)"
+            (click)="addToActiveUserDeniedList(r)"
+          >
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Uninterested</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserDeniedList(r)">
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Blocked</p>
+          </button>
         </div>
       </div>
     </div>
@@ -231,6 +442,73 @@
             <span id="icon" class="material-symbols-outlined"> delete </span
             ><br />
             <p class="buttonText">Remove</p>
+          </button>
+        </div>
+        <!-- if not logged list buttons will be viewable -->
+        <div *ngIf="!checkIfPageOwner() && loggedIn" class="bookButtons">
+          <!-- add favorite -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserFavoriteList(d)"
+            (click)="addActiveUserFavorite(d)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserFavoriteList(d)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+          <!-- add to readlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserReadList(d)"
+            (click)="addToActiveUserReadList(d)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserReadList(d)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+          <!-- add to wishlist -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserWishList(d)"
+            (click)="addToActiveUserReadList(d)"
+          >
+            <span id="icon" class="material-symbols-outlined"> menu_book </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserWishList(d)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Wish List</p>
+          </button>
+          <!-- add to denied list -->
+          <button
+            class="iconButton"
+            *ngIf="!checkIfInActiveUserDeniedList(d)"
+            (click)="addToActiveUserReadList(d)"
+          >
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="checkIfInActiveUserDeniedList(d)">
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Blocked</p>
           </button>
         </div>
       </div>

@@ -227,7 +227,7 @@
   </div>
   <!-- displays all info on recommended book in container -->
   <div class="recommendedInfo">
-    <h2>
+    <h2 style="text-shadow: none">
       <a
         routerLink="/Book/{{ getIsbn(recommendations[recommendationCount]) }}"
         >{{ recommendations[recommendationCount].volumeInfo.title }}</a
@@ -606,9 +606,9 @@
 </div>
 
 <!-- Displays top recommended author -->
-<h3 *ngIf="topAuthorBooks.items != undefined" class="authorRecommend">
+<h2 *ngIf="topAuthorBooks.items != undefined" class="authorRecommend">
   Recommendations based on: {{ topAuthors[0] }}
-</h3>
+</h2>
 <div *ngIf="topAuthorBooks.items != undefined" class="searchResultsContainer">
   <div
     class="searchBook"
@@ -733,9 +733,9 @@
 </div>
 
 <!-- Displays second recommended author -->
-<h3 *ngIf="topAuthorBooks2.items != undefined" class="authorRecommend">
+<h2 *ngIf="topAuthorBooks2.items != undefined" class="authorRecommend">
   Recommendations based on: {{ topAuthors[1] }}
-</h3>
+</h2>
 <div *ngIf="topAuthorBooks2.items != undefined" class="searchResultsContainer">
   <div
     class="searchBook"
@@ -860,9 +860,9 @@
 </div>
 
 <!-- Displays third recommended author -->
-<h3 *ngIf="topAuthorBooks3.items != undefined" class="authorRecommend">
+<h2 *ngIf="topAuthorBooks3.items != undefined" class="authorRecommend">
   Recommendations based on: {{ topAuthors[2] }}
-</h3>
+</h2>
 <div *ngIf="topAuthorBooks3.items != undefined" class="searchResultsContainer">
   <div
     class="searchBook"

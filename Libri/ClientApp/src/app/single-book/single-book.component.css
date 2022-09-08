@@ -1,6 +1,6 @@
 .container{
     z-index: 1;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     margin-top: 2%;
     margin-bottom: 2%;
     border: 3px solid black;
@@ -26,12 +26,15 @@
 .iconButton{
     transition: transform .5s;
     border: none;
-    background:none;
+    background-color: #c3ebc6;
+    color: #212529;
+    background: none;
 }
 
 .iconButton:hover{
     transform: scale(1.1);
     z-index: 0;
+    background: none;
 }
 
 #icon{
@@ -40,6 +43,8 @@
 
 .buttonText{
     font-size: xx-small;
+    background-color: #c3ebc6;
+    color:#212529;
 }
 
 .reviewButtonContainer{
@@ -104,7 +109,7 @@
     border-radius: 4px;
     border-width: 1px;
     box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     padding-top: 1.5%;
     padding-bottom: 1.5%;
 }
@@ -118,6 +123,14 @@
     margin: auto;
     margin-top: 2%;
     width: 90%;
+    background-color: #f0f0f0;
+    border: 3px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.reviewFormButton:hover{
+    background-color: #999;
 }
 
 .closeFormButton{
@@ -141,18 +154,22 @@ textarea{
     display: block;
     margin:auto;
     background: none;
-}
+    background-color: #aaaaaa00;
+    color: #212529;
+    background: none;
+  }
 
 .scrollRecommendButton:hover{
     transform: scale(1.1);
     z-index: 0;
+    background-color: #a9ddb1;
 }
 
 .recommendUser{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     max-width: 30%;
     margin-top: 1%;
     border: 3px solid black;
@@ -182,7 +199,7 @@ textarea{
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #aaaaaa;
     border-radius: 10px;
   }
   
@@ -224,7 +241,7 @@ textarea{
     width: 300px;
     border: 3px solid black;
     border-radius: 5px;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
 }
 
 .searchImageAndButtons{
@@ -274,5 +291,14 @@ textarea{
     text-align: center;
 }
 
+a{
+    color: #212529;
+}
 
+a:hover{
+    color: #0066ff;
+}
 
+a:link{
+    text-decoration: none;
+}

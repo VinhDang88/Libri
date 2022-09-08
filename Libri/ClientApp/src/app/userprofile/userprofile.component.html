@@ -669,7 +669,7 @@
       <h3 *ngIf="checkIfPageOwner()">Your Reviews:</h3>
       <h3 *ngIf="!checkIfPageOwner()">{{ user.firstName }}'s Reviews</h3>
     </div>
-    <div class="reviewButtons">
+    <div *ngIf="userReviews.length > 0" class="reviewButtons">
       <button
         *ngIf="userReviews.length > 0"
         class="iconButton"

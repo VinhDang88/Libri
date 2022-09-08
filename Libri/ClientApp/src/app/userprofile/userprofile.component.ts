@@ -102,7 +102,7 @@ export class UserprofileComponent implements OnInit{
         this.getActiveUserFavoriteList();
         this.getActiveUserWishList();
         this.getActiveUserReadList();
-        this.getActiveUserDeniedList();
+        this.getActiveUserDeniedList();  
       })
     });
     
@@ -127,9 +127,11 @@ export class UserprofileComponent implements OnInit{
     if(this.activeUser == null){
       this.pageOwner = false
     }
-    else if(this.loggedIn && this.activeUser.id == this.user.id && this.activeUser.photoUrl == this.user.photoUrl){
+    else if(this.loggedIn && this.activeUser.id == this.user.id){
       this.pageOwner = true;
     }
+    console.log(this.activeUser)
+    console.log(this.user)
     return this.pageOwner;
   }
 
@@ -224,7 +226,6 @@ export class UserprofileComponent implements OnInit{
     })
   }
 
-
   getActiveUserWishList():any{
     this.listsService.getWishList(this.activeUser.id).subscribe((response:Wish[]) => {
       this.activeUserWishList = response;
@@ -248,7 +249,6 @@ getActiveUserFavoriteList():any{
       this.activeUserFavoriteList = response;
     })
   }
-
 
   getThumbnail(book:Item):string{
     if(<string>book.volumeInfo.imageLinks?.thumbnail == undefined || <string>book.volumeInfo.imageLinks?.thumbnail == null)
@@ -472,8 +472,6 @@ getActiveUserFavoriteList():any{
     });
   }
 
-
-
   checkIfInReadList(book:Item):boolean{
     let read: Read = {
       readListId: this.user.id,
@@ -485,7 +483,6 @@ getActiveUserFavoriteList():any{
   checkIfInFavoriteList(book:Item):boolean{
     return this.favListItems.some(f => this.getIsbn(f) == this.getIsbn(book)) || this.favoriteList.some(f => f.favoriteListId  == this.getIsbn(book))
   }
-
 
   checkIfInActiveUserReadList(book:Item):boolean{
     let read: Read = {
@@ -514,7 +511,6 @@ getActiveUserFavoriteList():any{
     }
     return this.activeUserDeniedLists.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
   }
-
 
   toggleFavoriteList():any{
     this.displayFavoriteList = !this.displayFavoriteList;
@@ -690,5 +686,4 @@ getActiveUserFavoriteList():any{
     })
     return this.pageOwnerTopAuthors;
   }
-
 }

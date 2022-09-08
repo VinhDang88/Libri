@@ -1,5 +1,5 @@
 .listContainer{
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     border: 3px solid black;
     border-radius: 5px;
     color: #3B3C3E;
@@ -49,12 +49,12 @@
 
 .displayButton{
     width: 25%;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     border: 3px solid;
 }
 
 .displayButton:hover{
-    background-color: #798ea4;
+    background-color: #a9ddb1;
 }
 
 .profileContainer{
@@ -63,7 +63,7 @@
     border: 3px solid black;
     border-radius: 5px;
     box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     margin:4%;
     padding: 10px 7px 5px;
     width: 80%;
@@ -73,7 +73,7 @@
 .followContainer{
     display: flex;
     justify-content: space-between;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     margin:4%;
     padding: 10px 7px 5px;
     width: 80%;
@@ -105,6 +105,8 @@ h1,h2,h3,h4,h5,h6,p{
 
 .buttonText{
     font-size: xx-small;
+    background-color: #c3ebc6;
+    color:#212529;
 }
 
 .bookContainer{
@@ -208,6 +210,3 @@ a:link{
     border-radius: 5px;
     margin-bottom: 2%;
 }
-
-
-

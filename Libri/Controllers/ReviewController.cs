@@ -32,10 +32,6 @@ namespace Libri.Controllers
         [HttpGet("GetReviewsByBook")]
         public List<Review> GetReviewsByBook(string isbn)
         {
-            if (context.Reviews.Where(r => r.Isbn == isbn).Count() < 1)
-            {
-                return null;
-            }
             List<Review> reviews = context.Reviews.Where(r => r.Isbn == isbn).ToList();
             reviews.Reverse();
             return reviews;
@@ -44,10 +40,6 @@ namespace Libri.Controllers
         [HttpGet("GetTopReviewsByBook")]
         public List<Review> GetTopReviewsByBook(string isbn)
         {
-            if (context.Reviews.Where(r => r.Isbn == isbn).Count() < 1)
-            {
-                return null;
-            }
             List<Review> reviews = context.Reviews.Where(r => r.Isbn == isbn).ToList();
             List<Review> topReviews = reviews.OrderByDescending(r => r.Votes).ThenByDescending(r => r.DatePosted).ToList();
             return topReviews;
@@ -56,10 +48,6 @@ namespace Libri.Controllers
         [HttpGet("GetReviewsByUser")]
         public List<Review> GetReviewsByUser(string userId)
         {
-            if (context.Reviews.Where(r => r.UserId == userId).Count() < 1)
-            {
-                return null;
-            }
             List<Review> reviews = context.Reviews.Where(r => r.UserId == userId).ToList();
             reviews.Reverse();
             return reviews;
@@ -68,10 +56,6 @@ namespace Libri.Controllers
         [HttpGet("GetTopReviewsByUser")]
         public List<Review> GetTopReviewsByUser(string userId)
         {
-            if (context.Reviews.Where(r => r.UserId == userId).Count() < 1)
-            {
-                return null;
-            }
             List<Review> reviews = context.Reviews.Where(r => r.UserId == userId).ToList();
             List<Review> topReviews = reviews.OrderByDescending(r => r.Votes).ThenByDescending(r => r.DatePosted).ToList();
             return topReviews;

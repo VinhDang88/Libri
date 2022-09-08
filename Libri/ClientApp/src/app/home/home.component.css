@@ -16,14 +16,12 @@
     margin-top:2%;
 }
 
-
-
 .searchedUser{
     display: flex;
     justify-content: center;
     flex-direction: row;
     border: 3px solid black;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     max-width: 30%;
     overflow:scroll;
     overflow-y:hidden;
@@ -39,6 +37,7 @@
 
 .dropdownButtonText{
     margin-bottom: .1%;
+    color:#212529
 }
 
 .dropButtonTextAndIcon{
@@ -48,18 +47,18 @@
 }
 
 .dropdownBox{
-    background-color: #EEEEEE;
+    background-color: #f0f0f0;
     border: 3px solid black;
     border-radius: 5px;
     cursor: pointer;
     margin:0%;
 }
 
-.searchSwitchButton:hover{
+.dropdownBox:hover{
     background-color: #999;
 }
 
-.dropdownBox:hover{
+.searchSwitchButton:hover{
     background-color: #999;
 }
 
@@ -96,7 +95,7 @@
     width: 300px;
     border: 3px solid black;
     border-radius: 5px;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
 }
 
 .searchImageAndButtons{
@@ -116,12 +115,12 @@
     width: auto;
     height: auto;
     margin: auto;
-  }
+}
   
 .zoom:hover {
     transform: scale(1.1);
     z-index: 0;
-  }
+}
 
 .searchInfo{
     font-size: smaller;
@@ -140,6 +139,7 @@
 
 #searchIcon{
     font-size: 220%;
+    color: #212529;
 }
 
 .recommendedContainer{
@@ -148,7 +148,7 @@
     border: 3px solid black;
     border-radius: 5px;
     padding:2%;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     width: 80%;
     margin-left: 10%;
     margin-bottom: 1%;
@@ -175,11 +175,13 @@
 }
 
 .recommendationRecommendButton{
-    transition: transform .5s;
+    background-color: #aaaaaa00;
+    color: #212529;
     background: none;
 }
 
 .recommendationRecommendButton:hover{
+    background-color: #a9ddb1;
     transform: scale(1.1);
     z-index: 0;
 }
@@ -190,7 +192,13 @@
 
 .nextRecommendButton{
     margin-right: 3%;
-    background-color: #EEEEEE;
+    background-color: #aaaaaa00;
+    color: #212529;
+}
+
+.nextRecommendButton:hover{
+    background-color: #a9ddb1;
+    z-index: 0;
 }
 
 .layer2{
@@ -219,7 +227,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background-color: #9CC0E7;
+    background-color: #c3ebc6;
     max-width: 30%;
     margin-top: 1%;
     border: 3px solid black;
@@ -249,33 +257,45 @@
 
 .buttonText{
     font-size: xx-small;
+    background-color: #c3ebc6;
+    color:#212529;
 }
 
 .iconButton{
     transition: transform .5s;
     border: none;
-    background:none;
+    background-color: #c3ebc6;
+    color: #212529;
+    background: none;
 }
 
 .iconButton:hover{
     transform: scale(1.1);
     z-index: 0;
+    background: none;
 }
 
 h1{
     margin-left: 10%;
 }
 
-h1,h2,h3,h4,h5,h6,p{
+h1,h2{
     font-family: 'Noto Sans', sans-serif;
+    color: #c3ebc6;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+h3,h4,h5,h6,p{
+    font-family: 'Noto Sans', sans-serif;
+    color: #212529;
 }
 
 a{
-    color: rgb(20, 20, 20)
+    color: #212529;
 }
 
 a:hover{
-    color: rgb(0, 102, 255);
+    color: #0066ff;
 }
 
 a:link{
@@ -289,32 +309,36 @@ a:link{
 /* width */
 ::-webkit-scrollbar {
     height: 10px;
-  }
+}
   
-  /* Track */
-  ::-webkit-scrollbar-track {
+/* Track */
+::-webkit-scrollbar-track {
     background: none;
-  }
+}
   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #888;
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #aaaaaa;
     border-radius: 10px;
-  }
+}
   
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: #555;
-  }
+}
 
-  .scrollRecommendButton{
+.scrollRecommendButton{
     transition: transform .5s;
     display: block;
     margin:auto;
     background: none;
-  }
+    background-color: #aaaaaa00;
+    color: #212529;
+    background: none;
+}
 
-  .scrollRecommendButton:hover{
+.scrollRecommendButton:hover{
     transform: scale(1.1);
     z-index: 0;
+    background-color: #a9ddb1;
 }

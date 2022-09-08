@@ -106,7 +106,7 @@
 
 --SELECT * FROM Followers;
 
-SELECT * FROM UserReccomendations;
+--SELECT * FROM UserReccomendations;
 
 --SELECT * FROM WishLists
 --JOIN Users ON WishLists.WishListId=Users.Id;
@@ -119,14 +119,16 @@ SELECT * FROM UserReccomendations;
 
 --DELETE FROM DeniedLists;
 
---DELETE FROM Reviews;
+--DELETE FROM Reviews
+--Where id = 15;
+	
 
 --DELTE FROM Votes;
 
 --SELECT * FROM FavoriteLists
 --JOIN Users ON FavoriteLists.FavoriteListId=Users.Id;
 
---ALTER TABLE FavoriteLists
+--ALTER TABLE UserReccomendations
 --ADD Description NVARCHAR(4000);
 
 --ALTER TABLE FavoriteLists

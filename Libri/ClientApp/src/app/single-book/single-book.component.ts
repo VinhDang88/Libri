@@ -12,6 +12,9 @@ import { Review } from '../review';
 import { ReviewsService } from '../reviews.service';
 import { Wish } from '../wish';
 import {formatDate} from '@angular/common';
+import { User } from '../user';
+import { UserReccomendation } from '../user-reccomendation';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-single-book',
@@ -32,9 +35,17 @@ export class SingleBookComponent implements OnInit {
     newReview:Review = {} as Review;
     reviews:Review[] = [];
     showReviews: boolean = false;
+    toggleUserRecommendations:boolean = false;
+    notRecommendedTo:User[] = [];
+    recommendedBook:Item = {} as Item;
+    following:string[] = [];
+    userFollowing:User[] = [];
+    author:string = "";
+    authorBooks: Books = {} as Books;
 
     constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
-       private reviewsService: ReviewsService, private route:ActivatedRoute, @Inject(LOCALE_ID) private locale: string) { }
+       private reviewsService: ReviewsService, private route:ActivatedRoute, @Inject(LOCALE_ID) private locale: string,
+       private usersService:UsersService) { }
 
     ngOnInit(): void {
       //displayed book's isbn is stored from the page url
@@ -54,6 +65,7 @@ export class SingleBookComponent implements OnInit {
             this.getReviews(); 
           })
         }
+        this.getAuthor();
       })
       //logs in user
       this.authService.authState.subscribe((user) => {
@@ -64,6 +76,7 @@ export class SingleBookComponent implements OnInit {
         this.getFavoriteList();
         this.getReadList();
         this.getDeniedList();
+        this.getUserFollowing();
     })
     
   }
@@ -209,6 +222,72 @@ export class SingleBookComponent implements OnInit {
     }
   }
 
+  getUserFollowing():any{
+    //gets the list of string ids of users that are following the current user
+    this.usersService.GetFollowing(this.user.id).subscribe((response:string[]) => {
+      response.forEach((f:string) => {
+         //gets a list of user objects from the ids that are following the current user
+        this.usersService.GetUserById(f).subscribe((response:User) => {
+          this.userFollowing.push(response);
+        })
+      });
+    })
+    console.log(this.userFollowing)
+    return this.userFollowing;
+  }
+
+  getNotRecommendedTo(followers:User[], book:Item):User[]
+  {
+    this.recommendedBook = book;
+    this.notRecommendedTo = [];
+    followers.forEach(u => {
+      this.usersService.GetUserRecommendations(u.id).subscribe((response:UserReccomendation[]) => {
+        let notRecommended:boolean = (response.some((r:UserReccomendation) => r.isbn == this.getIsbn(book)) == false)
+        if(notRecommended){
+          this.notRecommendedTo.push(u)
+        }
+      })
+    })
+    return this.notRecommendedTo;
+  }
+
+  sendRecommendation(book:Item, reccomendedTo:User):any{
+    if(book.volumeInfo.categories == undefined){
+      book.volumeInfo.categories = [];
+    }
+    if(book.volumeInfo.authors == undefined){
+      book.volumeInfo.authors = [];
+    }
+    if(book.volumeInfo.title == undefined){
+      book.volumeInfo.title = "";
+    }
+    if(book.volumeInfo.averageRating == undefined)
+    {
+      book.volumeInfo.averageRating = 0;
+    }
+    if(book.volumeInfo.ratingsCount == undefined)
+    {
+      book.volumeInfo.ratingsCount = 0;
+    }
+    if(book.volumeInfo.description == undefined)
+    {
+      book.volumeInfo.description = "";
+    }
+    this.usersService.SendRecommendation(reccomendedTo.id, this.user.id.trim().toString(), this.getIsbn(book), book.volumeInfo.title.trim().toString(), book.volumeInfo.authors.toString(),
+    book.volumeInfo.categories.toString(),<number>book.volumeInfo.averageRating, <number>book.volumeInfo.ratingsCount, this.getThumbnail(book), book.volumeInfo.description).subscribe(
+      (response:UserReccomendation) => {
+        let i = this.notRecommendedTo.indexOf(reccomendedTo)
+        this.notRecommendedTo.splice(i,1);
+      })
+  }
+
+  toggleUserRecommendation():boolean{
+    if(this.toggleUserRecommendations){
+      this.notRecommendedTo = [];
+    }
+    return this.toggleUserRecommendations = !this.toggleUserRecommendations;
+  }
+
   toggleReviewForm():boolean{
     this.showReviewForm = !this.showReviewForm;
     return this.showReviewForm;
@@ -220,6 +299,7 @@ export class SingleBookComponent implements OnInit {
     this.user.name, review).subscribe((response:Review) => {
       console.log(response);
       this.newReview = response;
+      this.reviews.unshift(response);
     })
     this.getReviews();
   }
@@ -261,5 +341,28 @@ export class SingleBookComponent implements OnInit {
     this.reviewsService.DownVote(this.user.id, review.id).subscribe((response:Review) =>
     this.reviews[this.reviews.indexOf(review)] = response
     )
+  }
+
+  getAuthor():void{
+    this.author = this.displayBook.volumeInfo.authors.toString();
+    this.bookService.getBooks("", this.author, "").subscribe((response:Books) => {
+      this.authorBooks = response;
+    })
+  }
+
+  CheckForDuplicateAny(books:Item[]):Item[]{
+    //remove dups based on book title
+    books = books.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.volumeInfo.title.trim() == value.volumeInfo.title.trim()
+    ))
+    )
+    books.forEach((r:Item) => {
+      if(this.CheckIfInDeniedList(r)) {
+        let i = books.indexOf(r)
+        books.splice(i,1);
+      } 
+    })
+    return books;
   }
 }

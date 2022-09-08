@@ -78,6 +78,14 @@
     left:3%;
 }
 
+.recommendLayer3{
+    position:fixed;
+    z-index: 3;
+    width: 200%;
+    top:40%;
+    left:18%;
+}
+
 .reviewForm{
     width: 80%;
     display: block;
@@ -121,4 +129,133 @@ textarea{
     border-radius: 4px;
     font-size: x-large;
 }
+
+.scrollRecommendButton{
+    display: block;
+    margin:auto;
+    background: none;
+}
+
+.recommendUser{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #9CC0E7;
+    max-width: 30%;
+    margin-top: 1%;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 1px;
+    padding-top: 5px;
+}
+
+.recommendBoxUsers{
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
+    margin-left: 10%;
+    overflow:scroll;
+    overflow-y:hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+    height: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.authorRecommend{
+    margin-left: 7%
+}
+
+.searchResultsContainer{
+    display: flex;
+    color: #3B3C3E;
+    font-size: 12px;
+    font-weight: bold;
+    left: -1px;
+    width:86%;
+    margin-left: 7%;
+    height: 10%;
+    padding: none;
+    border: none;
+    max-width: 100%;
+    overflow:scroll;
+    overflow-y:hidden;
+    margin-bottom: 1%;
+}
+
+.searchBook{
+    margin-right: .2%;
+}
+
+.searchResult{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 300px;
+    border: 3px solid black;
+    border-radius: 5px;
+    background-color: #9CC0E7;
+}
+
+.searchImageAndButtons{
+    display:flex;
+    justify-content: center;
+}
+
+.searchImage{
+    width:100%;
+    margin-right: 0%;
+    margin-left: 8%;
+    margin-top: 4%;
+}
+
+.zoom {
+    transition: transform .5s;
+    width: auto;
+    height: auto;
+    margin: auto;
+}
+
+.searchInfo{
+    font-size: smaller;
+    width:100%;
+    margin-bottom: 1%;
+    text-align: center;
+}
+
+.searchButtons{
+    width:100%;
+    margin:none;
+    padding: none;
+    display:flex;
+    flex-direction: column;
+}
+
+#searchIcon{
+    font-size: 220%;
+}
+
+.noReviewsMessage{
+    text-align: center;
+}
+
+
 

@@ -700,10 +700,7 @@
             <br />
             <p class="buttonText">Uninterested</p>
           </button>
-          <button
-            class="iconButton"
-            *ngIf="loggedIn && !CheckIfInDeniedList(b)"
-          >
+          <button class="iconButton" *ngIf="loggedIn && CheckIfInDeniedList(b)">
             <span id="searchIcon" class="material-symbols-outlined">
               dangerous
             </span>

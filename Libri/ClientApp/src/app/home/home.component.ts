@@ -432,10 +432,10 @@ export class HomeComponent {
   }
 
   toggleUserRecommendation():boolean{
-    if(this.toggleUserRecommendedRecommendations){
+    if(this.toggleUserRecommendations){
       this.notRecommendedTo = [];
     }
-    return this.toggleUserRecommendedRecommendations = !this.toggleUserRecommendedRecommendations;
+    return this.toggleUserRecommendations = !this.toggleUserRecommendations;
   }
 
   toggleUserRecommendedRecommendation():boolean{

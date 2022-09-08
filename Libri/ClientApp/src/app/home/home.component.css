@@ -16,6 +16,8 @@
     margin-top:2%;
 }
 
+
+
 .searchedUser{
     display: flex;
     justify-content: center;
@@ -51,6 +53,18 @@
     border-radius: 5px;
     cursor: pointer;
     margin:0%;
+}
+
+.searchSwitchButton:hover{
+    background-color: #999;
+}
+
+.dropdownBox:hover{
+    background-color: #999;
+}
+
+.searchButton:hover{
+    background-color: #999;
 }
 
 .searchResultsContainer{
@@ -161,8 +175,14 @@
 }
 
 .recommendationRecommendButton{
+    transition: transform .5s;
     background: none;
-  }
+}
+
+.recommendationRecommendButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
+}
 
 .recommendedButtons{
     padding-right: 3%;
@@ -232,8 +252,14 @@
 }
 
 .iconButton{
+    transition: transform .5s;
     border: none;
     background:none;
+}
+
+.iconButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 h1{
@@ -282,7 +308,13 @@ a:link{
   }
 
   .scrollRecommendButton{
+    transition: transform .5s;
     display: block;
     margin:auto;
     background: none;
   }
+
+  .scrollRecommendButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
+}

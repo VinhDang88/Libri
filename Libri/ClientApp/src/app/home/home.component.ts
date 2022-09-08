@@ -336,22 +336,7 @@ export class HomeComponent {
         let i = result.indexOf(r)
         result.splice(i,1);
         // console.log(r.volumeInfo.title)
-      } 
-      // else if(this.CheckIfInFavoriteList(r)) {
-      //   let i = result.indexOf(r)
-      //   result.splice(i,1);
-      //   // console.log(r.volumeInfo.title)
-      // } 
-      // else if(this.CheckIfInReadList(r)) {
-      //   let i = result.indexOf(r)
-      //   result.splice(i,1);
-      //   // console.log(r.volumeInfo.title)
-      // } 
-      // else if(this.CheckIfInWishList(r)) {
-      //   let i = result.indexOf(r)
-      //   result.splice(i,1);
-      //   // console.log(r.volumeInfo.title)
-      // } 
+      }  
     })
     // console.log(result);
     this.books.items = result;

@@ -1,7 +1,7 @@
 .listContainer{
     background-color: #9CC0E7;
     border: 3px solid black;
-    border-radius: 5px 0 4px 0;
+    border-radius: 5px;
     color: #3B3C3E;
     font-size: 12px;
     font-weight: bold;
@@ -14,12 +14,19 @@
     margin-left: 10%;
     margin-top: 2%;
     margin-bottom: 3%;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
 }
 
 .followButton{
+    transition: transform .5s;
     margin-top: 25%;
     border: none;
     background:none;
+}
+
+.followButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 .pageOwnerInfo{
@@ -37,6 +44,7 @@
     margin-bottom: .25%;
     width: 80%;
     margin-left: 10%;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
 }
 
 .displayButton{
@@ -45,11 +53,26 @@
     border: 3px solid;
 }
 
+.displayButton:hover{
+    background-color: #798ea4;
+}
+
 .profileContainer{
     display: flex;
     justify-content: space-between;
     border: 3px solid black;
-    border-radius: 5px 0 4px 0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    background-color: #9CC0E7;
+    margin:4%;
+    padding: 10px 7px 5px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.followContainer{
+    display: flex;
+    justify-content: space-between;
     background-color: #9CC0E7;
     margin:4%;
     padding: 10px 7px 5px;
@@ -66,8 +89,14 @@ h1,h2,h3,h4,h5,h6,p{
 }
 
 .iconButton{
+    transition: transform .5s;
     border: none;
     background:none;
+}
+
+.iconButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 #icon{
@@ -148,6 +177,15 @@ a:link{
     background: #555;
 }
 
+.followScroll{
+    display: flex;
+    justify-content: center;
+    max-width: 60%;
+    margin-left: 20%;
+    overflow:scroll;
+    overflow-y:hidden;
+}
+
 .review{
     margin-right: 2%;
     margin-left:2%;
@@ -157,3 +195,19 @@ a:link{
     padding: 1%;
     font-size: small;
 }
+
+.reviewLabel{
+    display: inline-block;
+    margin-left: 3%;
+}
+
+.reviewButtons{
+    display: inline-block;
+    margin-left: 25%;
+    border: 3px solid black;
+    border-radius: 5px;
+    margin-bottom: 2%;
+}
+
+
+

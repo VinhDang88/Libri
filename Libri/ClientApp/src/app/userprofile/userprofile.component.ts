@@ -55,6 +55,7 @@ export class UserprofileComponent implements OnInit{
   userRecommendations:UserReccomendation[] = []; 
   userReviews:Review[] = [];
   pageOwnerTopAuthors:string[] = [];
+  followingReadCount:number[] = [];
 
   constructor(private authService: SocialAuthService, private listsService: ListsService, private bookService: BooksService,
      private route:ActivatedRoute, private usersService: UsersService, private reviewService: ReviewsService, @Inject(LOCALE_ID) private locale: string) { }
@@ -350,6 +351,88 @@ getActiveUserFavoriteList():any{
     });
   }
 
+  addRecommendedFavorite(book:UserReccomendation):any{
+    if(book.subject == undefined){
+      book.subject = "";
+    }
+    if(book.author == undefined){
+      book.author = "";
+    }
+    if(book.title == undefined){
+      book.title = "";
+    }
+    if(book.description == undefined){
+      book.description = "";
+    }
+    this.listsService.addToFavoriteBooks(this.user.id, <string>book.isbn, book.title, book.author,
+    book.subject, <number>book.averageRating, <number>book.ratingsCount, book.description, book.bookThumbnailUrl).subscribe((response: Favorites)=>{
+      this.favoriteList.push(response)
+      this.favoriteList = [];
+      this.favListItems = [];
+      this.getFavoriteList();
+      console.log(response);
+    });
+  }
+
+  addRecommendedToWishList(book:UserReccomendation):any{
+    this.listsService.addToWishList(book.isbn, this.user.id).subscribe((response:Wish) => {
+      console.log(response);
+      this.wishList = [];
+      this.wishListItems = [];
+      this.getWishList();
+      this.wishList.push(response);
+    });
+  }
+
+  addRecommendedToReadList(book:UserReccomendation):any{
+    this.listsService.addToReadList(book.isbn, this.user.id).subscribe((response:Read) => {
+      console.log(response);
+      this.readLists = [];
+      this.readListItems = [];
+      this.getReadList();
+      this.readLists.push(response);
+    });
+  }
+
+  addRecommendedToDeniedList(book:UserReccomendation):any{
+    this.listsService.addToDeniedList(book.isbn, this.user.id).subscribe((response:Denied) => {
+      console.log(response);
+      this.deniedLists = [];
+      this.deniedListItems = [];
+      this.getDeniedList();
+      this.deniedLists.push(response);
+    });
+  }
+
+  CheckIfRecommendedInFavoriteList(book:UserReccomendation):boolean{
+    return this.favoriteList.some(f => f.isbn.trim().toString() == book.isbn)
+  }
+
+  //Create a toggle that will hide Wish list button after user clicks on the button
+  CheckIfRecommendedInWishList(book:UserReccomendation):boolean{
+  let wish: Wish = {
+    wishListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.wishList.some(w=> w.isbn == wish.isbn && w.wishListId == wish.wishListId)
+  }
+
+  CheckIfRecommendedInReadList(book:UserReccomendation):boolean{
+  let read: Read = {
+    readListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.readLists.some(r=> r.isbn == read.isbn && r.readListId == read.readListId)
+  }
+
+  CheckIfRecommendedInDeniedList(book:UserReccomendation):boolean{
+  let denied: Denied = {
+    deniedListId: this.user.id,
+    isbn: book.isbn
+  }
+  return this.deniedLists.some(d=> d.isbn == denied.isbn && d.deniedListId == denied.deniedListId)
+  }
+
 
   addToActiveUserReadList(book:Item):any{
     this.listsService.addToReadList(this.getIsbn(book), this.activeUser.id).subscribe((response:Read) => {
@@ -544,7 +627,9 @@ getActiveUserFavoriteList():any{
       response.forEach(u => {
         this.usersService.GetUserById(u).subscribe((response:User) => {
           this.followingUsers.push(response);
-    })})})
+        })
+      })
+    })
   }
 
   getPageOwnerFollowedUsers():any{
@@ -577,6 +662,12 @@ getActiveUserFavoriteList():any{
     })
   }
 
+  getUserTopReviews():any{
+    this.reviewService.GetTopReviewsByUser(this.user.id).subscribe((response:Review[]) => {
+      this.userReviews = response
+    })
+  }
+
   formatReviewDate(date:Date):string{
     return formatDate(date,'short',this.locale);
   }
@@ -599,4 +690,5 @@ getActiveUserFavoriteList():any{
     })
     return this.pageOwnerTopAuthors;
   }
+
 }

@@ -1,6 +1,9 @@
 <div class="chooseSearch">
   <div>
-    <button (click)="searchDropdownToggle = !searchDropdownToggle">
+    <button
+      class="searchSwitchButton"
+      (click)="searchDropdownToggle = !searchDropdownToggle"
+    >
       <div class="dropButtonTextAndIcon">
         <p class="dropdownButtonText">Search For: {{ searchType }}</p>
         <span class="material-symbols-outlined"> arrow_drop_down </span>
@@ -35,7 +38,7 @@
         placeholder="Search for users"
         ngModel
       />
-      <button>Search</button>
+      <button class="searchButton">Search</button>
     </form>
   </div>
   <!-- searchbar, allows search w/ any combination of title, author, and subject -->
@@ -49,7 +52,7 @@
         placeholder="Search by subject"
         ngModel
       />
-      <button>Search</button>
+      <button class="searchButton">Search</button>
     </form>
   </div>
 </div>

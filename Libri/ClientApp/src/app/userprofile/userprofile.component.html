@@ -491,11 +491,11 @@
           <button
             class="iconButton"
             *ngIf="!checkIfInActiveUserWishList(d)"
-            (click)="addToActiveUserReadList(d)"
+            (click)="addToActiveUserWishList(d)"
           >
             <span id="icon" class="material-symbols-outlined"> menu_book </span>
             <br />
-            <p class="buttonText">Already Read</p>
+            <p class="buttonText">Wishlist</p>
           </button>
           <button class="iconButton" *ngIf="checkIfInActiveUserWishList(d)">
             <span id="icon" class="material-symbols-outlined"> check </span>
@@ -526,19 +526,21 @@
 <div *ngIf="displayFollowers">
   <div class="listContainer">
     <h3 class="listLabel">Followers:</h3>
-    <div *ngFor="let f of followingUsers">
-      <div class="profileContainer">
-        <a
-          routerLink="/UserProfile/{{ f.sqlId }}"
-          (click)="user = getNewPageOwner(f)"
-        >
-          <img
-            class="zoom"
+    <div class="followScroll">
+      <div *ngFor="let f of followingUsers">
+        <div class="followContainer">
+          <a
+            routerLink="/UserProfile/{{ f.sqlId }}"
             (click)="user = getNewPageOwner(f)"
-            src="{{ f.photoUrl }}"
-          />
-          <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
-        </a>
+          >
+            <img
+              class="zoom"
+              (click)="user = getNewPageOwner(f)"
+              src="{{ f.photoUrl }}"
+            />
+            <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -547,19 +549,21 @@
 <div *ngIf="displayWhoUserIsFollowing">
   <div class="listContainer">
     <h3 class="listLabel">Following:</h3>
-    <div *ngFor="let f of beingFollowedByUsers">
-      <div class="profileContainer">
-        <a
-          routerLink="/UserProfile/{{ f.sqlId }}"
-          (click)="user = getNewPageOwner(f)"
-        >
-          <img
-            class="zoom"
+    <div class="followScroll">
+      <div *ngFor="let f of beingFollowedByUsers">
+        <div class="followContainer">
+          <a
+            routerLink="/UserProfile/{{ f.sqlId }}"
             (click)="user = getNewPageOwner(f)"
-            src="{{ f.photoUrl }}"
-          />
-          <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
-        </a>
+          >
+            <img
+              class="zoom"
+              (click)="user = getNewPageOwner(f)"
+              src="{{ f.photoUrl }}"
+            />
+            <p (click)="user = getNewPageOwner(f)">{{ f.name }}</p>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -586,7 +590,74 @@
           </p>
           <p *ngIf="ur.ratingsCount == undefined">Rating not available</p>
         </div>
-        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons"></div>
+        <div *ngIf="checkIfPageOwner() && loggedIn" class="bookButtons">
+          <button
+            class="iconButton"
+            *ngIf="!CheckIfRecommendedInFavoriteList(ur)"
+            (click)="addRecommendedFavorite(ur)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              hotel_class
+            </span>
+            <br />
+            <p class="buttonText">Favorite</p>
+          </button>
+          <button
+            class="iconButton"
+            *ngIf="CheckIfRecommendedInFavoriteList(ur)"
+          >
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">Favorited</p>
+          </button>
+          <!-- add to readlist -->
+          <button
+            class="iconButton"
+            *ngIf="!CheckIfRecommendedInReadList(ur)"
+            (click)="addRecommendedToReadList(ur)"
+          >
+            <span id="icon" class="material-symbols-outlined">
+              bookmark_added
+            </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="CheckIfRecommendedInReadList(ur)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Read List</p>
+          </button>
+          <!-- add to wishlist -->
+          <button
+            class="iconButton"
+            *ngIf="!CheckIfRecommendedInWishList(ur)"
+            (click)="addRecommendedToWishList(ur)"
+          >
+            <span id="icon" class="material-symbols-outlined"> menu_book </span>
+            <br />
+            <p class="buttonText">Wishlist</p>
+          </button>
+          <button class="iconButton" *ngIf="CheckIfRecommendedInWishList(ur)">
+            <span id="icon" class="material-symbols-outlined"> check </span>
+            <br />
+            <p class="buttonText">In Wish List</p>
+          </button>
+          <!-- add to denied list -->
+          <button
+            class="iconButton"
+            *ngIf="!CheckIfRecommendedInDeniedList(ur)"
+            (click)="addRecommendedToReadList(ur)"
+          >
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Already Read</p>
+          </button>
+          <button class="iconButton" *ngIf="CheckIfRecommendedInDeniedList(ur)">
+            <span id="icon" class="material-symbols-outlined"> dangerous </span>
+            <br />
+            <p class="buttonText">Blocked</p>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -594,8 +665,36 @@
 
 <div *ngIf="displayReviewsByUser">
   <div class="listContainer">
-    <h3 *ngIf="checkIfPageOwner()">Your Reviews:</h3>
-    <h3 *ngIf="!checkIfPageOwner()">{{ user.firstName }}'s Reviews</h3>
+    <div class="reviewLabel">
+      <h3 *ngIf="checkIfPageOwner()">Your Reviews:</h3>
+      <h3 *ngIf="!checkIfPageOwner()">{{ user.firstName }}'s Reviews</h3>
+    </div>
+    <div class="reviewButtons">
+      <button
+        *ngIf="userReviews.length > 0"
+        class="iconButton"
+        (click)="getUserReview()"
+      >
+        <span id="icon" class="material-symbols-outlined">
+          nest_clock_farsight_analog
+        </span>
+        <br />
+        <p class="buttonText">Most Recent</p>
+      </button>
+      <!-- button for ordering reviews by most upvotes -->
+      <button
+        *ngIf="userReviews.length > 0"
+        class="iconButton"
+        (click)="getUserTopReviews()"
+      >
+        <span id="icon" class="material-symbols-outlined">
+          local_fire_department
+        </span>
+        <br />
+        <p class="buttonText">Top Voted</p>
+      </button>
+    </div>
+
     <div *ngFor="let r of userReviews">
       <!-- container that holds an individual review of displayed book -->
       <div class="review">

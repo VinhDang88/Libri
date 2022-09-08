@@ -24,8 +24,14 @@
 }
 
 .iconButton{
+    transition: transform .5s;
     border: none;
     background:none;
+}
+
+.iconButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 #icon{
@@ -131,9 +137,15 @@ textarea{
 }
 
 .scrollRecommendButton{
+    transition: transform .5s;
     display: block;
     margin:auto;
     background: none;
+}
+
+.scrollRecommendButton:hover{
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 .recommendUser{
